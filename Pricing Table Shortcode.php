@@ -982,6 +982,7 @@ class Bld_Go_PricingTable {
                         'bearer_constant'  => '', // name of a defined() constant that stores the Freemius Bearer token
                         'coupon'           => '', // comma-separated Freemius coupon IDs (automatic mode only)
                         'discount'         => '', // manual/empty mode: "$10" or "15%" global discount
+                        'redirect_url'     => '', // redirect URL after purchase (skips confirmation dialog)
                 ],
                 $atts,
                 'gopricingtable'
@@ -1213,8 +1214,9 @@ class Bld_Go_PricingTable {
                         'stack'        => true,
                 ],
                 'urls'              => [
-                        'buy'   => (string) $a['buy_url'],
-                        'trial' => (string) $a['trial_url'],
+                        'buy'      => esc_url_raw( (string) $a['buy_url'] ),
+                        'trial'    => esc_url_raw( (string) $a['trial_url'] ),
+                        'redirect' => esc_url_raw( (string) $a['redirect_url'] ),
                 ],
                 'ident'             => [
                         'prefix' => $prefix,
@@ -1370,20 +1372,74 @@ class Bld_Go_PricingTable {
             }
 
             /* --- Toggle --- */
-            .go-pt-toggle{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem}
-            .go-pt-toggle__label{color:black; font-size:14px;line-height:1;opacity:.55;transition:opacity .2s,color .2s}
-            .go-pt-toggle__label.is-active{opacity:1;color:black !important;font-weight:600}
+            .go-pt-toggle {
+                display: flex;
+                align-items: center;
+                gap: .75rem;
+                margin-bottom: 1.25rem;
+                justify-content: center;
+                flex-wrap: wrap;
+                row-gap: .5rem;
+            }
 
-            .go-pt-toggle__switch{
-                position:relative;display:inline-flex;align-items:center;justify-content:flex-end; /* default = Annual */
-                width:58px;height:28px;border-radius:999px;background:#3a3a4a;
-                padding:3px;border:2px solid #65d3ff;cursor:pointer;transition:background .2s,justify-content .2s
+            .go-pt-toggle__label {
+                color: black;
+                font-size: 14px;
+                line-height: 1;
+                opacity: .55;
+                transition: opacity .2s, color .2s
             }
-            .go-pt-toggle__switch[aria-pressed="false"]{ /* Monthly */
-                justify-content:flex-start;background:#6a5acd;
+
+            .go-pt-toggle__label.is-active {
+                opacity: 1;
+                color: black !important;
+                font-weight: 600
             }
-            .go-pt-toggle__knob{width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25)}
-            .go-pt-toggle__save{padding: 0 5px 0 5px; margin-left:.25rem;font-size:14px !important;color:#f5a623;background:black; white-space:nowrap;}
+
+            .go-pt-toggle__switch {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: flex-end; /* default = Annual */
+                width: 58px;
+                height: 28px;
+                border-radius: 999px;
+                background: #3a3a4a;
+                padding: 3px;
+                border: 2px solid #65d3ff;
+                cursor: pointer;
+                transition: background .2s, justify-content .2s
+            }
+
+            .go-pt-toggle__switch[aria-pressed="false"] { /* Monthly */
+                justify-content: flex-start;
+                background: #6a5acd;
+            }
+
+            .go-pt-toggle__knob {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #fff;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, .25)
+            }
+
+            .go-pt-toggle__save {
+                padding: .25rem .6rem;
+                margin-left: .25rem;
+                font-size: 13px !important;
+                font-weight: 800;
+                letter-spacing: .02em;
+                text-transform: uppercase;
+
+                color: #fff;
+                background: linear-gradient(135deg, var(--go-pt-accent), var(--go-pt-accent-2));
+                border: 1px solid rgba(255, 255, 255, .10);
+                border-radius: 999px;
+
+                box-shadow: 0 10px 22px rgba(0,0,0,.28);
+                white-space: nowrap;
+            }
 
             /* Coupon banner */
             .go-pt-coupon-banner{
@@ -1456,6 +1512,7 @@ class Bld_Go_PricingTable {
             .go-pt-card.is-best {
                 border-color: var(--go-pt-accent);
                 box-shadow: 0 10px 28px rgba(118,55,225,.35);
+                background-image: linear-gradient(90deg, rgba(117,58,225,0.2), rgba(51,201,253,0.2));
             }
             .go-pt-card__badge {
                 position: absolute; top: -16px; left: 16px;
@@ -1521,7 +1578,7 @@ class Bld_Go_PricingTable {
         </style>
 
         <script>
-            /* BrightLeaf GO Pricing Table logic v1.0.8 (inline) */
+            /* BrightLeaf GO Pricing Table logic */
             (function () {
                 function parseDataPayload(root) {
                     const tag = root.querySelector('.go-pt-data');
@@ -1873,11 +1930,13 @@ class Bld_Go_PricingTable {
                                     couponValue = couponGlobalCodes.join(',');
                                 }
                             }
+                            const plan_id = String(button.getAttribute('data-plan-id') || '');
+                            const redirect_url = data.urls.redirect || '';
                             handler.open({
                                 name: String(product.product_name || ''),
-                                plan_id: String(button.getAttribute('data-plan-id') || ''),
+                                plan_id,
                                 licenses: currentLicensesForCard(button.closest('[data-go-pt="card"]')),
-                                trial: opts.trialMode ? 'paid' : undefined,
+                                trial: opts.trialMode ? true : undefined,
                                 show_monthly_switch: true,
                                 billing_cycle_selector: 'responsive_list',
                                 multisite_discount: false,
@@ -1885,8 +1944,60 @@ class Bld_Go_PricingTable {
                                 show_refund_badge: true,
                                 billing_cycle: billingCycle,
                                 coupon: couponValue,
-                                purchaseCompleted: () => {},
-                                track: () => {}
+                                purchaseCompleted: (response) => {
+                                    const purchase = response.purchase;
+                                    const isTrial = null !== purchase.trial_ends;
+                                    const isSub = null !== purchase.initial_amount;
+                                    const total = isTrial ? 0 : (isSub ? purchase.initial_amount : purchase.gross);
+                                    const ORDER_ID = purchase.id ?? -1;
+
+                                    // (Optional) prevent double-firing on refresh
+                                    const firedKey = "fb_purchase_" + ORDER_ID;
+                                    if (!localStorage.getItem(firedKey)) {
+                                        fbq('track', 'Purchase', {
+                                            value: total,
+                                            currency: purchase.currency.toUpperCase(),
+                                            content_type: 'product',
+                                            contents: [{id: plan_id, quantity: 1}],
+                                            num_items: 1,
+                                            is_trial: isTrial,
+                                        }, {eventID: ORDER_ID});
+
+                                        localStorage.setItem(firedKey, "1");
+                                    }
+                                    if (typeof gtag === 'function') {
+                                        gtag('event', 'purchase', {
+                                            transaction_id: ORDER_ID,
+                                            value: total,
+                                            currency: purchase.currency.toUpperCase(),
+                                            items: [{
+                                                id: plan_id,
+                                                quantity: 1,
+                                                item_id: item_id.product_id,
+                                                item_name: product.product_name
+                                            }],
+                                            is_trial: isTrial,
+                                        });
+                                    }
+                                },
+                                track: () => {},
+                                success: (response) => {
+                                    if (redirect_url) {
+                                        const purchase = response.purchase;
+                                        const isTrial = null !== purchase.trial_ends;
+                                        const ORDER_ID = purchase.id ?? -1;
+
+                                        const user = response.user;
+                                        const url = new URL(redirect_url);
+                                        url.searchParams.set('order_id', `${ORDER_ID}`);
+                                        url.searchParams.set('is_trial', `${isTrial}`);
+                                        url.searchParams.set('product_name', product.product_name || '');
+                                        url.searchParams.set('first_name', user.first || '');
+                                        url.searchParams.set('last_name', user.last || '');
+
+                                        window.location.href = url.toString();
+                                    }
+                                }
                             });
                         };
                         const waitForFs = () => {
