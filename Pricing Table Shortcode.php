@@ -1318,21 +1318,29 @@ class Bld_Go_PricingTable {
                         <?php endif; ?>
 
                         <?php if ( ! empty( $pl['features'] ) ) : ?>
-                            <ul class="go-pt-features" data-go-pt="features">
-                                <?php foreach ( $pl['features'] as $feat ) : ?>
-                                    <li class="go-pt-feature">
+                            <div class="go-pt-features-wrapper" data-go-pt="features-wrapper">
+                                <ul class="go-pt-features" data-go-pt="features">
+                                    <?php foreach ( $pl['features'] as $feat ) : ?>
+                                        <li class="go-pt-feature">
+                                            <span class="go-pt-feature__icon" aria-hidden="true">✓</span>
+                                            <span class="go-pt-feature__text"><?php echo esc_html( $feat ); ?></span>
+                                        </li>
+                                    <?php endforeach; ?>
+                                    <li class="go-pt-feature" data-go-pt="live-sites">
                                         <span class="go-pt-feature__icon" aria-hidden="true">✓</span>
-                                        <span class="go-pt-feature__text"><?php echo esc_html( $feat ); ?></span>
+                                        <span class="go-pt-feature__text">Use on up to <strong data-go-pt="live-sites-count">—</strong> live sites</span>
                                     </li>
-                                <?php endforeach; ?>
-                                <li class="go-pt-feature" data-go-pt="live-sites">
-                                    <span class="go-pt-feature__icon" aria-hidden="true">✓</span>
-                                    <span class="go-pt-feature__text">Use on up to <strong data-go-pt="live-sites-count">—</strong> live sites</span>
-                                </li>
-                            </ul>
+                                </ul>
+                            </div>
                         <?php endif; ?>
                     </article>
                 <?php endforeach; ?>
+            </div>
+
+            <div class="go-pt-features-toggle-wrapper">
+                <button type="button" class="go-pt-features-toggle" data-go-pt="features-toggle-global" style="display: none;">
+                    Show more features
+                </button>
             </div>
 
             <script type="application/json" class="go-pt-data"><?php echo wp_json_encode( $payload ); ?></script>
@@ -1548,29 +1556,128 @@ class Bld_Go_PricingTable {
             }
 
             /* Header */
-            .go-pt-card__header { display: flex; justify-content: space-between; align-items: baseline; gap: .5rem; }
-            .go-pt-card__title { margin: 0; font-weight: 700; font-size: 1.35rem; color:white; }
-            .go-pt-card__price { text-align: right; }
-            .go-pt-card__price-main { display: flex; gap: .4rem; align-items: baseline; justify-content: flex-end; }
-            .go-pt-card__price-amount { font-size: 1.6rem; font-weight: 800; color: var(--go-pt-text); }
-            .go-pt-card__price-amount.is-discounted { color: #4ade80; }
-            .go-pt-card__price-amount.is-error { font-size: .9rem; font-weight: 600; color: var(--go-pt-muted); }
-            .go-pt-card__price-old { font-size: .95rem; color: var(--go-pt-muted); text-decoration: line-through; opacity: .8; min-width: 0; }
-            .go-pt-card__price-term { display: block; font-size: .9rem; color: var(--go-pt-muted); }
-            .go-pt-card__price-sub { display:flex; gap:.35rem; justify-content:flex-end; align-items: baseline; font-size:.85rem; color: var(--go-pt-muted); }
-            .go-pt-card__price-sub-old { text-decoration: line-through; opacity: .8; }
-            .go-pt-card__price-sub-new { font-weight: 700; color: var(--go-pt-text); }
+            .go-pt-card__header {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: .5rem;
+            }
+
+            .go-pt-card__title {
+                margin: 0;
+                font-weight: 700;
+                font-size: 1.35rem;
+                color: white;
+            }
+
+            .go-pt-card__price {
+                text-align: right;
+            }
+
+            .go-pt-card__price-main {
+                display: flex;
+                gap: .4rem;
+                align-items: baseline;
+                justify-content: flex-end;
+            }
+
+            .go-pt-card__price-amount {
+                font-size: 1.6rem;
+                font-weight: 800;
+                color: var(--go-pt-text);
+            }
+
+            .go-pt-card__price-amount.is-discounted {
+                color: #4ade80;
+            }
+
+            .go-pt-card__price-amount.is-error {
+                font-size: .9rem;
+                font-weight: 600;
+                color: var(--go-pt-muted);
+            }
+
+            .go-pt-card__price-old {
+                font-size: .95rem;
+                color: var(--go-pt-muted);
+                text-decoration: line-through;
+                opacity: .8;
+                min-width: 0;
+            }
+
+            .go-pt-card__price-term {
+                display: block;
+                font-size: .9rem;
+                color: var(--go-pt-muted);
+            }
+
+            .go-pt-card__price-sub {
+                display: flex;
+                gap: .35rem;
+                justify-content: flex-end;
+                align-items: baseline;
+                font-size: .85rem;
+                color: var(--go-pt-muted);
+                line-height: 1.2;
+            }
+
+            /* Reserve exactly 1 line of height even if both spans are empty/hidden */
+            .go-pt-card__price-sub::before {
+                content: "\00a0";          /* non‑breaking space */
+                display: inline-block;
+                width: 0;                  /* don’t affect horizontal layout */
+            }
+
+            .go-pt-card__price-sub-old {
+                text-decoration: line-through;
+                opacity: .8;
+            }
+
+            .go-pt-card__price-sub-new {
+                font-weight: 700;
+                color: var(--go-pt-text);
+            }
 
             /* Controls */
             .go-pt-card__controls { display: flex; align-items: center; gap: .5rem; margin-top: 1rem; }
-            .go-pt-card__label { font-size: .9rem; color: var(--go-pt-muted); }
+            .go-pt-card__label {
+                font-size: .9rem;
+                color: var(--go-pt-muted);
+                line-height: 1;          /* keep label compact */
+                padding: 0;              /* don't make the label change row height */
+                display: inline;         /* behave like text */
+            }
+
+            /* Make the "control" (select or static tier) match in height + text metrics */
+            .go-pt-card__select,
+            .go-pt-card__tier {
+                font-size: .95rem;     /* match select text size across cards */
+                line-height: 1.2;
+                min-height: 40px;      /* key: keeps rows equal -> buttons align */
+            }
+
             .go-pt-card__select {
                 width: 100%;
                 background: #0f0d21; color: var(--go-pt-text);
                 border: 1px solid #2c274a; border-radius: 10px;
                 padding: .5rem .6rem;
+
+                appearance: none;      /* helps normalize on some browsers */
+                -webkit-appearance: none;
+                -moz-appearance: none;
             }
-            .go-pt-card__tier { font-size: .95rem; font-weight: 600; color: var(--go-pt-text); }
+            .go-pt-card__tier {
+                width: 100%;             /* mimic select sizing */
+                background: #0f0d21;
+                color: var(--go-pt-text);
+                border: 1px solid #2c274a;
+                border-radius: 10px;
+
+                padding: .5rem .6rem;    /* same as select */
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+            }
 
             /* CTAs */
             .go-pt-card__cta { display: flex; gap: .6rem; margin-top: 1rem; }
@@ -1593,6 +1700,49 @@ class Bld_Go_PricingTable {
             .go-pt-feature { display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: .5rem; }
             .go-pt-feature__icon { color: var(--go-pt-green); font-weight: 800; }
             .go-pt-feature__text { color: var(--go-pt-text); text-align:left; }
+
+            .go-pt-features-wrapper { position: relative; }
+            .go-pt-features--collapsible {
+                overflow: hidden;
+                transition: max-height 0.3s ease-out;
+                position: relative;
+            }
+            .go-pt-features--collapsed {
+                max-height: 250px;
+            }
+            .go-pt-features--collapsed::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 60px;
+                background: linear-gradient(transparent, var(--go-pt-surface));
+                pointer-events: none;
+                z-index: 1;
+            }
+            .go-pt-features-toggle {
+                background: none;
+                border: none;
+                color: var(--go-pt-accent-2);
+                cursor: pointer;
+                font-size: 0.9rem;
+                font-weight: 700;
+                padding: .5rem 0;
+                margin-top: .5rem;
+                display: flex;
+                align-items: center;
+                gap: .25rem;
+                width: fit-content;
+            }
+            .go-pt-features-toggle:hover { text-decoration: underline; }
+
+            .go-pt-features-toggle-wrapper {
+                display: flex;
+                justify-content: center;
+                margin-top: 1rem;
+                padding-bottom: 1rem;
+            }
 
             /* Accessibility focus */
             .go-pt-btn:focus,
@@ -1690,11 +1840,11 @@ class Bld_Go_PricingTable {
 
                         if (priceSubNew) {
                             priceSubNew.textContent = finalAnnual != null ? money(finalAnnual) + ' per year' : '';
-                            priceSubNew.style.display = priceSubNew.textContent ? '' : 'none';
+                            priceSubNew.style.visibility = priceSubNew.textContent ? 'visible' : 'hidden';
                         }
                         if (priceSubOld) {
                             priceSubOld.textContent = hasDiscount ? (baseAnnual != null ? money(baseAnnual) + ' per year' : '') : '';
-                            priceSubOld.style.display = priceSubOld.textContent ? '' : 'none';
+                            priceSubOld.style.visibility = priceSubOld.textContent ? 'visible' : 'hidden';
                         }
                     } else {
                         if (priceAmount) {
@@ -1717,8 +1867,8 @@ class Bld_Go_PricingTable {
                         }
                         if (priceTerm) priceTerm.textContent = termText;
 
-                        if (priceSubNew) { priceSubNew.textContent = ''; priceSubNew.style.display = 'none'; }
-                        if (priceSubOld) { priceSubOld.textContent = ''; priceSubOld.style.display = 'none'; }
+                        if (priceSubNew) { priceSubNew.textContent = ''; priceSubNew.style.visibility = 'hidden'; }
+                        if (priceSubOld) { priceSubOld.textContent = ''; priceSubOld.style.visibility = 'hidden'; }
                     }
 
                     if (priceAmount) priceAmount.classList.toggle('is-discounted', !!hasDiscount);
@@ -1742,6 +1892,54 @@ class Bld_Go_PricingTable {
                         if (d < bestDiff) { nearest = c; bestDiff = d; }
                     });
                     return { row: map[String(nearest)], license: nearest };
+                }
+
+                function initFeaturesCollapsible(root) {
+                    const wrappers = root.querySelectorAll('[data-go-pt="features-wrapper"]');
+                    const globalToggle = root.querySelector('[data-go-pt="features-toggle-global"]');
+                    if (!wrappers.length || !globalToggle) return;
+
+                    const threshold = 250;
+                    const collapsibleLists = [];
+                    let needsCollapsible = false;
+
+                    wrappers.forEach(wrapper => {
+                        const list = wrapper.querySelector('[data-go-pt="features"]');
+                        if (!list) return;
+
+                        if (list.scrollHeight > threshold + 30) {
+                            needsCollapsible = true;
+                            list.classList.add('go-pt-features--collapsible');
+                            list.classList.add('go-pt-features--collapsed');
+                            list.style.maxHeight = threshold + 'px';
+                            collapsibleLists.push({ list, wrapper });
+                        }
+                    });
+
+                    if (needsCollapsible) {
+                        globalToggle.style.display = 'flex';
+                        globalToggle.addEventListener('click', () => {
+                            const isCollapsed = collapsibleLists.some(item => item.list.classList.contains('go-pt-features--collapsed'));
+
+                            collapsibleLists.forEach(item => {
+                                if (isCollapsed) {
+                                    item.list.style.maxHeight = item.list.scrollHeight + 'px';
+                                    item.list.classList.remove('go-pt-features--collapsed');
+                                } else {
+                                    item.list.style.maxHeight = threshold + 'px';
+                                    item.list.classList.add('go-pt-features--collapsed');
+                                }
+                            });
+
+                            globalToggle.textContent = isCollapsed ? 'Show less features' : 'Show more features';
+
+                            if (!isCollapsed) {
+                                // Scroll back to grid top if collapsing
+                                const grid = root.querySelector('[data-go-pt="grid"]');
+                                if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        });
+                    }
                 }
 
                 function init(container) {
@@ -2136,6 +2334,9 @@ class Bld_Go_PricingTable {
                             }
                         }
                     });
+
+                    initFeaturesCollapsible(container);
+
                     return true;
                 }
 
