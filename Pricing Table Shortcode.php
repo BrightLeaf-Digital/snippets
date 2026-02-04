@@ -1659,7 +1659,7 @@ class Bld_Go_PricingTable {
                         }
                     }
 
-                    const isUnsupported = priceInfo && priceInfo.isUnsupported;
+                    const isUnsupported = priceInfo ? priceInfo.isUnsupported : false;
                     const actualCycle   = priceInfo ? (priceInfo.actualCycle || cycle) : cycle;
 
                     if (actualCycle === 'Annual') {
@@ -1803,14 +1803,16 @@ class Bld_Go_PricingTable {
                         let isUnsupported = false;
                         let actualCycle = cycle;
 
-                        if (!slotAdjusted && !slotBase) {
-                            // Requested cycle not found. Check the other one.
-                            const otherCycle = (cycle === 'Annual' ? 'Monthly' : 'Annual');
-                            slotAdjusted = adjustedRow ? adjustedRow[otherCycle] : null;
-                            slotBase = baseRow ? baseRow[otherCycle] : null;
-                            if (slotAdjusted || slotBase) {
-                                isUnsupported = true;
-                                actualCycle = otherCycle;
+                        if (!slotAdjusted) {
+                            if (!slotBase) {
+                                // Requested cycle not found. Check the other one.
+                                const otherCycle = (cycle === 'Annual' ? 'Monthly' : 'Annual');
+                                slotAdjusted = adjustedRow ? adjustedRow[otherCycle] : null;
+                                slotBase = baseRow ? baseRow[otherCycle] : null;
+                                if (slotAdjusted || slotBase) {
+                                    isUnsupported = true;
+                                    actualCycle = otherCycle;
+                                }
                             }
                         }
 
@@ -1829,8 +1831,10 @@ class Bld_Go_PricingTable {
                                 finalValue = slotAdjusted.final;
                             }
                         }
-                        if (finalValue === null && slotBase != null) {
-                            finalValue = parseFloat(slotBase);
+                        if (finalValue === null) {
+                            if (slotBase != null) {
+                                finalValue = parseFloat(slotBase);
+                            }
                         }
 
                         let applied = [];
@@ -1944,10 +1948,12 @@ class Bld_Go_PricingTable {
                         updateCouponBanner();
                     };
 
-                    if (toggle && showToggle) {
-                        toggle.addEventListener('click', () => {
-                            setCycle(billingCycle === 'Annual' ? 'Monthly' : 'Annual');
-                        });
+                    if (toggle) {
+                        if (showToggle) {
+                            toggle.addEventListener('click', () => {
+                                setCycle(billingCycle === 'Annual' ? 'Monthly' : 'Annual');
+                            });
+                        }
                     }
 
                     container.addEventListener('change', (e) => {
@@ -2107,7 +2113,7 @@ class Bld_Go_PricingTable {
                         params.set('billing_cycle', finalCycle);
                         if (product.product_id) params.set('product_id', String(product.product_id));
                         if (product.product_name) params.set('product_name', String(product.product_name));
-                        window.location.href = baseUrl.indexOf('?') === -1 ? `${baseUrl}?${params}` : `${baseUrl}&${params}`;
+                        window.location.href = baseUrl.indexOf('?') === -1 ? `${baseUrl}?${params}` : `${baseUrl}\x26${params}`;
                     }
                     container.addEventListener('click', (e) => {
                         const buy = e.target.closest('[data-go-pt="buy"]');
@@ -2159,9 +2165,11 @@ class Bld_Go_PricingTable {
 
                     // schedule another pass only if there are sections not yet initialized
                     clearTimeout(retryTimer);
-                    if (remaining > 0 && retryIndex < retryDelays.length) {
-                        const delay = retryDelays[retryIndex++];
-                        retryTimer = setTimeout(bootstrap, delay);
+                    if (remaining > 0) {
+                        if (retryIndex < retryDelays.length) {
+                            const delay = retryDelays[retryIndex++];
+                            retryTimer = setTimeout(bootstrap, delay);
+                        }
                     }
                 }
 
