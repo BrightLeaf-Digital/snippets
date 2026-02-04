@@ -1229,12 +1229,17 @@ class Bld_Go_PricingTable {
         <section class="go-pt" data-component="go-pricing-table">
             <?php if ( $show_toggle ) : ?>
                 <div class="go-pt-toggle" role="group" aria-label="Billing cycle">
-                    <span class="go-pt-toggle__label" data-go-pt="label-monthly">Pay monthly</span>
-                    <button class="go-pt-toggle__switch" type="button" aria-pressed="true" data-go-pt="cycle-switch">
-                        <span class="go-pt-toggle__knob" aria-hidden="true"></span>
-                    </button>
-                    <span class="go-pt-toggle__label is-active" data-go-pt="label-annually">Pay annually</span>
-                    <span class="go-pt-toggle__save" data-go-pt="save-banner">Save up to <?php echo esc_html( $save_pct ); ?>%</span>
+                <span class="go-pt-toggle__save" data-go-pt="save-banner">
+                    Save up to <?php echo esc_html( $save_pct ); ?>%
+                </span>
+
+                    <div class="go-pt-toggle__controls">
+                        <span class="go-pt-toggle__label" data-go-pt="label-monthly">Pay monthly</span>
+                        <button class="go-pt-toggle__switch" type="button" aria-pressed="true" data-go-pt="cycle-switch">
+                            <span class="go-pt-toggle__knob" aria-hidden="true"></span>
+                        </button>
+                        <span class="go-pt-toggle__label is-active" data-go-pt="label-annually">Pay annually</span>
+                    </div>
                 </div>
             <?php endif; ?>
 
@@ -1373,13 +1378,20 @@ class Bld_Go_PricingTable {
 
             /* --- Toggle --- */
             .go-pt-toggle {
-                display: flex;
-                align-items: center;
-                gap: .75rem;
-                margin-bottom: 1.25rem;
-                justify-content: center;
-                flex-wrap: wrap;
-                row-gap: .5rem;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                gap:.5rem;
+                margin-bottom:1.25rem;
+            }
+
+            .go-pt-toggle__controls {
+                display:flex;
+                align-items:center;
+                gap:.75rem;
+                justify-content:center;
+                flex-wrap:wrap;
+                row-gap:.5rem;
             }
 
             .go-pt-toggle__label {
@@ -1426,7 +1438,7 @@ class Bld_Go_PricingTable {
 
             .go-pt-toggle__save {
                 padding: .25rem .6rem;
-                margin-left: .25rem;
+                margin-left: 0;
                 font-size: 13px !important;
                 font-weight: 800;
                 letter-spacing: .02em;
@@ -1439,6 +1451,20 @@ class Bld_Go_PricingTable {
 
                 box-shadow: 0 10px 22px rgba(0,0,0,.28);
                 white-space: nowrap;
+
+                width: fit-content;          /* pill width = text width */
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+
+                visibility:hidden;        /* hidden by default, but still reserves space */
+                opacity:0;
+                transition: opacity .15s ease;
+            }
+
+            .go-pt-toggle__save.is-visible{
+                visibility:visible;
+                opacity:1;
             }
 
             /* Coupon banner */
@@ -1633,7 +1659,10 @@ class Bld_Go_PricingTable {
                         }
                     }
 
-                    if (cycle === 'Annual') {
+                    const isUnsupported = priceInfo && priceInfo.isUnsupported;
+                    const actualCycle   = priceInfo ? (priceInfo.actualCycle || cycle) : cycle;
+
+                    if (actualCycle === 'Annual') {
                         const baseAnnual  = basePrice;
                         const finalAnnual = finalPrice;
                         const baseMonthly = baseAnnual != null ? baseAnnual / 12 : null;
@@ -1652,7 +1681,13 @@ class Bld_Go_PricingTable {
                             priceOld.textContent = hasDiscount ? (baseMonthly != null ? money(baseMonthly) : '') : '';
                             priceOld.style.display = priceOld.textContent ? '' : 'none';
                         }
-                        if (priceTerm)   priceTerm.textContent   = 'per month (paid annually)';
+
+                        let termText = 'per month (paid annually)';
+                        if (isUnsupported) {
+                            termText += ' — Annual only';
+                        }
+                        if (priceTerm) priceTerm.textContent = termText;
+
                         if (priceSubNew) {
                             priceSubNew.textContent = finalAnnual != null ? money(finalAnnual) + ' per year' : '';
                             priceSubNew.style.display = priceSubNew.textContent ? '' : 'none';
@@ -1675,7 +1710,13 @@ class Bld_Go_PricingTable {
                             priceOld.textContent = hasDiscount ? (basePrice != null ? money(basePrice) : '') : '';
                             priceOld.style.display = priceOld.textContent ? '' : 'none';
                         }
-                        if (priceTerm)   priceTerm.textContent   = 'per month';
+
+                        let termText = 'per month';
+                        if (isUnsupported) {
+                            termText += ' — Monthly only';
+                        }
+                        if (priceTerm) priceTerm.textContent = termText;
+
                         if (priceSubNew) { priceSubNew.textContent = ''; priceSubNew.style.display = 'none'; }
                         if (priceSubOld) { priceSubOld.textContent = ''; priceSubOld.style.display = 'none'; }
                     }
@@ -1756,8 +1797,22 @@ class Bld_Go_PricingTable {
                         const adjustedRow = adjusted.row;
                         const baseRow = base.row;
 
-                        const slotAdjusted = adjustedRow ? adjustedRow[cycle] : null;
-                        const slotBase = baseRow ? baseRow[cycle] : null;
+                        let slotAdjusted = adjustedRow ? adjustedRow[cycle] : null;
+                        let slotBase = baseRow ? baseRow[cycle] : null;
+
+                        let isUnsupported = false;
+                        let actualCycle = cycle;
+
+                        if (!slotAdjusted && !slotBase) {
+                            // Requested cycle not found. Check the other one.
+                            const otherCycle = (cycle === 'Annual' ? 'Monthly' : 'Annual');
+                            slotAdjusted = adjustedRow ? adjustedRow[otherCycle] : null;
+                            slotBase = baseRow ? baseRow[otherCycle] : null;
+                            if (slotAdjusted || slotBase) {
+                                isUnsupported = true;
+                                actualCycle = otherCycle;
+                            }
+                        }
 
                         let baseValue = null;
                         if (slotBase != null) {
@@ -1789,7 +1844,9 @@ class Bld_Go_PricingTable {
                             base: baseValue,
                             final: finalValue,
                             applied,
-                            licenseUsed: adjusted.row ? adjusted.license : (base.row ? base.license : licenses)
+                            licenseUsed: adjusted.row ? adjusted.license : (base.row ? base.license : licenses),
+                            isUnsupported,
+                            actualCycle
                         };
                     }
 
@@ -1826,7 +1883,10 @@ class Bld_Go_PricingTable {
                         couponBanner.classList.add('is-active');
                     }
 
-                    if (saveBanner) saveBanner.textContent = `Save up to ${ui.save_pct || 0}%`;
+                    if (saveBanner) {
+                        saveBanner.textContent = `Save up to ${ui.save_pct || 0}%`;
+                        saveBanner.classList.toggle('is-visible', billingCycle === 'Monthly');
+                    }
 
                     const setCycle = (cycle) => {
                         billingCycle = cycle;
@@ -1835,12 +1895,12 @@ class Bld_Go_PricingTable {
                             if (toggle) toggle.setAttribute('aria-pressed', 'true');
                             if (labelAnnually) labelAnnually.classList.add('is-active');
                             if (labelMonthly) labelMonthly.classList.remove('is-active');
-                            if (saveBanner) saveBanner.style.display = 'none';
+                            if (saveBanner) saveBanner.classList.remove('is-visible');
                         } else {
                             if (toggle) toggle.setAttribute('aria-pressed', 'false');
                             if (labelMonthly) labelMonthly.classList.add('is-active');
                             if (labelAnnually) labelAnnually.classList.remove('is-active');
-                            if (saveBanner) { saveBanner.style.display = ''; saveBanner.textContent = `Switch to Pay Annually and save up to ${ui.save_pct || 0}%`; }
+                            if (saveBanner) { saveBanner.classList.add('is-visible'); saveBanner.textContent = `Switch to Pay Annually and save up to ${ui.save_pct || 0}%`; }
                         }
 
                         container.querySelectorAll('[data-go-pt="card"]').forEach(card => {
@@ -1914,6 +1974,11 @@ class Bld_Go_PricingTable {
                     function openCheckout(button, opts) {
                         const openNow = () => {
                             const planId = String(button.getAttribute('data-plan-id') || '');
+                            const card = button.closest('[data-go-pt="card"]');
+                            const licenses = currentLicensesForCard(card);
+                            const info = getPriceInfo(planId, licenses, billingCycle);
+                            const finalCycle = info.actualCycle || billingCycle;
+
                             const handler = new FS.Checkout({
                                 product_id: String(product.product_id || ''),
                                 public_key: String(product.public_key || '')
@@ -1935,14 +2000,14 @@ class Bld_Go_PricingTable {
                             handler.open({
                                 name: String(product.product_name || ''),
                                 plan_id,
-                                licenses: currentLicensesForCard(button.closest('[data-go-pt="card"]')),
+                                licenses: licenses,
                                 trial: opts.trialMode ? true : undefined,
                                 show_monthly_switch: true,
                                 billing_cycle_selector: 'responsive_list',
                                 multisite_discount: false,
                                 show_reviews: true,
                                 show_refund_badge: true,
-                                billing_cycle: billingCycle,
+                                billing_cycle: finalCycle.toLowerCase(),
                                 coupon: couponValue,
                                 purchaseCompleted: (response) => {
                                     const purchase = response.purchase;
@@ -2030,11 +2095,16 @@ class Bld_Go_PricingTable {
                     function openManualUrl(baseUrl, button) {
                         if (!baseUrl) return;
                         const card = button.closest('[data-go-pt="card"]');
+                        const planId = String(card.getAttribute('data-plan-id') || '');
+                        const licenses = currentLicensesForCard(card);
+                        const info = getPriceInfo(planId, licenses, billingCycle);
+                        const finalCycle = info.actualCycle || billingCycle;
+
                         const params = new URLSearchParams();
-                        params.set('plan_id', String(card.getAttribute('data-plan-id') || ''));
+                        params.set('plan_id', planId);
                         params.set('plan_name', String(card.getAttribute('data-plan-name') || ''));
-                        params.set('licenses', String(currentLicensesForCard(card)));
-                        params.set('billing_cycle', billingCycle);
+                        params.set('licenses', String(licenses));
+                        params.set('billing_cycle', finalCycle);
                         if (product.product_id) params.set('product_id', String(product.product_id));
                         if (product.product_name) params.set('product_name', String(product.product_name));
                         window.location.href = baseUrl.indexOf('?') === -1 ? `${baseUrl}?${params}` : `${baseUrl}&${params}`;
