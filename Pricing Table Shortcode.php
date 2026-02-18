@@ -968,21 +968,22 @@ class Bld_Go_PricingTable {
     public function render_parent( $atts, $content = null ) {
         $a = shortcode_atts(
                 [
-                        'public_key'       => '',
-                        'product_name'     => '',
-                        'product_id'       => '',
-                        'freemius'         => '', // '', 'manual', 'automatic'
-                        'buy_url'          => '', // used when freemius is empty. requires full url including http(s)://
-                        'trial_url'        => '', // used when freemius is empty. requires full url including http(s)://
-                        'product_prefix'   => '', // used to generate predictable button IDs
+                        'public_key'          => '',
+                        'product_name'        => '',
+                        'product_id'          => '',
+                        'freemius'            => '', // '', 'manual', 'automatic'
+                        'buy_url'             => '', // used when freemius is empty. requires full url including http(s)://
+                        'trial_url'           => '', // used when freemius is empty. requires full url including http(s)://
+                        'product_prefix'      => '', // used to generate predictable button IDs
                     // Automatic mode optional controls:
-                        'currency'         => 'usd', // pricing currency for automatic mode
-                        'cache_ttl'        => '21600', // seconds (6h) for automatic mode API cache
-                        'site_tiers_label' => '', // optional global labels override for automatic mode
-                        'bearer_constant'  => '', // name of a defined() constant that stores the Freemius Bearer token
-                        'coupon'           => '', // comma-separated Freemius coupon IDs (automatic mode only)
-                        'discount'         => '', // manual/empty mode: "$10" or "15%" global discount
-                        'redirect_url'     => '', // redirect URL after purchase (skips confirmation dialog)
+                        'currency'            => 'usd', // pricing currency for automatic mode
+                        'cache_ttl'           => '21600', // seconds (6h) for automatic mode API cache
+                        'site_tiers_label'    => '', // optional global labels override for automatic mode
+                        'bearer_constant'     => '', // name of a defined() constant that stores the Freemius Bearer token
+                        'coupon'              => '', // comma-separated Freemius coupon IDs (automatic mode only)
+                        'discount'            => '', // manual/empty mode: "$10" or "15%" global discount
+                        'redirect_url'        => '', // redirect URL after purchase (skips confirmation dialog)
+                        'show_annual_monthly' => 'yes',
                 ],
                 $atts,
                 'gopricingtable'
@@ -1200,9 +1201,10 @@ class Bld_Go_PricingTable {
                 'plans'             => $plans,
                 'global_site_tiers' => $global_site_tiers,
                 'ui'                => [
-                        'default_cycle' => $has_annual ? 'Annual' : 'Monthly',
-                        'save_pct'      => $save_pct,
-                        'show_toggle'   => $show_toggle,
+                        'default_cycle'       => $has_annual ? 'Annual' : 'Monthly',
+                        'save_pct'            => $save_pct,
+                        'show_toggle'         => $show_toggle,
+                        'show_annual_monthly' => ! in_array( strtolower( (string) $a['show_annual_monthly'] ), [ 'no', 'false', '0' ], true ),
                 ],
                 'freemius'          => $freemius_mode,
                 'pricing'           => $pricing_with_coupons,
@@ -1756,6 +1758,23 @@ class Bld_Go_PricingTable {
         <script>
             /* BrightLeaf GO Pricing Table logic */
             (function () {
+                window.__sessionStart = window.__sessionStart || Date.now();
+                // ---- Bot guard tuning ----
+                const MIN_MS = 1000;
+                let humanSignal = false;
+                // Flip once on first real interaction
+                const markHuman = () => { humanSignal = true; };
+                ['pointerdown','scroll','keydown','touchstart','mousemove']
+                    .forEach(ev => window.addEventListener(ev, markHuman, { once: true, passive: true }));
+                // Also count "page is visible again" as a human hint
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'visible') markHuman();
+                });
+                // Utility
+                const passedTimeGate = () => (Date.now() - (window.__sessionStart || Date.now())) > MIN_MS;
+                const pageIsActive   = () => document.visibilityState === 'visible' && document.hasFocus();
+                const passHumanGate  = () => passedTimeGate() && humanSignal && pageIsActive();
+
                 function parseDataPayload(root) {
                     const tag = root.querySelector('.go-pt-data');
                     if (!tag) return null;
@@ -1780,7 +1799,8 @@ class Bld_Go_PricingTable {
                     if (priceSubOld) { priceSubOld.textContent = ''; priceSubOld.style.display = 'none'; }
                     if (priceSubNew) { priceSubNew.textContent = ''; priceSubNew.style.display = 'none'; }
                 }
-                function updateCardPrice(card, cycle, licenses, priceInfo) {
+                function updateCardPrice(card, cycle, licenses, priceInfo, options = {}) {
+                    const showAnnualMonthly = options.showAnnualMonthly !== false;
                     const priceAmount = card.querySelector('[data-go-pt="price-amount"]');
                     const priceOld    = card.querySelector('[data-go-pt="price-old"]');
                     const priceTerm   = card.querySelector('[data-go-pt="price-term"]');
@@ -1813,40 +1833,66 @@ class Bld_Go_PricingTable {
                     const actualCycle   = priceInfo ? (priceInfo.actualCycle || cycle) : cycle;
 
                     if (actualCycle === 'Annual') {
-                        const baseAnnual  = basePrice;
-                        const finalAnnual = finalPrice;
-                        const baseMonthly = baseAnnual != null ? baseAnnual / 12 : null;
-                        const finalMonthly = finalAnnual != null ? finalAnnual / 12 : null;
+                        if (showAnnualMonthly) {
+                            const baseAnnual  = basePrice;
+                            const finalAnnual = finalPrice;
+                            const baseMonthly = baseAnnual != null ? baseAnnual / 12 : null;
+                            const finalMonthly = finalAnnual != null ? finalAnnual / 12 : null;
 
-                        if (priceAmount) {
-                            if (finalMonthly != null) {
-                                priceAmount.textContent = money(finalMonthly);
-                                priceAmount.classList.remove('is-error');
-                            } else {
-                                priceAmount.textContent = FALLBACK_TEXT;
-                                priceAmount.classList.add('is-error');
+                            if (priceAmount) {
+                                if (finalMonthly != null) {
+                                    priceAmount.textContent = money(finalMonthly);
+                                    priceAmount.classList.remove('is-error');
+                                } else {
+                                    priceAmount.textContent = FALLBACK_TEXT;
+                                    priceAmount.classList.add('is-error');
+                                }
                             }
-                        }
-                        if (priceOld) {
-                            priceOld.textContent = hasDiscount ? (baseMonthly != null ? money(baseMonthly) : '') : '';
-                            priceOld.style.display = priceOld.textContent ? '' : 'none';
-                        }
+                            if (priceOld) {
+                                priceOld.textContent = hasDiscount ? (baseMonthly != null ? money(baseMonthly) : '') : '';
+                                priceOld.style.display = priceOld.textContent ? '' : 'none';
+                            }
 
-                        let termText = 'per month (paid annually)';
-                        if (isUnsupported) {
-                            termText += ' — Annual only';
-                        }
-                        if (priceTerm) priceTerm.textContent = termText;
+                            let termText = 'per month (paid annually)';
+                            if (isUnsupported) {
+                                termText += ' — Annual only';
+                            }
+                            if (priceTerm) priceTerm.textContent = termText;
 
-                        if (priceSubNew) {
-                            priceSubNew.textContent = finalAnnual != null ? money(finalAnnual) + ' per year' : '';
-                            priceSubNew.style.visibility = priceSubNew.textContent ? 'visible' : 'hidden';
-                        }
-                        if (priceSubOld) {
-                            priceSubOld.textContent = hasDiscount ? (baseAnnual != null ? money(baseAnnual) + ' per year' : '') : '';
-                            priceSubOld.style.visibility = priceSubOld.textContent ? 'visible' : 'hidden';
+                            if (priceSubNew) {
+                                priceSubNew.textContent = finalAnnual != null ? money(finalAnnual) + ' per year' : '';
+                                priceSubNew.style.visibility = priceSubNew.textContent ? 'visible' : 'hidden';
+                            }
+                            if (priceSubOld) {
+                                priceSubOld.textContent = hasDiscount ? (baseAnnual != null ? money(baseAnnual) + ' per year' : '') : '';
+                                priceSubOld.style.visibility = priceSubOld.textContent ? 'visible' : 'hidden';
+                            }
+                        } else {
+                            // Annual shown as annual total (no monthly equivalent)
+                            if (priceAmount) {
+                                if (finalPrice != null) {
+                                    priceAmount.textContent = money(finalPrice);
+                                    priceAmount.classList.remove('is-error');
+                                } else {
+                                    priceAmount.textContent = FALLBACK_TEXT;
+                                    priceAmount.classList.add('is-error');
+                                }
+                            }
+
+                            if (priceOld) {
+                                priceOld.textContent = hasDiscount ? (basePrice != null ? money(basePrice) : '') : '';
+                                priceOld.style.display = priceOld.textContent ? '' : 'none';
+                            }
+
+                            let termText = 'per year';
+                            if (isUnsupported) termText += ' — Annual only';
+                            if (priceTerm) priceTerm.textContent = termText;
+
+                            if (priceSubNew) { priceSubNew.textContent = ''; priceSubNew.style.visibility = 'hidden'; }
+                            if (priceSubOld) { priceSubOld.textContent = ''; priceSubOld.style.visibility = 'hidden'; }
                         }
                     } else {
+                        // monthly
                         if (priceAmount) {
                             if (finalPrice != null) {
                                 priceAmount.textContent = money(finalPrice);
@@ -1861,9 +1907,9 @@ class Bld_Go_PricingTable {
                             priceOld.style.display = priceOld.textContent ? '' : 'none';
                         }
 
-                        let termText = 'per month';
+                        let termText = actualCycle === 'Annual' ? 'per year' : 'per month';
                         if (isUnsupported) {
-                            termText += ' — Monthly only';
+                            termText += ' — ' + actualCycle + ' only';
                         }
                         if (priceTerm) priceTerm.textContent = termText;
 
@@ -2115,7 +2161,7 @@ class Bld_Go_PricingTable {
                                 if (staticEl) licenses = parseInt(staticEl.getAttribute('data-tier-value') || globalTierValue, 10);
                             }
                             const info = getPriceInfo(planId, licenses, billingCycle);
-                            updateCardPrice(card, billingCycle, info.licenseUsed || licenses, info);
+                            updateCardPrice(card, billingCycle, info.licenseUsed || licenses, info, { showAnnualMonthly: ui.show_annual_monthly });
                             const cardBanner = card.querySelector('[data-go-pt="card-coupon-banner"]');
                             if (cardBanner) {
                                 const planApplied = (info.applied || []).filter(a => a.scope === 'plan');
@@ -2230,6 +2276,7 @@ class Bld_Go_PricingTable {
                                             contents: [{id: plan_id, quantity: 1}],
                                             num_items: 1,
                                             is_trial: isTrial,
+                                            show_annual_monthly: ui.show_annual_monthly ? 'yes' : 'no',
                                         }, {eventID: ORDER_ID});
 
                                         localStorage.setItem(firedKey, "1");
@@ -2242,10 +2289,11 @@ class Bld_Go_PricingTable {
                                             items: [{
                                                 id: plan_id,
                                                 quantity: 1,
-                                                item_id: item_id.product_id,
+                                                item_id: product.product_id,
                                                 item_name: product.product_name
                                             }],
                                             is_trial: isTrial,
+                                            show_annual_monthly: ui.show_annual_monthly ? 'yes' : 'no',
                                         });
                                     }
                                 },
@@ -2317,6 +2365,12 @@ class Bld_Go_PricingTable {
                         const buy = e.target.closest('[data-go-pt="buy"]');
                         if (buy) {
                             e.preventDefault();
+                            if (!passHumanGate()) { return; }
+                            if (typeof gtag === 'function') {
+                                gtag('event', buy.id || 'buy_button_click', {
+                                    show_annual_monthly: ui.show_annual_monthly ? 'yes' : 'no'
+                                });
+                            }
                             if ((data.freemius || '').toLowerCase() === 'manual' || (data.freemius || '').toLowerCase() === 'automatic') {
                                 openCheckout(buy, { trialMode: false, eventName: 'click_buy' });
                             } else {
@@ -2327,6 +2381,12 @@ class Bld_Go_PricingTable {
                         const trial = e.target.closest('[data-go-pt="trial"]');
                         if (trial) {
                             e.preventDefault();
+                            if (!passHumanGate()) { return; }
+                            if (typeof gtag === 'function') {
+                                gtag('event', trial.id || 'trial_button_click', {
+                                    show_annual_monthly: ui.show_annual_monthly ? 'yes' : 'no',
+                                });
+                            }
                             if ((data.freemius || '').toLowerCase() === 'manual' || (data.freemius || '').toLowerCase() === 'automatic') {
                                 openCheckout(trial, { trialMode: true, eventName: 'click_trial' });
                             } else {
