@@ -448,9 +448,17 @@ add_action(
                                     alert('Clipboard access was denied, and the browser blocked the fallback window.');
                                     return;
                                 }
-                                fallback.document.open();
-                                fallback.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>${formTitle} Export</title></head><body>${tableHTML}</body></html>`);
-                                fallback.document.close();
+                        const doc = fallback.document;
+                        doc.open();
+                        doc.close();
+
+                        doc.title = `${formTitle} Export`;
+
+                        const meta = doc.createElement('meta');
+                        meta.setAttribute('charset', 'utf-8');
+                        doc.head.appendChild(meta);
+
+                        doc.body.innerHTML = tableHTML;
                                 alert('Clipboard access was denied.\n\nThe export has been opened in a new tab — select all (Ctrl+A) and copy from there.');
                             }
 
