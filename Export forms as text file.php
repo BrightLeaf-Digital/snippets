@@ -129,16 +129,18 @@
         if ( function_exists( 'gravity_flow' ) && is_object( gravity_flow() ) ) {
             $output_header = false;
             $steps         = gravity_flow()->get_steps( $form['id'] );
-            foreach ( $steps as $step ) {
-                if ( is_object( $step ) && method_exists( $step, 'get_type' ) && 'notification' === $step->get_type() ) {
-                    if ( ! $output_header ) {
-                        $out          .= PHP_EOL . 'Workflow Notifications:' . PHP_EOL;
-                        $output_header = true;
+            if ( is_array( $steps ) ) {
+                foreach ( $steps as $step ) {
+                    if ( is_object( $step ) && method_exists( $step, 'get_type' ) && 'notification' === $step->get_type() ) {
+                        if ( ! $output_header ) {
+                            $out          .= PHP_EOL . 'Workflow Notifications:' . PHP_EOL;
+                            $output_header = true;
+                        }
+                        $out .= '  - step: ' . ( $step->step_name ?? '' ) . PHP_EOL;
+                        $out .= '    subject: ' . wp_strip_all_tags( (string) ( $step->workflow_notification_subject ?? '' ) ) . PHP_EOL;
+                        $out .= '    message: ' . wp_strip_all_tags( (string) ( $step->workflow_notification_message ?? '' ) ) . PHP_EOL;
+                        $out .= str_repeat( '-', 40 ) . PHP_EOL;
                     }
-                    $out .= '  - step: ' . $step->__get( 'step_name' ) . PHP_EOL;
-                    $out .= '    subject: ' . wp_strip_all_tags( (string) $step->__get( 'workflow_notification_subject' ) ) . PHP_EOL;
-                    $out .= '    message: ' . wp_strip_all_tags( (string) $step->__get( 'workflow_notification_message' ) ) . PHP_EOL;
-                    $out .= str_repeat( '-', 40 ) . PHP_EOL;
                 }
             }
         }
