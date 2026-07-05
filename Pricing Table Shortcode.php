@@ -1247,7 +1247,7 @@ class Bld_Go_PricingTable {
 
             <div class="go-pt-coupon-banner" data-go-pt="coupon-banner" aria-live="polite"></div>
 
-            <div class="go-pt-grid" data-go-pt="grid">
+            <div class="go-pt-grid" data-go-pt="grid" data-plan-count="<?php echo count( $plans ); ?>" style="--go-pt-count: <?php echo count( $plans ); ?>;">
                 <?php
                 foreach ( $plans as $idx => $pl ) :
                     $plan_key = 'plan-' . ( $idx + 1 );
@@ -1530,8 +1530,15 @@ class Bld_Go_PricingTable {
 
 
             /* Grid: desktop = columns, mobile = stacked cards */
-            .go-pt-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
-            @media (min-width: 900px) { .go-pt-grid > .go-pt-card { grid-column: span 4; } }
+            .go-pt-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; justify-content: center; }
+            @media (min-width: 900px) {
+                .go-pt-grid > .go-pt-card { grid-column: span 4; }
+                /* When the row isn't full (1 or 2 plans), switch to fixed-width tracks so the grid can center instead of hugging the left. */
+                .go-pt-grid[data-plan-count="1"],
+                .go-pt-grid[data-plan-count="2"] { grid-template-columns: repeat(var(--go-pt-count), minmax(260px, 340px)); }
+                .go-pt-grid[data-plan-count="1"] > .go-pt-card,
+                .go-pt-grid[data-plan-count="2"] > .go-pt-card { grid-column: auto; }
+            }
             @media (max-width: 899.98px) {
                 .go-pt-grid { grid-template-columns: 1fr; }
             }
