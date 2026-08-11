@@ -2,15 +2,17 @@ name: Submit New Files to Gravity Forms
 
 on:
   push:
-    paths-ignore:
-      - '.github/**'
-      - '.gitignore'
-      - '.gitattributes'
-      - 'README.md'
-      - 'LICENSE'
-      - '*.md'
-  create:
+    branches:
+      - main
+    paths:
+      - '**.php'
+      - '**.js'
   workflow_dispatch:
+    inputs:
+      snippet_path:
+        description: PHP or JavaScript snippet to submit
+        required: true
+        type: string
 
 jobs:
   submit_new_files:
@@ -27,48 +29,64 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_BRANCH: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}
+          MANUAL_SNIPPET_PATH: ${{ inputs.snippet_path }}
         run: |
           set -euo pipefail
-          # Ensure the previous commit exists
-          BEFORE_COMMIT=${{ github.event.before }}
-          if [ -z "$BEFORE_COMMIT" ] || ! git rev-parse "$BEFORE_COMMIT" >/dev/null 2>&1; then
-            echo "Previous commit not found, using HEAD~1"
-            BEFORE_COMMIT="HEAD~1"
-          fi
-
-          # Get added files, but exclude any that are part of a rename
-          # Strategy:
-          # 1) Collect added files (A)
-          # 2) Collect renamed pairs (R) and extract the new path (right side)
-          # 3) Subtract renamed-new-paths from added list
-          ADDED_FILES=$(git -c core.quotepath=false diff -M --name-only --diff-filter=A "$BEFORE_COMMIT".."${{ github.sha }}")
-          RENAMED_NEW_PATHS=$(git -c core.quotepath=false diff -M --name-status --diff-filter=R "$BEFORE_COMMIT".."${{ github.sha }}" | awk '{print $3}')
-          # Filter ADDED_FILES to remove any path that appears as a renamed destination
-          CLEAN_ADDED_FILES=""
-          if [ -n "$ADDED_FILES" ]; then
-            while IFS= read -r FILE; do
-              [ -z "$FILE" ] && continue
-              if ! echo "$RENAMED_NEW_PATHS" | grep -Fxq "$FILE"; then
-                CLEAN_ADDED_FILES="${CLEAN_ADDED_FILES}"$'\n'"$FILE"
-              fi
-            done <<< "$ADDED_FILES"
-            CLEAN_ADDED_FILES=$(echo "$CLEAN_ADDED_FILES" | sed '/^$/d')
-          fi
-
-          # Further filter to only real snippet files: *.php or *.js; exclude dotfiles and .github
           FILTERED_FILES=""
-          if [ -n "$CLEAN_ADDED_FILES" ]; then
-            while IFS= read -r FILE; do
-              [ -z "$FILE" ] && continue
-              case "$FILE" in
-                .github/*|*/.github/*) continue ;;
-                .*) continue ;;
-                */.*) continue ;;
-                *.php|*.js) FILTERED_FILES="${FILTERED_FILES}"$'\n'"$FILE" ;;
-                *) continue ;;
-              esac
-            done <<< "$CLEAN_ADDED_FILES"
-            FILTERED_FILES=$(echo "$FILTERED_FILES" | sed '/^$/d')
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            case "$MANUAL_SNIPPET_PATH" in
+              ''|/*|../*|*/../*|.github/*|*/.github/*|.*|*/.*)
+                echo "Invalid manual snippet path: $MANUAL_SNIPPET_PATH"
+                exit 1
+                ;;
+              *.php|*.js)
+                if [ ! -f "$MANUAL_SNIPPET_PATH" ] || ! git ls-files --error-unmatch -- "$MANUAL_SNIPPET_PATH" >/dev/null 2>&1; then
+                  echo "Manual snippet path is not a tracked file: $MANUAL_SNIPPET_PATH"
+                  exit 1
+                fi
+                FILTERED_FILES="$MANUAL_SNIPPET_PATH"
+                ;;
+              *)
+                echo "Manual snippet path must end in .php or .js: $MANUAL_SNIPPET_PATH"
+                exit 1
+                ;;
+            esac
+          else
+            # Ensure the previous commit exists.
+            BEFORE_COMMIT=${{ github.event.before }}
+            if [ -z "$BEFORE_COMMIT" ] || ! git rev-parse "$BEFORE_COMMIT" >/dev/null 2>&1; then
+              echo "Previous commit not found, using HEAD~1"
+              BEFORE_COMMIT="HEAD~1"
+            fi
+
+            # Get added files, but exclude any that are part of a rename.
+            ADDED_FILES=$(git -c core.quotepath=false diff -M --name-only --diff-filter=A "$BEFORE_COMMIT".."${{ github.sha }}")
+            RENAMED_NEW_PATHS=$(git -c core.quotepath=false diff -M --name-status --diff-filter=R "$BEFORE_COMMIT".."${{ github.sha }}" | awk '{print $3}')
+            CLEAN_ADDED_FILES=""
+            if [ -n "$ADDED_FILES" ]; then
+              while IFS= read -r FILE; do
+                [ -z "$FILE" ] && continue
+                if ! echo "$RENAMED_NEW_PATHS" | grep -Fxq "$FILE"; then
+                  CLEAN_ADDED_FILES="${CLEAN_ADDED_FILES}"$'\n'"$FILE"
+                fi
+              done <<< "$ADDED_FILES"
+              CLEAN_ADDED_FILES=$(echo "$CLEAN_ADDED_FILES" | sed '/^$/d')
+            fi
+
+            # Keep only real snippet files and exclude dotfiles and .github.
+            if [ -n "$CLEAN_ADDED_FILES" ]; then
+              while IFS= read -r FILE; do
+                [ -z "$FILE" ] && continue
+                case "$FILE" in
+                  .github/*|*/.github/*) continue ;;
+                  .*) continue ;;
+                  */.*) continue ;;
+                  *.php|*.js) FILTERED_FILES="${FILTERED_FILES}"$'\n'"$FILE" ;;
+                  *) continue ;;
+                esac
+              done <<< "$CLEAN_ADDED_FILES"
+              FILTERED_FILES=$(echo "$FILTERED_FILES" | sed '/^$/d')
+            fi
           fi
 
           if [ -n "$FILTERED_FILES" ]; then
@@ -84,15 +102,30 @@ jobs:
               BLOB_URL="https://github.com/${GITHUB_REPO}/blob/${GITHUB_SHA}/${ENCODED_FILE_NAME}"
               RAW_URL="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}/${ENCODED_FILE_NAME}"
 
+              case "$FILE" in
+                *.php)
+                  INSTALL_WITH="Code Snippets"
+                  ;;
+                *.js)
+                  INSTALL_WITH="Code Chest"
+                  if sed -n '1,60p' "$FILE" | grep -Eiq '@bld-install[[:space:]]*:?[[:space:]]*Custom JS'; then
+                    INSTALL_WITH="Custom JS"
+                  fi
+                  ;;
+              esac
+
               JSON_PAYLOAD=$(jq -n \
                 --arg file_name "$FILE_NAME" \
                 --arg blob_url "$BLOB_URL" \
                 --arg raw_url "$RAW_URL" \
-                '{input_1: $file_name, input_5: $blob_url, input_4: $raw_url}')
+                --arg install_with "$INSTALL_WITH" \
+                --rawfile source_code "$FILE" \
+                '{input_1: $file_name, input_4: $raw_url, input_5: $blob_url, input_7: $install_with, input_11: $source_code}')
 
               echo "Submitting data for: $FILE_NAME"
               echo "Blob URL: $BLOB_URL"
               echo "Raw URL: $RAW_URL"
+              echo "Install with: $INSTALL_WITH"
 
               HTTP_STATUS=$(curl -sS -o /tmp/resp.json -w "%{http_code}" -X POST "$GF_WEBHOOK_URL" \
                 -u "${{ secrets.GF_CONSUMER_KEY }}:${{ secrets.GF_CONSUMER_SECRET }}" \
