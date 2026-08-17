@@ -7,7 +7,6 @@
  * - Adds Start Step settings to (a) delay initial start until GravityView approval and (b) restart a
  *   completed workflow on each subscription payment. Optionally update a date field on restart and
  *   include manual restart buttons in the entry details sidebar.
- *
  */
 
 	// to add checkboxes
@@ -155,14 +154,16 @@ add_action(
 		if ( ! $is_checked ) {
 			return;
 		}
-		$field_id      = $start_step->__get( 'update_date_field' );
-		$original_date = null;
-		if ( $start_step->__get( 'also_for_gv' ) && $field_id && isset( $entry[ $field_id ] ) ) {
-			$original_date = $entry[ $field_id ];
-			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
-			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
+		$api = new Gravity_Flow_API( $form_id );
+
+		// Same rule as the subscription-payment path: an approval must not yank a
+		// workflow that is already live on a step. With this feature the workflow is
+		// normally cancelled at start, so a current step here means something else
+		// already started it and approving should leave it alone.
+		if ( false !== $api->get_current_step( $entry ) ) {
+			return;
 		}
-		$api            = new Gravity_Flow_API( $form_id );
+
 		$target_step_id = $start_step->__get( 'restart_target_step' );
 		$target_step    = null;
 		if ( $target_step_id ) {
@@ -175,21 +176,29 @@ add_action(
 			}
 			$target_step = $steps[0] ?? null;
 		}
-		if ( $target_step ) {
-			$gwf->add_timeline_note( $entry['id'], 'Workflow started because of Gravity View Approval.' );
-			if ( null !== $original_date ) {
-				add_action(
-					'gravityflow_post_process_workflow',
-					static function () use ( $entry, $field_id, $original_date ) {
-						GFAPI::update_entry_field( $entry['id'], $field_id, $original_date );
-					}
-				);
-			}
-			$api->send_to_step( $entry, $target_step->get_id() );
-            GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
-		} else {
-            GFAPI::add_note( $entry_id, 0, 'bld-restart-workflow', 'Step not found, unable to restart workflow.' );
-        }
+		if ( ! $target_step ) {
+			GFAPI::add_note( (int) $entry_id, 0, 'bld-restart-workflow', 'Step not found, unable to restart workflow.' );
+			return;
+		}
+
+		// Only bump the date field once the restart is certain — see the matching
+		// comment in the subscription-payment handler.
+		$field_id = $start_step->__get( 'update_date_field' );
+		if ( $start_step->__get( 'also_for_gv' ) && $field_id && isset( $entry[ $field_id ] ) ) {
+			$original_date = $entry[ $field_id ];
+			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
+			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
+			add_action(
+				'gravityflow_post_process_workflow',
+				static function () use ( $entry, $field_id, $original_date ) {
+					GFAPI::update_entry_field( $entry['id'], $field_id, $original_date );
+				}
+			);
+		}
+
+		$gwf->add_timeline_note( $entry['id'], 'Workflow started because of Gravity View Approval.' );
+		$api->send_to_step( $entry, $target_step->get_id() );
+		GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
 	},
 	10,
 	1
@@ -216,14 +225,24 @@ add_action(
 		if ( ! $is_checked ) {
 			return;
 		}
-		$field_id      = $start->__get( 'update_date_field' );
-		$original_date = null;
-		if ( $field_id && isset( $entry[ $field_id ] ) ) {
-			$original_date = $entry[ $field_id ];
-			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
-			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
+		$api = new Gravity_Flow_API( $form_id );
+
+		// Never disturb a workflow that is currently live on a step: a recurring
+		// payment arriving while the entry sits on a step must not discard it.
+		//
+		// Test for the presence of a current step rather than matching status
+		// strings. get_status() returns the *step's* evaluated status while a step is
+		// live, and that vocabulary is open-ended — 'pending', but also 'queued'
+		// (scheduled/delayed steps, which is exactly how the Crowded balance-gate step
+		// parks an entry), an approval step's 'approved'/'rejected' mid-processing, a
+		// webhook step's 'error_client'/'error_server', and anything a custom step or
+		// the gravityflow_step_status_evaluation_approval filter invents. No string
+		// list stays correct. get_current_step() returning false is the unambiguous
+		// "workflow has ended" signal, whatever final status it ended on.
+		if ( false !== $api->get_current_step( $entry ) ) {
+			return;
 		}
-		$api            = new Gravity_Flow_API( $form_id );
+
 		$target_step_id = $start->__get( 'restart_target_step' );
 		$target_step    = null;
 		if ( $target_step_id ) {
@@ -236,21 +255,31 @@ add_action(
 			}
 			$target_step = $steps[0] ?? null;
 		}
-		if ( $target_step ) {
-			$gwf->add_timeline_note( $entry['id'], 'Workflow started because of subscription payment.' );
-			if ( null !== $original_date ) {
-				add_action(
-					'gravityflow_post_process_workflow',
-					static function () use ( $entry, $field_id, $original_date ) {
-						GFAPI::update_entry_field( $entry['id'], $field_id, $original_date );
-					}
-				);
-			}
-			$api->send_to_step( $entry, $target_step->get_id() );
-            GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
-		} else {
-            GFAPI::add_note( $entry['id'], 0, 'bld-restart-workflow', 'Step not found, unable to restart workflow.' );
-        }
+		if ( ! $target_step ) {
+			GFAPI::add_note( $entry['id'], 0, 'bld-restart-workflow', 'Step not found, unable to restart workflow.' );
+			return;
+		}
+
+		// Bump the date field only once the restart is certain, and register the
+		// restore in the same breath. Updating it before the target step was resolved
+		// left the field permanently overwritten with today whenever the restart then
+		// bailed, because the restore was only ever hooked on the success path.
+		$field_id = $start->__get( 'update_date_field' );
+		if ( $field_id && isset( $entry[ $field_id ] ) ) {
+			$original_date = $entry[ $field_id ];
+			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
+			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
+			add_action(
+				'gravityflow_post_process_workflow',
+				static function () use ( $entry, $field_id, $original_date ) {
+					GFAPI::update_entry_field( $entry['id'], $field_id, $original_date );
+				}
+			);
+		}
+
+		$gwf->add_timeline_note( $entry['id'], 'Workflow started because of subscription payment.' );
+		$api->send_to_step( $entry, $target_step->get_id() );
+		GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
 	},
 	10,
 	2
