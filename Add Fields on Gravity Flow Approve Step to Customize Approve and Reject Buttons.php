@@ -97,15 +97,26 @@ add_filter(
 			];
 			array_splice( $fields, $insert_at, 0, [ $rejection_text ] );
 
-			// Only show the Revert label field on Approval steps when the workflow has a User Input step.
+			// Only show the Revert label field on Approval steps when the workflow has a User Input step,
+			// and then only while Gravity Flow's own "Revert to User Input step" setting is enabled.
 			if ( $has_user_input_step ) {
 				$insert_at++;
 				$revert_text = [
-					'name'    => 'custom_revert_text',
-					'label'   => 'Custom Revert Button Text',
-					'type'    => 'text',
-					'class'   => 'merge-tag-support mt-position-right',
-					'tooltip' => 'Enter text that you would like to display instead of "Revert" when sending back to a User Input step.',
+					'name'       => 'custom_revert_text',
+					'label'      => 'Custom Revert Button Text',
+					'type'       => 'text',
+					'class'      => 'merge-tag-support mt-position-right',
+					'tooltip'    => 'Enter text that you would like to display instead of "Revert" when sending back to a User Input step.',
+					'dependency' => [
+						'live'   => true,
+						'fields' => [
+							[
+								// Checkbox input of Gravity Flow's 'revert' checkbox_and_select setting.
+								'field'  => 'revertEnable',
+								'values' => [ '1' ],
+							],
+						],
+					],
 				];
 				array_splice( $fields, $insert_at, 0, [ $revert_text ] );
 			}
@@ -113,36 +124,69 @@ add_filter(
 			$settings[ $target_section_index ]['fields'] = $fields;
 		}
 
-		// User Input step: add fields for custom Submit/Update/Save Progress button labels.
+		// User Input step: add fields for the button labels this step actually renders.
+		//
+		// Which buttons exist is decided by Gravity Flow's "Save Progress" setting (default_status).
+		// "submit_buttons" renders a "Save" button and a "Submit" button; "hidden" renders a single
+		// button labelled "Submit"; the two radio button options render a single "Update" button.
+		// Each field below is shown only for the settings that render its button, so a step never
+		// offers a label for a button it does not have.
 		if ( $is_user_input ) {
+			$save_progress_text = [
+				'name'       => 'custom_user_input_save_text',
+				'label'      => 'Custom Save Button Text',
+				'type'       => 'text',
+				'class'      => 'merge-tag-support mt-position-right',
+				'tooltip'    => 'Enter text to display instead of "Save" on the button that saves progress without completing this step.',
+				'dependency' => [
+					'live'   => true,
+					'fields' => [
+						[
+							'field'  => 'default_status',
+							'values' => [ 'submit_buttons' ],
+						],
+					],
+				],
+			];
+			array_splice( $fields, $insert_at, 0, [ $save_progress_text ] );
+			$insert_at++;
+
 			$submit_text = [
-				'name'    => 'custom_user_input_submit_text',
-				'label'   => 'Custom Submit Form Button Text',
-				'type'    => 'text',
-				'class'   => 'merge-tag-support mt-position-right',
-				'tooltip' => 'Enter text that you would like to display instead of "Submit" for this User Input step.',
+				'name'       => 'custom_user_input_submit_text',
+				'label'      => 'Custom Submit Button Text',
+				'type'       => 'text',
+				'class'      => 'merge-tag-support mt-position-right',
+				'tooltip'    => 'Enter text that you would like to display instead of "Submit" on the button that completes this step.',
+				'dependency' => [
+					'live'   => true,
+					'fields' => [
+						[
+							'field'  => 'default_status',
+							'values' => [ 'submit_buttons', 'hidden' ],
+						],
+					],
+				],
 			];
 			array_splice( $fields, $insert_at, 0, [ $submit_text ] );
 			$insert_at++;
 
 			$update_text = [
-				'name'    => 'custom_user_input_update_text',
-				'label'   => 'Custom Update Button Text',
-				'type'    => 'text',
-				'class'   => 'merge-tag-support mt-position-right',
-				'tooltip' => 'Enter text that you would like to display instead of "Update" for this User Input step.',
+				'name'       => 'custom_user_input_update_text',
+				'label'      => 'Custom Update Button Text',
+				'type'       => 'text',
+				'class'      => 'merge-tag-support mt-position-right',
+				'tooltip'    => 'Enter text that you would like to display instead of "Update" for this User Input step. The status radio buttons decide whether the entry is saved as in progress or complete.',
+				'dependency' => [
+					'live'   => true,
+					'fields' => [
+						[
+							'field'  => 'default_status',
+							'values' => [ 'in_progress', 'complete' ],
+						],
+					],
+				],
 			];
 			array_splice( $fields, $insert_at, 0, [ $update_text ] );
-			$insert_at++;
-
-			$save_progress_text = [
-				'name'    => 'custom_user_input_save_text',
-				'label'   => 'Custom Save Progress Button Text',
-				'type'    => 'text',
-				'class'   => 'merge-tag-support mt-position-right',
-				'tooltip' => 'Enter text to display instead of "Save Progress" for this User Input step.',
-			];
-			array_splice( $fields, $insert_at, 0, [ $save_progress_text ] );
 
 			$settings[ $target_section_index ]['fields'] = $fields;
 		}
@@ -191,10 +235,26 @@ add_filter(
 	3
 );
 
+// This filter covers the single button rendered when Save Progress is not set to "Submit buttons".
+// Gravity Flow labels that button "Submit" when Save Progress is disabled and "Update" otherwise, so
+// read whichever setting matches the button the assignee actually sees.
 add_filter(
 	'gravityflow_update_button_text_user_input',
 	function ( $label, $form, $step ) {
-		$custom = is_object( $step ) && method_exists( $step, '__get' ) ? $step->__get( 'custom_user_input_update_text' ) : '';
+		if ( ! is_object( $step ) || ! method_exists( $step, '__get' ) ) {
+			return $label;
+		}
+
+		if ( 'hidden' === $step->__get( 'default_status' ) ) {
+			$custom = $step->__get( 'custom_user_input_submit_text' );
+			// Steps configured before this button had its own setting stored the label as the update text.
+			if ( empty( $custom ) ) {
+				$custom = $step->__get( 'custom_user_input_update_text' );
+			}
+		} else {
+			$custom = $step->__get( 'custom_user_input_update_text' );
+		}
+
 		return empty( $custom ) ? $label : $custom;
 	},
 	10,
