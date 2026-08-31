@@ -1,14 +1,18 @@
 <?php
 /**
- * Rename GravityView "Workflow Complete" to the Actual Step Name
+ * Rename Workflow Complete Step
+ *
+ * @gravityflow
+ * @gravityview
  *
  * GOAL:
- * - When GravityView displays the status "Workflow Complete", replace it with the configured
- *   Workflow Complete step name from Gravity Flow for selected forms.
- *
+ * This code snippet **renames the "Workflow Complete" step** in Gravity Flow by dynamically
+ * replacing it with the actual name of the last completed step in the workflow. This ensures that
+ * users see a meaningful step name rather than the generic "Workflow Complete" label when viewing
+ * GravityView entries.
  *
  * CONFIGURATION:
- * - Update $form_ids below to the list of form IDs this should apply to.
+ * - `$form_ids`: Update to the list of form IDs this should apply to.
  *
  * NOTES:
  * - Runs only when the field value is exactly "Workflow Complete".

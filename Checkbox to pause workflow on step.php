@@ -1,11 +1,27 @@
 <?php
 /**
- * Pause GravityFlow workflow after a step completion if configured.
+ * Pause the Workflow After a Step
  *
- * The pause can be limited to particular step outcomes. Gravity Flow fires
- * gravityflow_step_complete for every status a step can end on, failures included, so a step with
- * more than one outcome offers a checkbox per status. Ticking none keeps the original behaviour of
- * pausing however the step ends.
+ * @gravityflow
+ *
+ * GOAL:
+ * Adds a setting to every Gravity Flow workflow step that pauses the entry on that step. Once
+ * paused, the entry does not move on unless it is manually moved to a different step. Useful
+ * when an earlier step hit an error and was routed to a "failure" route: the entry can sit on
+ * the designated step until the problem is fixed and the entry re-processed.
+ *
+ * CONFIGURATION:
+ * - Tick **Pause after this step** in the step's settings.
+ * - The pause can be limited to particular step outcomes. A step with more than one outcome
+ *   offers a checkbox per status under **Pause only on these outcomes**; the list reflects the
+ *   step type as it was last saved.
+ * - Leaving every outcome unticked pauses however the step ends.
+ *
+ * NOTES:
+ * - Gravity Flow fires `gravityflow_step_complete` for every status a step can end on,
+ *   failures included, which is why limiting the pause to specific outcomes is worth doing.
+ * - When the pause is limited to selected outcomes the step keeps its real status, so the
+ *   outcome stays visible on the entry.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

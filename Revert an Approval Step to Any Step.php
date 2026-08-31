@@ -2,35 +2,39 @@
 /**
  * Revert an Approval Step to Any Step
  *
- * GOAL:
- * - Gravity Flow's Approval step can show a third "Revert" button beside Approve and Reject, but the
- *   step it reverts to can only be a User Input step, and the setting is hidden altogether in a
- *   workflow that has no User Input step. Nothing in the engine requires that: the approval step's
- *   process_revert_status() ends the current step and starts whichever step ID was saved, whatever
- *   type that step is. This snippet widens the setting so Revert can target any step in the
- *   workflow, and adds the setting to workflows that have no User Input step at all.
+ * @gravityflow
  *
- * WHAT IT CHANGES (Approval steps only):
- * - "Revert to User Input step" becomes "Revert to step", and the select lists every step in the
- *   workflow except the Approval step itself.
- * - When Gravity Flow left the setting out because the workflow has no User Input step, the snippet
- *   adds it back along with the pieces Gravity Flow only creates alongside its own revert setting:
- *   the two "Required if reverted" Workflow Note options, the Revert Email tab, and the "Reverted
- *   Confirmation" message.
+ * GOAL:
+ * Gravity Flow's Approval step can show a third "Revert" button beside Approve and Reject, but
+ * the step it reverts to can only be a User Input step, and the setting is hidden altogether in
+ * a workflow that has no User Input step. Nothing in the engine requires that: the approval
+ * step's `process_revert_status()` ends the current step and starts whichever step ID was saved,
+ * whatever type that step is. This snippet widens the setting so Revert can target **any** step
+ * in the workflow, and adds the setting to workflows that have no User Input step at all.
+ *
+ * FEATURES:
+ * Applies to Approval steps only.
+ * - "Revert to User Input step" becomes "Revert to step", and the select lists every step in
+ *   the workflow except the Approval step itself.
+ * - When Gravity Flow left the setting out because the workflow has no User Input step, the
+ *   snippet adds it back along with the pieces Gravity Flow only creates alongside its own
+ *   revert setting: the two "Required if reverted" Workflow Note options, the Revert Email tab,
+ *   and the "Reverted Confirmation" message.
  *
  * NOTES:
- * - Reverting re-runs every step between the target and this one. That is already how reverting to
- *   an earlier User Input step behaves, since each step is restarted as the workflow walks forward
- *   again; no step statuses are left stale.
+ * - Reverting re-runs every step between the target and this one. That is already how reverting
+ *   to an earlier User Input step behaves, since each step is restarted as the workflow walks
+ *   forward again; no step statuses are left stale.
  * - Gravity Flow only suppresses the target step's own assignee email when the target is a User
  *   Input step. Revert to any other type and the assignee email for that step is sent as usual,
  *   alongside the Revert Email if you have enabled it.
- * - Steps whose conditions are not met are still listed. Gravity Flow evaluates the condition when
- *   the step starts, so the entry will move straight through such a step after reverting to it.
- * - Gravity Flow's own confirmation message and timeline note name the target by its step *type*
- *   ("Reverted to step: Approval"), not by the step name. That was always the case, but it reads
- *   oddly once the target can be any type; set a custom "Reverted Confirmation" message on the step
- *   if the default wording matters to you.
+ * - Steps whose conditions are not met are still listed. Gravity Flow evaluates the condition
+ *   when the step starts, so the entry will move straight through such a step after reverting
+ *   to it.
+ * - Gravity Flow's own confirmation message and timeline note name the target by its step
+ *   *type* ("Reverted to step: Approval"), not by the step name. That was always the case, but
+ *   it reads oddly once the target can be any type; set a custom "Reverted Confirmation"
+ *   message on the step if the default wording matters to you.
  * - Pairs with the "Add Fields on Gravity Flow Approve Step to Customize Approve and Reject
  *   Buttons" snippet, which renames the Revert button the assignee sees.
  */

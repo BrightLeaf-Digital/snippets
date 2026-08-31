@@ -1,3 +1,15 @@
+
+/**
+ * Snippet to get GitHub snippets
+ *
+ * @gravityview
+ *
+ * GOAL:
+ * This is the snippet that powers this snippet directory. The snippet is installed as custom code
+ * on a Gravity View and fetches the code from GitHub and displays it in the specified HTML element
+ * - in this case the code box. The code box is created mostly through CSS.
+ */
+
 addEventListener('DOMContentLoaded', function () {
     const urlElement = document.querySelector('.gv-field-2-4'); // GravityView field ID
     const codeBox = document.getElementById('codeBox');

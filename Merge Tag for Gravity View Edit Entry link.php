@@ -1,8 +1,49 @@
 <?php
 /**
- * GravityView: custom merge tag {gview_edit_entry_link} and {gview_edit_entry_link:Link Text}
+ * Merge Tag for Gravity View Edit Entry link
  *
- * Paste into a small custom plugin or your theme's functions.php.
+ * @gravityview
+ * @gravityforms
+ *
+ * GOAL:
+ * Create a custom merge tag that outputs a **secure GravityView Edit Entry link** for the current
+ * entry when displayed inside a GravityView context.
+ *
+ * The snippet registers the merge tags:
+ *
+ *     {gview_edit_entry_link}
+ *     {gview_edit_entry_link:Link Text}
+ *
+ * These tags generate an edit link to the current entry within the active GravityView.
+ *
+ * USAGE:
+ *     {gview_edit_entry_link:Your Link Text}
+ *
+ *     {gview_edit_entry_link:Update your submission}
+ *
+ * # Default Behavior
+ *
+ * If no link text is provided, the merge tag will automatically use: Edit Entry
+ *
+ * # Where It Works
+ *
+ * The merge tag works in any content processed through Gravity Forms merge tags, including:
+ *
+ * - GravityView **Custom Content fields**
+ * - Gravity Forms **confirmations**
+ * - Gravity Forms **notifications**
+ * - Any text processed through `gform_replace_merge_tags`
+ *
+ * FEATURES:
+ * - Generates a **GravityView Edit Entry link** for the current entry.
+ * - Uses the **current View ID automatically** (no configuration required).
+ * - Ensures the link is only displayed if the **current user has permission to edit the entry**.
+ * - Supports custom link text.
+ *
+ * # Customizing the Link Text
+ *
+ * You can customize the text displayed in the edit link by adding text after the merge tag using a
+ * colon.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

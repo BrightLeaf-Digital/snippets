@@ -1,12 +1,36 @@
 <?php
 /* phpcs:disable WordPress.Files.FileName */
 /**
- * Restart Workflow on GV Approval and Subscription Payment
+ * Restart workflow on GV approval and subscription payment
+ *
+ * @gravityflow
+ * @gravityview
+ * @gravityforms
  *
  * GOAL:
- * - Adds Start Step settings to (a) delay initial start until GravityView approval and (b) restart a
- *   completed workflow on each subscription payment. Optionally update a date field on restart and
- *   include manual restart buttons in the entry details sidebar.
+ * This code snippet enhances **Gravity Flow** by allowing workflows to be delayed or restarted
+ * based on **GravityView approval** and **subscription payments**. It provides options to:
+ *
+ * - **Delay workflow initiation** until an entry is approved in GravityView instead of starting
+ *   upon form submission.
+ * - **Restart the workflow** upon each subscription payment for recurring payment scenarios.
+ * - **Update a date field** when the workflow restarts to reflect the latest payment or approval.
+ * - **Manually restart workflows** from the entry detail sidebar in the admin panel.
+ *
+ * FEATURES:
+ * ✔ **Delay Workflow Until Approval** – Prevents workflows from starting immediately on form
+ * submission and instead begins only after **GravityView approval**. ✔ **Restart Workflow on
+ * Subscription Payment** – When a new payment is received, the workflow restarts automatically,
+ * making it useful for recurring payments. ✔ **Configurable Options in Gravity Flow Step
+ * Settings** – Adds checkboxes in **Workflow Start steps** to enable these behaviors
+ * selectively. ✔ **Auto-Update Date Field** – Updates a selected date field when the workflow
+ * restarts, ensuring accurate tracking. ✔ **Manual Workflow Restart from Admin Panel** – Adds
+ * buttons in the **entry detail sidebar**, allowing admins to manually restart workflows for
+ * **GravityView approval** or **subscription payments**. ✔ **Ensures Workflow Integrity** –
+ * Automatically cancels the initial workflow if delayed until GravityView approval to prevent
+ * redundant execution. This snippet integrates seamlessly with **Gravity Flow, GravityView, and
+ * Gravity Forms Subscription Payments**, enabling more **dynamic and automated workflow
+ * management**.
  */
 
 	// to add checkboxes

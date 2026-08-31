@@ -1,4 +1,24 @@
 <?php
+/**
+ * Add Fields on Gravity Flow Approve Step to Customize Approve and Reject Buttons
+ *
+ * @gravityflow
+ *
+ * GOAL:
+ * **New****:** The snippet now also supports custom labels for the revert button on an Approval
+ * step, as well as Custom Submit Form label, Custom Update label, and Custom Save Progress label
+ * for the User Input step. This code snippet enhances Gravity Flow by allowing administrators to
+ * customize the text of the "Approve" and "Reject" buttons in an Approval step. Instead of the
+ * default labels, users can specify their own button text for each step, improving clarity and
+ * workflow customization.
+ *
+ * FEATURES:
+ * - Adds a **"Custom Approval Button Text"** field to Approval step settings.
+ * - Adds a **"Custom Rejection Button Text"** field to Approval step settings.
+ * - Dynamically updates the button labels based on the custom text entered.
+ * - Enhances workflow clarity by allowing tailored approval and rejection options.
+ */
+
 add_filter(
 	'gravityflow_step_settings_fields',
 	function ( $settings, $step ) {

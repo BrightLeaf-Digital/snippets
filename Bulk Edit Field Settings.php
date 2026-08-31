@@ -1,8 +1,19 @@
 <?php
 /**
- * Plugin Name: BL GF Editor Bulk Field Edit (Sidebar-native)
- * Description: Bulk-edit core field properties from inside the existing Gravity Forms editor sidebar UI.
- * Version: 0.5.0
+ * Bulk Edit Field Settings
+ *
+ * @gravityforms
+ *
+ * GOAL:
+ * This snippet allows you to bulk edit field properties like "Required," "Visibility," "Allow
+ * Duplicates" and more. It adds a small floating button to the side of each field. When you click
+ * on a button it opens a new tab in the sidebar where you can edit the desired settings. You can
+ * also select all, none or exit bulk edit mode from this tab. When you make a change the field
+ * properties are updated as if you went to each individual field and updated the property - but it
+ * does not save the changes. You still have to click save just like with any other changes. The
+ * snippet prevents you from editing settings on a field that does not support it. For instance if
+ * you have a field that does not support the "Size" setting then the snippet will update the other
+ * selected fields and display a message that the property is not supported for the relevant field.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

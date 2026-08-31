@@ -2,39 +2,22 @@
 /**
  * Gravity Forms Advanced Conditional Logic Editor UI
  *
- * GOAL
- * Adds a powerful "Advanced Conditional Groups" interface to the Gravity Forms editor.
- * Allows for complex, nested "AND" and "OR" logic that isn't possible with standard settings.
+ * @gravityforms
  *
- * CONFIGURATION REQUIRED
- * - Must be active alongside the "Gravity Forms Advanced Conditional Logic Runtime Engine" snippet.
- * - Requires Gravity Forms to be installed and active.
- *
- * USAGE
- * 1. Enable this snippet and the "Runtime Engine" snippet.
- * 2. Edit a Gravity Form and click on a field to open its settings.
- * 3. In the sidebar, look for "Conditional Logic" -> "Advanced Conditional Groups".
- * 4. Toggle "Enable Advanced Groups" to ON.
- * 5. Use "Add group" and "+" buttons to build your complex logic.
- * 6. Save the form.
- *
- * FEATURES
- * - NESTED GROUPS: Create multiple groups and choose between AND/OR logic between them.
- * - INTERNAL LOGIC: Choose between AND/OR logic for rules within each group.
- * - NATIVE IMPORT: "Initialize from existing Conditional Logic" button to quickly migrate setups.
- * - SECURE STORAGE: Saves directly to field settings.
- *
- * TIPS
- * - Enabling Advanced Groups overrides the standard Gravity Forms "Conditional Logic" for that field.
- * - You can choose whether the logic should "Show" or "Hide" the field when conditions are met.
- *
- * --- TECHNICAL NOTES ---
- * 1. STORAGE: Config is stored on the field as field.blAdvLogic via SetFieldProperty.
- *
- * 2. CACHING: Per-field cache (BL_ADVLOGIC_CACHE) survives the toggle cycle where disabling
- *    then re-enabling advanced groups caused groups to be wiped: the cache stores the
- *    last known good config (with actual rules) per field ID, and restores it when
- *    re-enabling if the current in-memory config has empty groups.
+ * GOAL:
+ * GOAL Adds a powerful "Advanced Conditional Groups" interface to the Gravity Forms editor. Allows
+ * for complex, nested "AND" and "OR" logic that isn't possible with standard settings.
+ * CONFIGURATION REQUIRED - Must be active alongside the "Gravity Forms Advanced Conditional Logic
+ * Runtime Engine" snippet. - Requires Gravity Forms to be installed and active. USAGE 1. Enable
+ * this snippet and the "Runtime Engine" snippet. 2. Edit a Gravity Form and click on a field to
+ * open its settings. 3. In the sidebar, look for "Conditional Logic" -> "Advanced Conditional
+ * Groups". 4. Toggle "Enable Advanced Groups" to ON. 5. Use "Add group" and "+" buttons to build
+ * your complex logic. 6. Save the form. FEATURES - NESTED GROUPS: Create multiple groups and
+ * choose between AND/OR logic between them. - INTERNAL LOGIC: Choose between AND/OR logic for
+ * rules within each group. - NATIVE IMPORT: "Initialize from existing Conditional Logic" button to
+ * quickly migrate setups. - SECURE STORAGE: Saves directly to field settings. TIPS - Enabling
+ * Advanced Groups overrides the standard Gravity Forms "Conditional Logic" for that field. - You
+ * can choose whether the logic should "Show" or "Hide" the field when conditions are met.
  */
 
 add_action(

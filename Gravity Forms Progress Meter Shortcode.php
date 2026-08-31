@@ -2,39 +2,31 @@
 /**
  * Gravity Forms Progress Meter Shortcode
  *
- * GOAL
- * Creates a visual progress meter that calculates the sum of a specific numeric field
- * from Gravity Forms entries and displays progress toward a goal. Supports filtering
- * by field values, date ranges, and custom multipliers.
+ * @gravityforms
  *
- * CONFIGURATION REQUIRED
- * - CSS: Style .gfpm-container, .gfpm-meter, .gfpm-fill, .gfpm-caption, .gfpm-goal
- * - CSS: Set width, colors, borders for progress bar appearance
- * - Gravity Forms: Must be installed with at least one form containing numeric field
- * - Attributes: form_id, field, and goal are required
+ * GOAL:
+ * Creates a visual progress meter that calculates the sum of a specific numeric field from Gravity
+ * Forms entries and displays progress toward a goal. Supports filtering by field values, date
+ * ranges, and custom multipliers.
  *
- * USAGE
- * Basic:
- * [gf_progress_meter form_id="1" field="5" goal="10000"]
+ * CONFIGURATION:
+ * CSS: Style .gfpm-container, .gfpm-meter, .gfpm-fill, .gfpm-caption, .gfpm-goal CSS: Set width,
+ * colors, borders for progress bar appearance Attributes: form_id, field, and goal are required
  *
- * With filter (only sum entries where field 3 = "approved"):
- * [gf_progress_meter form_id="1" field="5" goal="10000" filter_key="3" filter_value="approved"]
+ * USAGE:
+ * - Basic: `[gf_progress_meter form_id="1" field="5" goal="10000"]`
+ * - With filter (only sum entries where field 3 = "approved"): `[gf_progress_meter form_id="1"
+ *   field="5" goal="10000" filter_key="3" filter_value="approved"]`
+ * - With date range: `[gf_progress_meter form_id="1" field="5" goal="10000"
+ *   start_date="2025-01-01" end_date="2025-12-31"]`
+ * - With multiplier (e.g., employee matching): `[gf_progress_meter form_id="1" field="5"
+ *   goal="10000" multiplier="2"]`
+ * - Custom labels: `[gf_progress_meter form_id="1" field="5" goal="10000" caption_label="Raised"
+ *   goal_label="Target"]`
  *
- * With date range:
- * [gf_progress_meter form_id="1" field="5" goal="10000" start_date="2025-01-01" end_date="2025-12-31"]
- *
- * With multiplier (e.g., employee matching):
- * [gf_progress_meter form_id="1" field="5" goal="10000" multiplier="2"]
- *
- * Custom labels:
- * [gf_progress_meter form_id="1" field="5" goal="10000" caption_label="Raised" goal_label="Target"]
- *
- * NOTES
- * - Accepts comma and dollar sign in goal attribute (auto-stripped)
- * - Date format: Use any format accepted by strtotime()
- * - Progress capped at 100% visually
- * - Only processes 'active' status entries (not spam/trash)
- * - Multiplier useful for donation matching scenarios
+ * **NOTES** Accepts comma and dollar sign in goal attribute (auto-stripped) Date format: Use any
+ * format accepted by strtotime() Progress capped at 100% visually Only processes 'active' status
+ * entries (not spam/trash) Multiplier useful for donation matching scenarios
  */
 
 add_action(

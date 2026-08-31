@@ -2,28 +2,27 @@
 /**
  * Countdown Timer Shortcode
  *
- * GOAL <br><br>
- * Creates a real-time countdown timer displaying days, hours, minutes, and seconds
- * until a specified date. Uses WordPress timezone settings and validates date input.
+ * @wordpress
  *
- * CONFIGURATION REQUIRED
+ * GOAL:
+ * Creates a real-time countdown timer displaying days, hours, minutes, and seconds until a
+ * specified date. Uses WordPress timezone settings and validates date input.
+ *
+ * CONFIGURATION:
  * - CSS: Style classes .countdown-timer, .countdown-segment, .countdown-number, .countdown-label
  * - WordPress: Ensure timezone is set correctly in Settings > General
  * - Date Format: Must use dd/mm/yyyy format (e.g., 31/12/2025)
- * - Time Format: HH:MM:SS or HH:MM (24-hour format) in local timezone. Default: 00:00:00 (midnight)
- * - End Text: Optional text to display when countdown reaches zero.
+ * - Accepts an optional `end_text` to show when the timer countdown is finished.
+ * - Accepts an optional `time` (in 24 hour format) attribute to configure what time of day. Useful
+ *   for offsetting against timezones. Can be HH:MM or HH:MM:SS format.
  *
- * USAGE <br><br>
- * [countdown date="31/12/2025"]
- * [countdown date="01/01/2026"]
+ * USAGE:
+ * [countdown date="31/12/2025"] [countdown date="01/01/2026"]
  *
- * NOTES
- * - Supports multiple timers on same page via static counter
- * - Countdown stops at zero (doesn't go negative)
- * - Uses site timezone from WordPress settings
- * - JavaScript updates every second
- * - Timer starts automatically on page load
- * - Falls back gracefully with error messages for invalid dates
+ * NOTES:
+ * Supports multiple timers on same page via static counter Countdown stops at zero (doesn't go
+ * negative) Uses site timezone from WordPress settings JavaScript updates every second Timer
+ * starts automatically on page load Falls back gracefully with error messages for invalid dates
  */
 
 add_shortcode(

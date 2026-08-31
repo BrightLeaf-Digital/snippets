@@ -1,22 +1,19 @@
 <?php
 /**
- * Require At Least One Child Entry to Have a Specific Value (Nested Forms)
+ * Require at least one child entry in batch to have specified value for selected field
+ *
+ * @gravityforms
+ * @gravityperks
  *
  * GOAL:
- * - On the parent form, ensure that within the current Nested Forms batch, at least one child entry
- *   has a specified value in a specified child field.
+ * This code snippet enforces validation on a **Gravity Forms Nested Form field**, ensuring that at
+ * least one child entry in a batch contains a specific value in a selected field. If no child
+ * entry meets the requirement, the form submission is blocked, and a validation message is
+ * displayed. **CONFIGURATION**
  *
- * CONFIGURATION:
- * - Edit the configuration block below. Add your parent form IDs and specify:
- *   - nested_field_id: ID of the Nested Form field on the parent form
- *   - child_field_id:  ID of the field on the child form to check
- *   - required_value:  String value required in at least one child entry
- *   - message:         Validation message to show if requirement is not met
- *
- * NOTES:
- * - Uses the GPNF session to resolve current batch entries when possible; falls back to using the
- *   comma-separated value string from the field when session is unavailable.
- * - Strict comparisons are used; this checks the stored value (not label).
+ * - `$forms`: `nested_field_id`: ID of the Nested Form field on the parent form `child_field_id`:
+ *   ID of the field on the child form to check `required_value`: String value required in at least
+ *   one child entry `message`: Validation message to show if requirement is not met
  */
 
 ( static function () {

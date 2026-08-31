@@ -1,8 +1,35 @@
 <?php
 /**
- * Plugin Name: GF Export Layout
- * Description: Adds an "Export Layout" button to the Gravity Forms editor that copies a full HTML visual layout of the form to clipboard, including GPPA, conditional logic, calculations, and all field metadata.
- * Version: 2.0.0
+ * Export Form Layout to Google Doc
+ *
+ * @gravityforms
+ * @gravityperks
+ *
+ * GOAL:
+ * Adds an "Export Layout" button to the Gravity Forms editor that copies a full HTML visual
+ * layout of the form to the clipboard, ready to paste straight into a Google Doc. Useful for
+ * handing a form's structure to someone who does not have admin access, and for keeping a
+ * readable record of how a form was built.
+ *
+ * REQUIREMENTS:
+ * - Gravity Forms, and the `gravityforms_edit_forms` capability.
+ * - Gravity Perks Populate Anything, for the GPPA section of the export. The rest of the
+ *   layout exports without it.
+ *
+ * USAGE:
+ * Open a form in the editor and click **Export Layout**, then paste into the target document.
+ *
+ * FEATURES:
+ * The exported layout carries the field metadata the editor does not show at a glance:
+ * - Every field and sub-field, with its label, type and visibility.
+ * - Conditional logic, with field IDs resolved back to their labels.
+ * - Calculation formulas.
+ * - Populate Anything (GPPA) choice and value configuration, including the source object type,
+ *   the primary property, and the ordering property and direction.
+ *
+ * NOTES:
+ * - The AJAX endpoint that supplies the field data is nonce-checked and requires
+ *   `gravityforms_edit_forms`, so it is not readable by unprivileged users.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

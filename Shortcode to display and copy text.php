@@ -1,15 +1,22 @@
 <?php
 /**
- * BrightLeaf "Copy This" shortcode
+ * Shortcode to display and copy text
  *
- * Usage:
- *   [bl_copy]Some text to copy[/bl_copy]
- *   [bl_copy label="API Key"]sk_live_123...[/bl_copy]
- *   [bl_copy tag="span"]Text[/bl_copy]
+ * @wordpress
  *
- * Attributes:
+ * GOAL:
+ * This snippet creates a shortcode that displays the configured text along with a copy button to
+ * easily display copyable content on your site.
+ *
+ * USAGE:
+ * - `[bl_copy]Some text to copy[/bl_copy]`
+ * - `[bl_copy label="API Key"]sk_live_123...[/bl_copy]`
+ * - `[bl_copy tag="span"]Text[/bl_copy]`
+ *
+ * # Attributes
+ *
  * - label: small label shown above the value
- * - tag:   wrapper tag for the value (div|span|code), default: div
+ * - tag: wrapper tag for the value (div|span|code), default: div
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

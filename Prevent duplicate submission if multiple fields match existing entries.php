@@ -1,30 +1,23 @@
 <?php
 /**
- * Prevent Duplicate Submission if Multiple Fields Match Existing Entries
+ * Prevent duplicate submission if multiple fields match existing entries
+ *
+ * @gravityforms
  *
  * GOAL:
- * - Prevents duplicate submissions when a specific combination of fields (Name, Number, Date) matches an
- *   existing active entry. If a duplicate is found, shows custom messages on the relevant fields.
+ * Prevents duplicate submissions when a specific combination of fields (Name, Number, Date)
+ * matches an existing active entry. If a duplicate is found, shows custom messages on the relevant
+ * fields. **CONFIGURATION**
  *
- * REQUIREMENTS:
- * - Gravity Forms core is required.
- *
- * CONFIGURATION:
- * - Edit the configuration block below. Add your form ID as a key, and set the field IDs to check.
- *   Example:
- *   77 => [
- *     'name_field_id' => 5,   // Name field ID (uses First .3 and Last .6)
- *     'num_field_id'  => 3,   // Number field ID
- *     'date_field_id' => 6,   // Date field ID
- *     'messages'      => [
- *       'name'  => 'A submission already exists with that first and last name.',
- *       'num'   => 'A submission already exists with that number.',
- *       'date'  => 'A submission already exists with that date.',
- *     ],
- *   ],
+ * - `$forms`: Add your form ID as a key, and set the field IDs to check. Then set the
+ *   corresponding error messages.
+ * - Optionally set the `window_days` key to limit check to recent entries. Leave at 0 to remove
+ *   limit.
  *
  * NOTES:
  * - All three fields must match to be considered a duplicate.
+ * - Dates are normalized to site timezone (Y-m-d) before searching.
+ * - Can be used for multiple forms by duplicating the inner array with a new form key, etc.
  */
 
 ( static function () {

@@ -1,36 +1,41 @@
 <?php
 /* phpcs:disable WordPress.Files.FileName */
 /**
- * Export GravityView (Server‑Side CSV for entire filtered dataset)
+ * Export Filtered Gravity View
+ *
+ * @gravityview
+ * @gravityforms
  *
  * GOAL:
- * - Shortcode [export_filtered_entries] renders a button that triggers a server‑side CSV download of the
- *   entire GravityView dataset matching the current filters/search.
+ * Use the simple shortcode [export_filtered_entries] to render a button that triggers a CSV
+ * download of the entire GravityView dataset matching the current filters/search.
  *
  * REQUIREMENTS:
  * - GravityView and Gravity Forms active.
- * - The shortcode should be used on a page where a GravityView is present, or provide view_id/form_id via attributes.
+ * - The shortcode should be used on a page where a GravityView is present, or provide
+ *   view_id/form_id via attributes.
  *
- * IMPORTANT:
- * - For filtered exports, the shortcode MUST be placed on the same page as the GravityView.
- * - If placed elsewhere, it will export all entries without filters.
+ * NOTES:
+ * **For filtered exports, the shortcode MUST be placed on the same page as the GravityView. If
+ * placed elsewhere, it will export all entries without filters.** **USAGE EXAMPLES**
  *
- * USAGE EXAMPLES:
  * - Basic (auto-detects current View): [export_filtered_entries]
  * - With custom label: [export_filtered_entries label="Download All Entries"]
  * - Specific View by ID: [export_filtered_entries view_id="123"]
- * - Tab-delimited with custom filename: [export_filtered_entries delimiter="\t" filename="my_export"]
+ * - Tab-delimited with custom filename: [export_filtered_entries delimiter="\t"
+ *   filename="my_export"]
  *
- * SHORTCODE ATTRIBUTES (all optional):
- * - view_id: GravityView post ID (defaults to detected current View when used inside a View).
- * - form_id: Gravity Forms form ID (defaults to the View’s connected form when detectable).
- * - filename: Base filename without extension (default: filtered_entries).
- * - delimiter: CSV delimiter character (default: ,). Allowed: ",", ";", "\t" (tab), "|".
- * - label: Button text (default: Export Filtered View).
+ * # SHORTCODE ATTRIBUTES (all optional)
  *
- * Notes:
+ * - `view_id`: GravityView post ID (defaults to detected current View when used inside a View).
+ * - `form_id`: Gravity Forms form ID (defaults to the View’s connected form when detectable).
+ * - `filename`: Base filename without extension (default: filtered_entries).
+ * - `delimiter`: CSV delimiter character (default: ,). Allowed: ",", ";", "\t" (tab), "|".
+ * - `label`: Button text (default: Export Filtered View).
+ *
  * - Exports exactly what the GravityView Table layout renders across all pages; HTML is stripped.
- * - If a cell’s output is obfuscated in the DOM (e.g., email), the exporter substitutes the raw Gravity Forms value when possible.
+ * - If a cell’s output is obfuscated in the DOM (e.g., email), the exporter substitutes the raw
+ *   Gravity Forms value when possible.
  */
 
 use GV\Frontend_Request;

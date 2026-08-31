@@ -2,53 +2,23 @@
 /**
  * Gravity Forms Advanced Conditional Logic Runtime Engine
  *
- * GOAL
- * Provides the "engine" that makes advanced conditional logic work on your live forms.
- * It handles both real-time showing/hiding of fields in the browser and secure enforcement
- * of those rules when the form is submitted.
+ * @gravityforms
  *
- * CONFIGURATION REQUIRED
- * - Must be active alongside the "Gravity Forms Advanced Conditional Logic Editor UI" snippet.
- * - Requires Gravity Forms to be installed and active.
- *
- * USAGE
- * 1. Ensure this snippet is active on your site.
- * 2. There are no settings to configure within this file.
- * 3. Once active, it will automatically look for any "Advanced Conditional Groups" you have
- *    configured on your form fields using the Editor UI snippet.
- *
- * HOW IT WORKS
- * - REAL-TIME SHOW/HIDE: Instantly evaluates advanced logic groups to show or hide fields as users
- *   fill out the form. Uses a "pre-hide" technique to prevent fields from "flicker" on page load.
- * - SECURE ENFORCEMENT: Runs on the server during submission. If a field is hidden by advanced logic,
- *   its value is cleared to prevent unnecessary data storage and bypass validation for hidden fields.
- * - NATIVE COMPATIBILITY: Respects Gravity Forms' built-in conditional logic.
- *
- * NOTES
- * - If advanced logic isn't working, verify BOTH this Engine snippet and the Editor UI snippet are active.
- * - This snippet uses standard WordPress hooks (gform_pre_render, gform_pre_validation, etc.) for integration.
- *
- * --- TECHNICAL NOTES ---
- * 1. PRE-HIDE via gform_form_tag: Fields with actionType=show and actual rules are
- *    hidden via an inline <style> tag injected right before the <form> tag. This fires
- *    synchronously as the page HTML is written, before any paint, so there is no flash
- *    of visibility. wp_footer is too late for this.
- *
- * 2. CONFIG via gform_form_tag: Per-form config JSON is injected inline alongside the
- *    pre-hide CSS so it is present for both initial page renders and GF AJAX renders
- *    (wp_footer never fires in a GF AJAX response). The runtime JS still goes in wp_footer.
- *
- * 3. nativeVisible: Only checks data-conditional-logic="hidden" (GF's own attr).
- *    We track fields we hide via data-bl-adv-hidden="1" so we can distinguish our
- *    mutations from GF's own mutations and avoid evaluation loops.
- *
- * 4. data-conditional-logic: We set this on fields we hide so GF skips them on
- *    submission (GF reads this attribute to determine whether to include a field's
- *    value in the POST). This is intentional but means GF's native CL JS may also
- *    react — mitigated by the MutationObserver ignoring mutations on elements we own.
- *
- * 5. readFieldValue: Handles GF radio groups (multiple inputs, same name, type=radio)
- *    by returning a string from :checked, not an array.
+ * GOAL:
+ * GOAL Provides the "engine" that makes advanced conditional logic work on your live forms. It
+ * handles both real-time showing/hiding of fields in the browser and secure enforcement of those
+ * rules when the form is submitted. CONFIGURATION REQUIRED - Must be active alongside the "Gravity
+ * Forms Advanced Conditional Logic Editor UI" snippet. - Requires Gravity Forms to be installed
+ * and active. USAGE 1. Ensure this snippet is active on your site. 2. There are no settings to
+ * configure within this file. 3. Once active, it will automatically look for any "Advanced
+ * Conditional Groups" you have configured on your form fields using the Editor UI snippet. HOW IT
+ * WORKS - REAL-TIME SHOW/HIDE: Instantly evaluates advanced logic groups to show or hide fields as
+ * users fill out the form. Uses a "pre-hide" technique to prevent fields from "flicker" on page
+ * load. - SECURE ENFORCEMENT: Runs on the server during submission. If a field is hidden by
+ * advanced logic, its value is cleared to prevent unnecessary data storage and bypass validation
+ * for hidden fields. - NATIVE COMPATIBILITY: Respects Gravity Forms' built-in conditional logic.
+ * NOTES - If advanced logic isn't working, verify BOTH this Engine snippet and the Editor UI
+ * snippet are active.
  */
 class BL_GF_AdvLogic {
 

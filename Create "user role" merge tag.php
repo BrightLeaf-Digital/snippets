@@ -1,45 +1,58 @@
 <?php
 /**
- * Create User Role Merge Tags ({user_role}, {user_primary_role})
+ * Create "user role" merge tag
+ *
+ * @gravityforms
  *
  * GOAL:
- * - Provides {user_role} (all roles) and {user_primary_role} merge tags for Gravity Forms.
- * - Supports modifiers: :separator(|) to change joiner and :display to output role display names.
+ * This code snippet creates a custom `{user_role}` merge tag for Gravity Forms. It dynamically
+ * retrieves the current user's WordPress role(s) and allows you to use this information within
+ * form notifications, confirmations, and field values.
  *
- * REQUIREMENTS:
- * - Gravity Forms core is required.
+ * USAGE:
+ * **Available tags**:
  *
- *  FEATURES:
- *  - Two merge tags: {user_role} (all roles) and {user_primary_role} (primary role).
- *  - Optional modifiers: :display for role display names, :separator() to customize the delimiter.
- *  - Configurable defaults for separator, logged-out label, and display preference.
- *  - Graceful handling for logged-out users via a configurable label.
- *  - Usable in notifications, confirmations, field labels, and default values.
+ * - `{user_role}` — outputs all roles for the current user joined by the separator (default: ",
+ *   ").
+ * - `{user_role:display}` — same as above but uses role display names.
+ * - `{user_role:separator(|)}` — uses "|" to join multiple roles.
+ * - `{user_role:display:separator( | )}` — combine modifiers; order does not matter.
+ * - `{user_primary_role}` — outputs the user's primary role (first role).
+ * - `{user_primary_role:display}` — primary role's display name.
  *
- *   USAGE:
- *   - Available tags:
- *     - {user_role} — outputs all roles for the current user joined by the separator (default: ", ").
- *     - {user_role:display} — same as above but uses role display names.
- *     - {user_role:separator(|)} — uses "|" to join multiple roles.
- *     - {user_role:display:separator( | )} — combine modifiers; order does not matter.
- *     - {user_primary_role} — outputs the user's primary role (first role).
- *     - {user_primary_role:display} — primary role's display name.
- *   - Modifiers:
- *     - :display — outputs display names instead of slugs. Works with both tags.
- *     - :separator(<string>) — sets the delimiter for joining roles when using {user_role}. Ignored for {user_primary_role}. Default is ", ".
- *       The separator is taken literally, can include spaces, and must not contain a closing parenthesis.
- *   - Behavior:
- *     - If the user is not logged in or has no roles, outputs the configured logged_out_label (default: empty string).
- *     - For users with multiple roles, the primary role is the first in their roles array.
+ * **Modifiers:**
  *
- * CONFIGURATION:
- * - Adjust the defaults in the $cfg block below if desired.
- *   - separator: string used to join roles for {user_role}.
- *   - logged_out_label: what to output for logged-out users (empty string by default).
- *   - prefer_display_names: whether to default to display names instead of slugs (can be overridden per-tag using :display).
+ * - `:display` — outputs display names instead of slugs. Works with both tags.
+ * - `:separator(<string>)` — sets the delimiter for joining roles when using `{user_role}`.
+ *   Ignored for `{user_primary_role}`. Default is ", ". The separator is taken literally, can
+ *   include spaces, and must not contain a closing parenthesis.
  *
- * NOTES:
- * - Works in notifications, confirmations, field labels, default values, etc.
+ * **Behavior:**
+ *
+ * - If the user is not logged in or has no roles, outputs the configured `logged_out_label`
+ *   (default: empty string).
+ *
+ * # For users with multiple roles, the primary role is the first in their roles array.
+ *
+ * **CONFIGURATION:**
+ *
+ * - Adjust the defaults in the $cfg block below if desired. `separator`: string used to join roles
+ *   for `{user_role}`. `logged_out_label`: what to output for logged-out users (empty string by
+ *   default). `prefer_display_names`: whether to default to display names instead of slugs (can be
+ *   overridden per-tag using `:display`).
+ *
+ * FEATURES:
+ * - **Adds two merge tags:** {user_role} (all roles) and {user_primary_role} (primary role).
+ * - **Automatically retrieves the logged-in user's role(s)** and replaces the merge tag with the
+ *   corresponding value(s).
+ * - **Supports multiple roles**, displaying them (by default) as a comma-separated list.
+ * - **Enhances form personalization** by dynamically adapting form content based on user roles.
+ * - **Easily customizable separator** for multiple roles.
+ * - **Optional modifiers**: `:display` for role display names, `:separator()` to customize the
+ *   delimiter.
+ * - **Configurable defaults** for separator, logged-out label, and display preference.
+ * - **Graceful handling** for logged-out users via a configurable label.
+ * - **Usable in** notifications, confirmations, field labels, and default values.
  */
 
 ( static function () {

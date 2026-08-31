@@ -1,51 +1,66 @@
 <?php
 /**
- * BrightLeaf GF Form Styler (Feed Add-On)
+ * Form Styler Feed
  *
- * Goal
- * - Provide a user-friendly, non-destructive way to style Gravity Forms without writing manual CSS.
- * - Allow granular control over form appearance at the global, field-type, and individual field levels.
- * - Ensure that styles are only applied when explicitly configured, preserving the theme's natural look by default.
+ * @gravityforms
+ *
+ * GOAL:
+ * BrightLeaf Digital GF Form Styler (Feed Add-On) Goal
+ *
+ * - Provide a user-friendly, non-destructive way to style Gravity Forms without writing manual
+ *   CSS.
+ * - Allow granular control over form appearance at the global, field-type, and individual field
+ *   levels.
+ * - Ensure that styles are only applied when explicitly configured, preserving the theme's natural
+ *   look by default.
  *
  * Features
+ *
  * - Integrated UI: A custom styling panel built directly into the Gravity Forms Feed settings.
- * - Global Tokens: Define base font sizes, colors, spacing, and borders that apply to the entire form.
- * - Type Overrides: Set styles for all fields of a specific type (e.g., all text inputs or all buttons).
- * - Field Overrides: Target specific fields by ID for high-specificity styling that wins over global/type settings.
+ * - Global Tokens: Define base font sizes, colors, spacing, and borders that apply to the entire
+ *   form.
+ * - Type Overrides: Set styles for all fields of a specific type (e.g., all text inputs or all
+ *   buttons).
+ * - Field Overrides: Target specific fields by ID for high-specificity styling that wins over
+ *   global/type settings.
  * - Live CSS Preview: See the generated CSS in real-time within the admin UI before saving.
- * - Base64 Storage: Style configurations are stored as base64-encoded JSON to avoid common character-filtering issues in database fields.
- * - Conditional Emission: Only emits CSS for properties that have been explicitly set, reducing bloat and preventing style conflicts.
- * - Admin Preview Support: Option to apply custom styles even within the Gravity Forms admin preview screens.
+ * - Base64 Storage: Style configurations are stored as base64-encoded JSON to avoid common
+ *   character-filtering issues in database fields.
+ * - Conditional Emission: Only emits CSS for properties that have been explicitly set, reducing
+ *   bloat and preventing style conflicts.
+ * - Admin Preview Support: Option to apply custom styles even within the Gravity Forms admin
+ *   preview screens.
  * - Debug Mode: Console logging for troubleshooting feed application and CSS injection.
  *
  * Requirements
+ *
  * - A hidden field on the form you would like to style named `style_b64`.
  *
  * How To Use
- * 1) Create a Styling Profile
- *    - Go to Forms -> [Your Form] -> Settings -> Form Styler.
- *    - Click "Add New" to create a new styling feed.
- *    - Give your profile a name (e.g., "Dark Theme" or "Contact Page Style").
  *
- * 2) Configure Styles
- *    - Open the "Styling" section in the feed settings.
- *    - Global Tokens: Use sections like Typography, Colors, and Spacing to set general form styles.
- *    - Type Overrides: Select a field type from the dropdown, then click "Type overrides" in the navigation to edit.
- *    - Field Overrides: Click a specific field in the field list on the left to apply styles only to that field.
- *
- * 3) Activate and Apply
- *    - Mark the feed as "Default" if you want it applied to all instances of this form.
- *    - Use the "Apply in admin preview" checkbox to see your styles while building the form.
- *    - To apply a specific (non-default) feed via URL for testing, append `?blfs_feed=[FEED_ID]` to your page URL.
- *
- * 4) Advanced Management
- *    - Export/Import: Copy the JSON payload to move styles between forms or sites.
- *    - Reset: Use the "Reset defaults" button to clear all configurations and start fresh.
+ * - Create a Styling Profile Go to Forms -> [Your Form] -> Settings -> Form Styler. Click "Add
+ *   New" to create a new styling feed. Give your profile a name (e.g., "Dark Theme" or "Contact
+ *   Page Style").
+ * - Configure Styles Open the "Styling" section in the feed settings. Global Tokens: Use sections
+ *   like Typography, Colors, and Spacing to set general form styles. Type Overrides: Select a
+ *   field type from the dropdown, then click "Type overrides" in the navigation to edit. Field
+ *   Overrides: Click a specific field in the field list on the left to apply styles only to that
+ *   field.
+ * - Activate and Apply Mark the feed as "Default" if you want it applied to all instances of this
+ *   form. Use the "Apply in admin preview" checkbox to see your styles while building the form. To
+ *   apply a specific (non-default) feed via URL for testing, append `?blfs_feed=[FEED_ID]` to your
+ *   page URL.
+ * - Advanced Management Export/Import: Copy the JSON payload to move styles between forms or
+ *   sites. Reset: Use the "Reset defaults" button to clear all configurations and start fresh.
  *
  * Developer Notes
- * - CSS Injection: Styles are injected into the page head via `<style></style>` tags, scoped to the specific form and feed.
- * - Scoping: CSS rules use dual selectors (`.blfs-scope-[ID]` and `#gform_wrapper_[ID]`) for maximum compatibility.
- * - Payload: The authoritative data source is the base64-encoded JSON stored in the `style_b64` feed meta.
+ *
+ * - CSS Injection: Styles are injected into the page head via `<style></style>` tags, scoped to
+ *   the specific form and feed.
+ * - Scoping: CSS rules use dual selectors (`.blfs-scope-[ID]` and `#gform_wrapper_[ID]`) for
+ *   maximum compatibility.
+ * - Payload: The authoritative data source is the base64-encoded JSON stored in the `style_b64`
+ *   feed meta.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

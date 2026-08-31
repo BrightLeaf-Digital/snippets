@@ -1,28 +1,37 @@
 <?php
 /**
- * Capitalize Specific Text Field Value Before Saving Entry (or perform other transformations)
+ * Capitalize Specific Field Value Before Saving Entry
+ *
+ * @gravityforms
  *
  * GOAL:
- * Transforms text field values using various string manipulation methods before saving a Gravity Forms entry.
- * By default, converts text to uppercase.
- * Available transformations include:
+ * By default this code snippet automatically converts the value of a specific text field to
+ * uppercase before saving the entry in Gravity Forms. It ensures consistency in formatting and is
+ * particularly useful for fields like names, codes, or identifiers that require capitalization.
+ * Now also allows numerous other text manipulations and transformations:
+ *
  * - Case transformations: uppercase, lowercase, title case, camelCase, PascalCase, sentence case
  * - Formatting: URL-friendly slugs, phone number formatting, whitespace trimming, space collapsing
  * - Cleaning: strip HTML tags, remove non-alphanumeric characters
  * - Special: string reversal
- * Uses the gform_save_field_value filter to transform field data during the save process.
+ *
+ * CONFIGURATION:
+ * - `gform_save_field_value_3_16`: Change '3' to your target form ID (or remove '_3' to apply to
+ *   all forms)
+ * - `gform_save_field_value_3_16`: Change '16' to your target field ID (or remove '_16' to apply
+ *   to all fields on the form)
+ * - `$apply`: Default is set to uppercase ('upper'). Other options include: 'lower', 'title',
+ *   'camel', 'pascal', 'sentence', 'slug', 'trim', 'collapse', 'alphanumeric', 'phone',
+ *   'strip_tags', 'reverse'. Add or modify transformations as needed.
  *
  * FEATURES:
+ * - Ensures uniform formatting for data consistency.
+ * - Applies only to text input fields, preventing unintended changes to other field types.
+ * - Easily customizable by modifying the form and field ID in the filter hook.
  * - Multiple transformations can be applied in sequence
  * - Highly configurable with 12+ built-in transformation options
- * - Form and field-specific targeting
  * - Preserves original value if transformation not applicable
  * - Sanitizes output for security
- *
- * CONFIGURATION REQUIRED:
- * - gform_save_field_value_3_16: Change '3' to your target form ID (or remove '_3' to apply to all forms)
- * - gform_save_field_value_3_16: Change '16' to your target field ID (or remove '_16' to apply to all fields on the form)
- * - $apply: Default is set to uppercase ('upper'). Other options include: 'lower', 'title', 'camel', 'pascal', 'sentence', 'slug', 'trim', 'collapse', 'alphanumeric', 'phone', 'strip_tags', 'reverse'. Add or modify transformations as needed.
  */
 
 add_filter(

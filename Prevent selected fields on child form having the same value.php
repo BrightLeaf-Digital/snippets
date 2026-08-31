@@ -1,19 +1,26 @@
 <?php
 /**
- * Prevent Selected Fields on a Child Form from Having the Same Value
+ * Prevent selected fields on child form having the same value
+ *
+ * @gravityforms
+ * @gravityperks
  *
  * GOAL:
- * - When using Nested Forms, prevent duplicate values across multiple child entries in the same batch/session
- *   for specific fields you choose (e.g., a number field, a name field, or a date field).
+ * When using Nested Forms, prevent duplicate values across multiple child entries in the same
+ * batch/session for specific fields you choose (e.g., a number field, a name field, or a date
+ * field).
  *
  * CONFIGURATION:
- * - Edit the settings below. Add your child form ID as the key, and list the child field IDs you want to keep unique
- *   with the message users should see if they choose a duplicate.
- *   Example: 66 => [ 4 => 'Please choose a unique value.', 2 => 'First and last name must be unique.' ]
+ * - `$forms_and_fields`: Add your child form ID as the key, and list the child field IDs you want
+ *   to keep unique with the message users should see if they choose a duplicate.
+ * - Example: 66 => [ 4 => 'Please choose a unique value.', 2 => 'First and last name must be
+ *   unique.' ]
  *
  * NOTES:
- * - Name fields compare First AND Last together. If both match an existing entry, it's considered a duplicate.
- * - Date fields compare dates using the site's timezone. If parsing fails, the comparison for that item is skipped.
+ * - Name fields compare First AND Last together. If both match an existing entry, it's considered
+ *   a duplicate.
+ * - Date fields compare dates using the site's timezone. If parsing fails, the comparison for that
+ *   item is skipped.
  */
 
 ( static function () {

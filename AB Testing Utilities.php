@@ -1,60 +1,33 @@
 <?php
 /**
- * BrightLeaf AB Test Utilities
+ * AB Testing Utilities
  *
- * A production-ready, client-first A/B testing utility designed for WordPress.
- * This utility handles A/B test resolution in the browser, making it fully compatible
- * with page caching (Cloudflare, Varnish, WP Rocket).
+ * @wordpress
+ * @gravityforms
  *
- * --- HOW IT WORKS ---
- * 1. The server renders BOTH versions of the content (A and B) in the HTML.
- * 2. High-priority CSS hides all A/B containers initially to prevent flickering (FOUC).
- * 3. JavaScript checks for a cookie (bl_abtest_{slug}). If missing, it randomly assigns a version.
- * 4. JavaScript toggles the 'ab-active' class on the chosen version and unhides it.
- * 5. JavaScript updates any Gravity Forms hidden fields to ensure lead data is 100% accurate.
- *
- * --- USAGE: GUTENBERG BLOCKS ---
- * 1. Create two blocks in the editor (e.g., two different Buttons).
- * 2. In the "Advanced" sidebar for BOTH blocks, add the class: abtestcontainer-{slug}
- *    Example: abtestcontainer-hero-cta
- * 3. The first block found with that slug becomes Version A, the second becomes Version B.
- *
- * --- USAGE: SHORTCODES ---
- * Wrap your content versions like this:
- * [abtest title="my-test-slug"]
- *   [abcontent contentversion="contentversiona"] Version A Content [/abcontent]
- *   [abcontent contentversion="contentversionb"] Version B Content [/abcontent]
- * [/abtest]
- *
- * --- USAGE: GRAVITY FORMS ---
- * A. Tracking which version was seen:
- *    1. Add a Hidden Field to your form.
- *    2. Advanced Tab -> Enable Dynamic Population.
- *    3. Parameter Name: abtestversion_{slug} (e.g., abtestversion_hero-cta).
- *    4. The value saved will be "{slug}:{version}" (e.g., hero-cta:contentversionb).
- *
- * B. Using Merge Tags:
- *    Use {abtestversion:slug} in notifications or confirmations to display the visitor's version.
- *
- * --- USAGE: EXTERNAL TRACKING (GA4, etc.) ---
- * 1. Automatic Resolution Events:
- *    a) 'bl_abtest_resolved' — dispatched on every page where a test is resolved.
- *       Use this to set GA4 User Properties to tie the version to ALL future events.
- *       Example:
- *       document.addEventListener('bl_abtest_resolved', function(e) {
- *         const { slug, version } = e.detail;
- *         // GA4 User Property (Ties ALL future events like clicks/purchases to this version)
- *         if (window.gtag) {
- *           gtag('set', 'user_properties', { ['ab_test_' + slug]: version });
- *           gtag('event', 'ab_test_view', { 'test_name': slug, 'test_version': version });
- *         }
- *       });
- *    b) 'bl_abtest_first_resolved' — dispatched exactly once per slug when the cookie is first created.
- *       Use this to associate a user with a cohort a single time.
- *
- * 2. Manual Retrieval:
- *    You can access resolved versions anytime via window.BL_ABTest.versions
- *    Example: const pricingVersion = window.BL_ABTest.versions['pricing-table'];
+ * GOAL:
+ * A production-ready, client-first A/B testing utility designed for WordPress. This utility
+ * handles A/B test resolution in the browser, making it fully compatible with page caching
+ * (Cloudflare, Varnish, WP Rocket). --- USAGE: GUTENBERG BLOCKS --- 1. Create two blocks in the
+ * editor (e.g., two different Buttons). 2. In the "Advanced" sidebar for BOTH blocks, add the
+ * class: abtestcontainer-{slug} Example: abtestcontainer-hero-cta 3. The first block found with
+ * that slug becomes Version A, the second becomes Version B. --- USAGE: SHORTCODES --- Wrap your
+ * content versions like this: [abtest title="my-test-slug"] [abcontent
+ * contentversion="contentversiona"] Version A Content [/abcontent] [abcontent
+ * contentversion="contentversionb"] Version B Content [/abcontent] [/abtest] --- USAGE: GRAVITY
+ * FORMS --- A. Tracking which version of your tested item (even if not on form) was seen: 1. Add a
+ * Hidden Field to your form. 2. Advanced Tab -> Enable Dynamic Population. 3. Parameter Name:
+ * abtestversion_{slug} (e.g., abtestversion_hero-cta). 4. The value saved will be
+ * "{slug}:{version}" (e.g., hero-cta:contentversionb). B. Using Merge Tags: Use
+ * {abtestversion:slug} in notifications or confirmations to display the visitor's version. ---
+ * USAGE: EXTERNAL TRACKING (GA4, etc.) --- Automatic Resolution Events: a) 'bl_abtest_resolved'
+ * — dispatched on every page where a test is resolved. Use this to set GA4 User Properties to
+ * tie the version to ALL future events. `document.addEventListener('bl_abtest_resolved',
+ * function(e) { const { slug, version } = e.detail; // GA4 User Property (Ties ALL future events
+ * like clicks/purchases to this version) if (window.gtag) { gtag('set', 'user_properties', {
+ * ['ab_test_' + slug]: version }); gtag('event', 'ab_test_view', { 'test_name': slug,
+ * 'test_version': version }); } });` b) 'bl_abtest_first_resolved' — dispatched exactly once per
+ * slug when the cookie is first created. Use this to associate a user with a cohort a single time.
  */
 
 /**

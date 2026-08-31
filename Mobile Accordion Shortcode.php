@@ -2,31 +2,26 @@
 /**
  * Mobile Accordion Shortcode
  *
- * GOAL:
- * Creates a mobile-friendly accordion component that parses nested divs into
- * collapsible sections. Supports nested shortcodes (like [gfsearch]) and allows
- * only one section to be open at a time.
+ * @wordpress
  *
- * CONFIGURATION REQUIRED:
- * - CSS: Add styles for .mobile-accordion-wrapper, .accordion-section, .accordion-label, .accordion-content
+ * GOAL:
+ * Creates a mobile-friendly accordion component that parses nested `divs` into collapsible
+ * sections. Supports nested shortcodes and allows only one section to be open at a time.
+ * **CONFIGURATION**
+ *
+ * - CSS: Add styles for .mobile-accordion-wrapper, .accordion-section, .accordion-label,
+ *   .accordion-content
  * - CSS: Define .open and .visible classes for active states
  * - Structure: Content must follow specific format (see usage below)
  *
  * USAGE:
- * [mobile_accordion]
- *   <div>
- *     <div>Section 1 Title</div>
- *     <div>Section 1 content goes here...</div>
- *   </div>
- *   <div>
- *     <div>Section 2 Title</div>
- *     <div>Section 2 content goes here...</div>
- *   </div>
- * [/mobile_accordion]
+ * `[mobile_accordion]` `<div>` `<div>Section 1 Title</div>` `<div>Section 1 content goes
+ * here...</div>` `</div>` `<div>` `<div>Section 2 Title</div>` `<div>Section 2 content goes
+ * here...</div>` `</div>` `[/mobile_accordion]`
  *
  * NOTES:
  * - First section opens by default
- * - Supports nested shortcodes via do_shortcode()
+ * - Supports nested shortcodes
  */
 
 add_shortcode(

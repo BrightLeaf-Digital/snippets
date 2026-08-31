@@ -1,19 +1,13 @@
 <?php
 /**
- * Fix Form Connectors: Multi‑File Upload JSON Decoding
+ * Fix Form Connectors creation of new entry with upload multi files
+ *
+ * @gravityflow
  *
  * GOAL:
- * - When Gravity Flow Form Connector creates a new entry, ensure multi‑file upload values are arrays
- *   (not JSON strings). Decodes JSON when detected and normalizes the array.
- *
- * REQUIREMENTS:
- * - Gravity Forms core and Gravity Flow Form Connector.
- *
- * CONFIGURATION:
- * - No configuration required. Works automatically when the Form Connector runs.
- *
- * NOTES:
- * - Silent operation; optionally hook into 'bld_fc_multifile_decoded' to log decode events.
+ * When Gravity Flow Form Connector creates a new entry, ensure multi‑file upload values are
+ * arrays (not JSON strings). Decodes JSON when detected and normalizes the array. This allows the
+ * entry to be created without errors.
  */
 
 ( static function () {

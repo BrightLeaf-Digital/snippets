@@ -1,31 +1,33 @@
 <?php
 /* phpcs:disable WordPress.Files.FileName, WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase */
 /**
- * Export Forms as Text (Admin Tool)
+ * Export forms as text file
+ *
+ * @gravityforms
+ * @gravityflow
  *
  * GOAL:
- * - Adds an option under Forms > Import/Export to download selected forms as a human‑readable .txt file
- *   including fields, confirmations, notifications, and (optionally) Gravity Flow notification steps.
- *   When multiple forms are selected, a .zip archive will be generated containing one .txt per form.
- *
- * REQUIREMENTS:
- * - Gravity Forms core (admin access with gravityforms_edit_forms capability).
- * - Optional: Gravity Flow for exporting workflow notifications.
+ * This code snippet adds an **"Export Forms as Text"** feature to Gravity Forms, allowing
+ * administrators to export form structures, confirmations, notifications, and workflow steps as a
+ * downloadable text file. This is useful for documentation, backups, or sharing form
+ * configurations without requiring JSON exports.
  *
  * FEATURES:
- * - Streams large outputs to avoid memory spikes.
- * - Customizable filename with timestamp to seconds. Use filter 'bld_gf_text_export_filename' to override.
- * - Optional inclusion of field IDs, admin labels, choice lists, conditional logic, validation rules,
- *   entry count, and high‑level form settings via UI checkboxes.
- * - Robust error handling via GF admin notices.
+ * - **Adds an Export Forms as Text tab** in the Gravity Forms export menu.
+ * - **Allows selection of multiple forms** for export.
+ * - **Exports form titles, fields, confirmations, notifications, and workflow steps** in a
+ *   structured text format.
+ * - **Includes Gravity Flow workflow notifications** for workflows using Gravity Flow.
+ * - **Ensures secure access** by restricting export functionality to users with form editing
+ *   permissions.
+ * - **Automatically downloads a formatted text file** for easy sharing or documentation.
+ * - **Optionally include more data** in the form export, such as field ID's, conditional logic,
+ *   form settings, entry count and more.
+ * - **Export multiple** forms at once in one zip file.
  *
- * FILTERS:
- * - bld_gf_text_export_filename (string $filename, array $context): Filter the final filename (already sanitized).
- *   $context includes: ['form_ids' => int[]]
+ * # Developer Note
  *
- * NOTES:
- * - When exporting multiple forms, the response is a ZIP archive with one TXT file per form. For a single form,
- *   a plain text download is streamed.
+ * - The `bld_gf_text_export_filename` filter exists to easily customize file names.
  */
 
 ( static function () {

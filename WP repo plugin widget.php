@@ -1,24 +1,11 @@
 <?php
 /**
- * WP.org Plugin Widget Shortcode
+ * WP repo plugin widget
  *
- * Shortcode:
- * [wporg_plugin_widget
- *     url="https://wordpress.org/plugins/gravityops-search/"
- *     features="Feature 1|Feature 2"
- *     short_description="true"
- *     requires="true"
- *     requires_php="true"
- *     version="true"
- *     downloaded="true"
- *     active_installs="true"
- *     last_updated="true"
- *     rating="true"
- *     num_ratings="true"
- *     homepage="true"
- *     icons="true"
- *     contributors="true"
- * ]
+ * @wordpress
+ *
+ * GOAL:
+ * Creates a shortcode to display simple information about a plugin hosted in the WP repo.
  */
 
 add_action(

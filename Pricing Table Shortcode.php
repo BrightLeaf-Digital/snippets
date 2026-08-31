@@ -1,30 +1,31 @@
 <?php
 /**
- * BrightLeaf Pricing Table — Single‑file Shortcode Snippet
+ * Pricing Table Shortcode
  *
- * Goal
+ * @wordpress
+ *
+ * GOAL:
+ * # BrightLeaf Pricing Table — Single-File Shortcode Snippet
+ *
+ * # Goal
+ *
  * - Make it easy to add a clear, modern pricing table to any page with simple shortcodes.
  * - Keep everything in one place: the layout, styles, and behavior live in this single file.
- * - Optionally connect to Freemius for checkout and, if you want, automatically load your plans and prices.
+ * - Optionally connect to Freemius for checkout and automatically load your plans and prices.
  *
- * Features
- * - Clean pricing cards with a Monthly/Annual toggle.
- * - One or more plans, each with license tiers, a short description, and a feature list.
- * - Site count selector that stays in sync across all plans.
- * - Optional Freemius checkout (Buy and Trial buttons), including license count and billing cycle.
- * - Optional “Automatic” mode to pull plans and prices from your Freemius account.
- * - All CSS and JS are included right here and only appear once per page.
- *
- * Requirements
+ * REQUIREMENTS:
  * - WordPress page or post where you can paste shortcodes.
- * - For Freemius checkout (manual plan entry): your product’s Public Key, Product ID, and each plan’s Plan ID.
- * - For Freemius “Automatic” mode: your Freemius Product ID and a token stored in a PHP constant.
+ * - **For Freemius checkout (manual plan entry):** Public Key, Product ID, and each plan’s Plan
+ *   ID.
+ * - **For Freemius Automatic mode:** Freemius Product ID and a token stored in a PHP constant.
  *
- * How To Use
- * 1) Parent shortcode
- *    Place the parent shortcode on the page. It controls product information, Freemius options, and overall behavior.
+ * USAGE:
+ * # 1) Parent Shortcode
  *
- *    [gopricingtable
+ * Place the parent shortcode on the page. It controls product information, Freemius options, and
+ * overall behavior.
+ *
+ *     [gopricingtable
  *       public_key="pk_XXXX"
  *       product_name="Your Product"
  *       product_id="12345"
@@ -38,123 +39,101 @@
  *       bearer_constant="FS_API_TOKEN"
  *       coupon="123,456"
  *       discount="$10" | "15%"
- *    ]
- *      ...one or more child plan shortcodes...
- *    [/gopricingtable]
+ *     ]
+ *     ...one or more child plan shortcodes...
+ *     [/gopricingtable]
  *
- *    Parent attributes (plain language reference):
- *    - public_key
- *      What: Your Freemius public key.
- *      When required: Required when freemius="manual" (for checkout). Optional when freemius is empty (no checkout). In freemius="automatic", it can be filled automatically from your account.
- *    - product_name
- *      What: Shown in checkout and used for button IDs if you don’t set a prefix.
- *      When required: Optional, but recommended so buyers see a friendly name.
- *    - product_id
- *      What: Your Freemius product ID.
- *      When required: Required for freemius="manual" and freemius="automatic". Optional when freemius is empty.
- *    - freemius
- *      What: Turns Freemius features on.
- *      Values: "" (off), "manual" (checkout on, you enter plans), "automatic" (checkout on, plans/prices loaded for you).
- *    - buy_url / trial_url
- *      What: Where the buttons go when freemius is empty.
- *      When required: Optional. Add one or both so the buttons have a destination when not using Freemius.
- *    - product_prefix
- *      What: A short ID added to button IDs (helps with analytics and testing).
- *      When required: Optional. If omitted, a neat prefix is created from your product name.
- *    - currency
- *      What: Currency to show when using freemius="automatic".
- *      Values: usd (default), eur, gbp.
- *    - cache_ttl
- *      What: How long to keep automatic pricing (in seconds). Default: 21600 (6 hours). Use 0 to always refresh.
- *    - coupon
- *      What: Optional comma-separated list of Freemius coupon IDs to apply (automatic Freemius mode only). They will be stacked in the order provided.
- *    - discount
- *      What: Manual/empty modes only. Discount to show in pricing and banners. Use "$10" for flat or "15%" for percentage. Can be overridden per plan.
- *    - site_tiers_label
- *      What: Optional list of labels for the site tiers in automatic mode (pipe‑separated).
- *      Example: "Single Site|Up to 3 Sites|Up to 10 Sites".
- *    - bearer_constant
- *      What: The name of a PHP constant that holds your Freemius token for automatic mode.
- *      When required: Required for freemius="automatic". Example: define('FS_API_TOKEN', 'your_token_here');
+ * # Parent Attributes (Plain Language)
  *
- * 2) Child plan shortcode
- *    Add one child for each plan (these act as settings; they don’t print anything by themselves).
+ * - **public_key** — Your Freemius public key.
+ * - **product_name** — Shown in checkout and used for button IDs.
+ * - **product_id** — Freemius product ID.
+ * - **freemius** — Turns Freemius features on or off.
+ * - **buy_url / trial_url** — URL destinations when Freemius is off.
+ * - **product_prefix** — ID prefix for analytics/testing.
+ * - **currency** — usd (default), eur, gbp.
+ * - **cache_ttl** — Seconds to cache pricing (default: 21600).
+ * - **coupon** — Comma-separated Freemius coupon IDs.
+ * - **discount** — "$10" or "15%".
+ * - **site_tiers_label** — Pipe-separated tier labels.
+ * - **bearer_constant** — PHP constant name for your Freemius token.
  *
- *    [go_plan_column
- *      plan_name="Pro"
- *      plan_id="111"
- *      site_tiers_label="Single Site|Up to 3 Sites"
- *      site_tiers="1|3"
- *      monthly="9.99|14.99"
- *      annual="89.99|134.99"
- *      plan_desc="Great for individuals"
- *      plan_features="Feature A|Feature B|Feature C"
- *      best_value="true"
- *      has_trial="true"
- *    ]
+ * # 2) Child Plan Shortcode
  *
- *    Child attributes (plain language reference):
- *    - plan_name
- *      What: The name shown on the card (e.g., Pro, Premium, Agency).
- *      When required: Yes.
- *    - plan_id
- *      What: The plan’s ID in Freemius (used by checkout).
- *      When required: Required when freemius is on (manual or automatic). Optional when freemius is off.
- *    - site_tiers_label
- *      What: The labels people see for each site tier (pipe‑separated).
- *      Example: "Single Site|Up to 3 Sites".
- *    - site_tiers
- *      What: The matching site counts (pipe‑separated numbers).
- *      Example: "1|3".
- *    - monthly / annual
- *      What: Prices for each tier (pipe‑separated to match your tiers). You can provide one or both. If both are present, Annual highlights the per‑month savings.
- *      Examples: monthly="9.99|14.99" and/or annual="89.99|134.99".
- *    - plan_desc
- *      What: Short sentence under the buttons.
- *      When required: Optional.
- *    - plan_features
- *      What: Bullet points for the feature list (pipe‑separated).
- *      Example: "Feature A|Feature B|Feature C".
- *    - best_value
- *      What: Mark true for the plan you want highlighted as “Best Value”. If you don’t pick one, the table may highlight a plan based on savings.
- *      Values: true or false. Optional.
- *    - has_trial
- *      What: Show or hide the “Free Trial” button for this plan.
- *      Values: true (default) or false.
+ * Add one child per plan (settings only—nothing prints alone).
  *
- * Examples
- * - Manual plans with Freemius checkout:
- *   [gopricingtable public_key="pk_XXXX" product_name="My Add‑on" product_id="12345" freemius="manual"]
+ *     [go_plan_column
+ *       plan_name="Pro"
+ *       plan_id="111"
+ *       site_tiers_label="Single Site|Up to 3 Sites"
+ *       site_tiers="1|3"
+ *       monthly="9.99|14.99"
+ *       annual="89.99|134.99"
+ *       plan_desc="Great for individuals"
+ *       plan_features="Feature A|Feature B|Feature C"
+ *       best_value="true"
+ *       has_trial="true"
+ *     ]
+ *
+ * # Child Attributes
+ *
+ * - **plan_name** — Name shown on the card.
+ * - **plan_id** — Required when Freemius is on.
+ * - **site_tiers_label** — Pipe-separated labels.
+ * - **site_tiers** — Matching numeric tier counts.
+ * - **monthly / annual** — Prices (pipe-separated).
+ * - **plan_desc** — Optional description.
+ * - **plan_features** — Bullet list (pipe-separated).
+ * - **best_value** — Highlights plan.
+ * - **has_trial** — Show/hide trial button.
+ *
+ * # Manual Plans with Freemius Checkout
+ *
+ *     [gopricingtable public_key="pk_XXXX" product_name="My Add-on" product_id="12345" freemius="manual"]
  *     [go_plan_column plan_name="Pro" plan_id="111" site_tiers_label="Single Site|Up to 3 Sites" site_tiers="1|3" monthly="9.99|14.99" annual="89.99|134.99" plan_desc="For individual sites" plan_features="Feature A|Feature B|Feature C"]
  *     [go_plan_column plan_name="Premium" plan_id="222" best_value="true" site_tiers_label="Single Site|Up to 3 Sites" site_tiers="1|3" monthly="14.99|24.99" annual="134.99|224.99" plan_desc="For growing teams" plan_features="Everything in Pro|Priority support"]
- *   [/gopricingtable]
+ *     [/gopricingtable]
  *
- * - Automatic plans (no child plans needed):
- *   [gopricingtable freemius="automatic" product_id="15834" currency="usd" bearer_constant="FS_API_TOKEN"]
- *   Tip: Define your token once, for example in wp-config.php: define('FS_API_TOKEN', 'your_token_here');
+ * # Automatic Plans
  *
- * Behavior Notes
- * - Monthly/Annual toggle: When Annual is selected, each plan shows the average per‑month price and the yearly total underneath.
- * - Site tiers: Picking a site count updates all plans so visitors compare fairly.
- * - Buttons: When Freemius is on, Buy and Trial open checkout with the selected site count and billing cycle. When Freemius is off, buttons go to your links with helpful details added to the URL.
- * - Best Value badge: Use it to guide visitors to the plan you recommend.
+ *     [gopricingtable freemius="automatic" product_id="15834" currency="usd" bearer_constant="FS_API_TOKEN"]
  *
- * Accessibility
- * - Keyboard‑friendly controls with visible focus outlines.
- * - Clear labels and logical order of information.
- * - Good color contrast aimed at comfortable reading.
+ * Tip: Define your token once in wp-config.php.
  *
- * Helpful Tips
- * - Keep feature lists short and benefit‑focused.
- * - Use consistent site tiers across plans so comparisons are easy.
- * - If you only sell yearly on a plan, you can leave out the monthly price.
- * - Set a friendly product_name so the checkout panel looks polished.
- * - If you share snippets with your team, add a product_prefix to make button IDs easy to find in analytics.
+ * # Behavior Notes
  *
- * Support & Troubleshooting
- * - If nothing appears, double‑check that at least one child plan is inside the parent (unless you’re using automatic mode).
- * - If buttons do nothing, confirm you set freemius and provided the required product details, or that your links are correct when freemius is off.
- * - In automatic mode, make sure the token constant exists and has the right value.
+ * - **Monthly/Annual toggle:** Annual shows per-month savings.
+ * - **Site tiers:** Updating site count syncs across all plans.
+ * - **Buttons:** Freemius opens checkout with selected options.
+ * - **Best Value badge:** Highlights recommended plan.
+ *
+ * # Accessibility
+ *
+ * - Keyboard-friendly controls.
+ * - Clear labels and logical layout.
+ * - Strong color contrast.
+ *
+ * # Helpful Tips
+ *
+ * - Keep feature lists short.
+ * - Use consistent tiers across plans.
+ * - Omit monthly price if selling annual-only.
+ * - Set product_name for a polished checkout panel.
+ * - Use product_prefix for analytics.
+ *
+ * # Support & Troubleshooting
+ *
+ * - Ensure at least one child plan exists (unless automatic mode).
+ * - If buttons fail, confirm Freemius config or links.
+ * - In automatic mode, verify the token constant exists.
+ *
+ * FEATURES:
+ * - Clean pricing cards with a Monthly/Annual toggle.
+ * - One or more plans, each with license tiers, a short description, and a feature list.
+ * - Site count selector that stays in sync across all plans.
+ * - Optional Freemius checkout (Buy and Trial buttons), including license count and billing cycle.
+ * - Optional "Automatic" mode to pull plans and prices from your Freemius account.
+ * - All CSS and JS are included right here and only appear once per page.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

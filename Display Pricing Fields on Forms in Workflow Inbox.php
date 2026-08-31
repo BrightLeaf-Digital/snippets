@@ -2,20 +2,19 @@
 /**
  * Display Pricing Fields on Forms in Workflow Inbox
  *
- * GOAL:
- * - Allows editing of pricing fields in the Gravity Flow inbox entry view, replacing the usual
- *   "Pricing fields are not editable" message with the real field input.
+ * @gravityflow
+ * @gravityforms
  *
- * REQUIREMENTS:
- * - Gravity Forms core and Gravity Flow.
+ * GOAL:
+ * Allows editing of pricing fields in the Gravity Flow inbox entry view, replacing the usual
+ * "Pricing fields are not editable" message with the real field input.
  *
  * CONFIGURATION:
- * - Update $workflow_form_ids to include the form IDs where pricing fields should be editable.
- * - Optionally restrict to certain pricing field types via $allowed_pricing_types.
+ * - `$workflow_form_ids`: Update to include the form IDs where pricing fields should be editable.
+ * - Optionally restrict to certain pricing field types via `$allowed_pricing_types`.
  *
  * NOTES:
  * - Applies only on the Gravity Flow inbox entry view (page=gravityflow-inbox&view=entry).
- * - Gracefully bails if dependencies are missing or retrieval fails.
  */
 
 ( static function () {

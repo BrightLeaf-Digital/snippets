@@ -1,23 +1,39 @@
 <?php
 /**
- * Check child entries do not exceed the parent "Total"
+ * Check all child entries don't exceed total field on parent form
+ *
+ * @gravityforms
+ * @gravityperks
  *
  * GOAL:
- * - When submitting a Nested Forms child entry, sums all existing child "Amount" values plus the currently-entered amount
- *   and ensures the result does not exceed the parent form's "Total" value.
- * - Shows a detailed, currency-formatted message if the attempt would exceed the total (Total, Used, Remaining, Attempted, Overage).
+ * This code snippet ensures that the sum of all child entries in a Gravity Forms nested form does
+ * not exceed the total specified in the parent form. It validates the "Amount" field in child
+ * entries against the "Total" field in the parent form, preventing over-allocation of resources,
+ * budgets, or quotas. Shows a detailed, currency-formatted message if the attempt would exceed the
+ * total (Total, Used, Remaining, Attempted, Overage).
  *
- * Requirements:
+ * REQUIREMENTS:
  * - Gravity Forms and Gravity Perks Nested Forms are required.
- * - GP Advanced Calculations is optional but recommended if the parent "Total" field uses a calculation. If Advanced Calculations
- *   is active and the target field has a calculationFormula, the formula is evaluated server-side during child validation.
- * - If you are not using a calculation, set a numeric default value on the parent "Total" field. If neither a calculation nor a
- *   numeric default value is present, this validation gracefully skips.
+ * - GP Advanced Calculations is optional but recommended if the parent "Total" field uses a
+ *   calculation. If Advanced Calculations is active and the target field has a calculation
+ *   Formula, the formula is evaluated server-side during child validation.
+ * - If you are not using a calculation, set a numeric default value on the parent "Total" field.
+ *   If neither a calculation nor a numeric default value is present, this validation gracefully
+ *   skips.
  *
- * Configuration:
- * - Adjust the labels below to match your forms:
- *   - $child_field_label: label of the Number field on the child form that represents the amount to add (default: "Amount")
- *   - $parent_field_label: label of the Calculated/Number field on the parent that represents the total (default: "Total")
+ * CONFIGURATION:
+ * - `$child_field_label`: label of the Number field on the child form that represents the amount
+ *   to add (default: "Amount").
+ * - `$parent_field_label`: label of the Calculated/Number field on the parent that represents the
+ *   total (default: "Total")
+ *
+ * FEATURES:
+ * - **Validates child form entries** to ensure the cumulative amount does not exceed the total in
+ *   the parent form.
+ * - **Works with Gravity Forms Nested Forms** to enforce limits across multiple child entries.
+ * - **Dynamically calculates totals** from submitted child entries.
+ * - **Customizable field labels** (e.g., "Amount" in child forms and "Total" in the parent form).
+ * - **Displays a validation message** when the limit is exceeded, preventing submission errors.
  */
 
 add_filter(

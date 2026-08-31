@@ -2,19 +2,20 @@
 /**
  * Add Category to Body Class
  *
- * GOAL:
- * Adds category slugs as CSS classes to the body tag on single posts and category
- * archives, enabling category-specific styling without custom templates.
+ * @wordpress
  *
- * CONFIGURATION REQUIRED:
+ * GOAL:
+ * Adds category slugs as CSS classes to the body tag on single posts and category archives,
+ * enabling category-specific styling without custom templates.
+ *
+ * CONFIGURATION:
  * - None - works out of the box
- * - Optional: Add CSS rules targeting .category-{slug} in your theme stylesheet
+ * - Optional: Add CSS rules targeting `.category-{slug}` in your theme stylesheet
  *
  * USAGE:
- * Access in CSS as: body.category-news { /* styles * / }
- *
- * Example output on single post in "News" category:
- * <body class="single postid-123 category-news">
+ * - Access in CSS as: `body.category-news { /* styles * / }`
+ * - Example output on single post in "News" category: `<body class="single postid-123
+ *   category-news">`
  *
  * NOTES:
  * - Only applies to single posts and category archives

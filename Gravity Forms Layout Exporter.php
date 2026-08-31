@@ -2,29 +2,23 @@
 /**
  * Gravity Forms Layout Exporter
  *
- * GOAL
- * Adds "Export Layout" button to Gravity Forms editor that exports form structure
- * as formatted HTML table to clipboard. Includes field labels, types, conditional logic,
- * and Gravity Populate Anything (GPPA) settings for documentation purposes.
+ * @gravityforms
+ * @gravityperks
  *
- * CONFIGURATION
- * - Plugin: Gravity Forms must be installed and activated
- * - Plugin: Gravity Populate Anything (GPPA) plugin (optional but recommended)
- * - Permissions: User must have 'gravityforms_edit_forms' capability
+ * GOAL:
+ * Adds "Export Layout" button to Gravity Forms editor that exports form structure as formatted
+ * HTML table to clipboard. Includes field labels, types, conditional logic, and Gravity Populate
+ * Anything (GPPA) settings for documentation purposes.
  *
- * USAGE
- * 1. Navigate to Forms > Edit Form in WordPress admin
- * 2. Click "📋 Export Layout" button in toolbar
- * 3. Script copies formatted table to clipboard
- * 4. Opens new Google Docs tab automatically
- * 5. Paste (Ctrl+V) into Google Doc
+ * USAGE:
+ * Navigate to Forms > Edit Form in WordPress admin Click "📋 Export Layout" button in toolbar
+ * Script copies formatted table to clipboard Opens new Google Docs tab automatically Paste
+ * (Ctrl+V) into Google Doc
  *
- * NOTES
- * - Detects form field widths (quarter, half, full, etc.)
- * - Resolves GPPA field mappings to human-readable labels
- * - Shows conditional logic rules with field references
- * - Exports hidden/admin-only field indicators
- * - Table format optimized for Google Docs
+ * NOTES:
+ * Detects form field widths (quarter, half, full, etc.) Resolves GPPA field mappings to
+ * human-readable labels Shows conditional logic rules with field references Exports
+ * hidden/admin-only field indicators Table format optimized for Google Docs
  */
 
 // ─────────────────────────────────────────────

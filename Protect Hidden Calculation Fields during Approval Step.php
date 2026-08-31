@@ -1,6 +1,18 @@
 <?php
 /**
- * Protect hidden calculation fields in Gravity Flow Approval/User Input steps.
+ * Protect Hidden Calculation Fields during Approval Step
+ *
+ * @gravityflow
+ * @gravityforms
+ *
+ * GOAL:
+ * GravityFlow Approval and User Input steps have a little known quirk. Before processing the step
+ * (approval, rejection, user input, etc.) they clear the values from fields that are hidden by
+ * conditional logic if those fields are marked as editable OR are calculation fields. This snippet
+ * adds a multi select field to the bottom of your Approval or User Input step settings that allows
+ * you to select any calculation field on the form. If the selected field is hidden by conditional
+ * logic during the pre-processing the field is temporarily (for the duration of the step) marked
+ * as read only to protect it from being cleared.
  */
 
 add_filter(

@@ -1,13 +1,16 @@
 <?php
 /**
- * Localize remote file upload URLs on the receiving site so APC can treat them
- * like native uploads.
+ * Fix APC's handling of cross-domain File Upload URLs
  *
- * APC only knows how to copy files that already live under the current form's
- * upload root. When an entry stored on this site contains a remote URL instead,
- * APC replaces the merge tag with an empty string. This snippet downloads those
- * remote files into the form upload directory, updates the entry field value to
- * the new local URL, and stores the matching path metadata.
+ * @gravityforms
+ * @gravityview
+ *
+ * GOAL:
+ * This snippet fixes APC's handling of remote URL's in a file upload field. This snippet downloads
+ * the remote file and updates the local entry with the new local URL so that APC can access it and
+ * add it to the media library and post. This snippet can also be useful without APC when dealing
+ * with remote entry creation or updates to download the files and have them hosted on the current
+ * site.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

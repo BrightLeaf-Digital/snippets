@@ -1,24 +1,23 @@
 <?php
 /**
- * Send Error Notification - Form Failed Validation
+ * Send Error Notification When Form(s) Fail Validation
+ *
+ * @gravityforms
  *
  * GOAL:
- * Sends email notification to administrators whenever any form submission fails validation. Captures
- * all failed fields with their labels and error messages, helping identify problematic forms, confusing
- * validation rules, or user experience issues that need attention.
+ * Sends email notification to administrators whenever any form submission fails validation.
+ * Captures all failed fields with their labels and error messages, helping identify problematic
+ * forms, confusing validation rules, or user experience issues that need attention.
  *
  * CONFIGURATION:
- * 1. $to: Add the recipient email address where notifications should be sent. Else, defaults to admin email.
- *
- * 2. $whitelist: Choose which forms to monitor
- *    - Leave empty [] to monitor ALL forms
- *    - Add form IDs like [1, 5, 12] to ONLY monitor those specific forms
- *    - Find form IDs in WordPress admin: Forms > Forms (shown in the ID column)
- *
- * 3. $blacklist: Choose which forms to exclude
- *    - Leave empty [] to exclude NO forms
- *    - Add form IDs like [3, 7] to SKIP those specific forms
- *    - If both whitelist and blacklist are configured, blacklist takes priority
+ * - $to: Add the recipient email address (in between the quotes) where notifications should be
+ *   sent. Defaults to site admin email.
+ * - $whitelist: Choose which forms to monitor - Leave empty [] to monitor ALL forms - Add form IDs
+ *   like [1, 5, 12] to ONLY monitor those specific forms - Find form IDs in WordPress admin: Forms
+ *   > Forms (shown in the ID column)
+ * - $blacklist: Choose which forms to exclude - Leave empty [] to exclude NO forms - Add form IDs
+ *   like [3, 7] to SKIP those specific forms - If both whitelist and blacklist are configured,
+ *   blacklist takes priority
  */
 
 add_action(

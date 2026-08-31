@@ -1,24 +1,27 @@
 <?php
 /**
- * Send Error Notification - Workflow Doesn't Run
+ * Send Error Notification When Gravity Flow Workflow Fails to Run
+ *
+ * @gravityflow
+ * @gravityforms
+ * @gravityperks
  *
  * GOAL:
- * Monitors Gravity Flow workflows and alerts administrators when workflow fails to start after form
- * submission. Critical for catching workflow configuration errors, conditional logic issues, or system
- * failures that prevent automated processes from running. Checks both parent and nested child forms.
+ * Monitors Gravity Flow workflows and alerts administrators when workflow fails to start after
+ * form submission. Critical for catching workflow configuration errors, conditional logic issues,
+ * or system failures that prevent automated processes from running. Checks both parent and nested
+ * child forms.
  *
- * FEATURES INCLUDED:
- * ✓ Workflow configuration details
- * ✓ Conditional logic evaluation (shows if conditions are met/not met and why)
- * ✓ Rule-by-rule breakdown with field values vs expected values
- * ✓ Overview of all workflow steps and their conditional logic status
- * ✓ Direct link to entry in admin panel
- * ✓ Works with both parent and nested child forms
- * ✓ Excludes workflows with "delay_workflow_checkbox" (intentionally delayed workflows, see our snippet here:
- *   https://digital.brightleaf.info/view/code-snippet-directory/entry/49-restart-workflow-on-gv-approval-and-subscription-payment/)
+ * CONFIGURATION:
+ * - `$to`: Add recipient email address in $to variable. Else, defaults to admin email.
  *
- * CONFIGURATION REQUIRED:
- * - $to: Add recipient email address in $to variable. Else, defaults to admin email.
+ * FEATURES:
+ * ✓ Workflow configuration details ✓ Conditional logic evaluation (shows if conditions are
+ * met/not met and why) ✓ Rule-by-rule breakdown with field values vs expected values ✓
+ * Overview of all workflow steps and their conditional logic status ✓ Direct link to entry in
+ * admin panel ✓ Works with both parent and nested child forms ✓ Excludes workflows with
+ * "delay_workflow_checkbox" (intentionally delayed workflows, see our snippet here
+ * (https://brightleafdigital.io/view/code-snippet-directory/entry/49-restart-workflow-on-gv-approval-and-subscription-payment/))
  */
 
 add_action(

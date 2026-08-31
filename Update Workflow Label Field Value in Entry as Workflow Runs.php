@@ -1,15 +1,19 @@
 <?php
 /**
- * Update Workflow Status Field Value as Workflow Runs
+ * Update Workflow Label Field Value in Entry as Workflow Runs
+ *
+ * @gravityflow
  *
  * GOAL:
- * - Keeps a designated field (label default: "Workflow Step Field") up to date with the workflow status:
- *   - On step start: current step name
- *   - On workflow complete: complete step name
- *   - On workflow cancel: "Cancelled"
+ * Keeps a designated field (label default: "Workflow Step Field") up to date with the workflow
+ * status:
+ *
+ * - On step start: current step name
+ * - On workflow complete: complete step name
+ * - On workflow cancel: "Cancelled"
  *
  * CONFIGURATION:
- * - If you use a different field label, change $status_field_label below.
+ * - `$status_field_label`: If you use a different field label, change to your field label.
  */
 
 ( static function () {

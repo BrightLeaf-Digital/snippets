@@ -1,21 +1,28 @@
 <?php
 /**
- * Correct GravityView Links to Work with Tabs
+ * Correct Gravity View Links to Work with Tabs
+ *
+ * @gravityview
  *
  * GOAL:
- * - Ensures GravityView links (Back, Entry Link, Search Form action, Edit Link) include the correct
- *   tab anchor when views are embedded within tabbed interfaces (e.g., UAGB Tabs).
- *
- * REQUIREMENTS:
- * - GravityView plugin active.
+ * This code snippet ensures that GravityView links correctly navigate back to the appropriate tab
+ * when using tabbed navigation (such as those created with the Spectra/UAGB Tabs block). It
+ * modifies GravityView back links, entry links, search form actions, and edit links to maintain
+ * tab-specific navigation, preventing users from losing their place when interacting with
+ * GravityView entries.
  *
  * CONFIGURATION:
- * - Edit the configuration block below. Map each GravityView ID to its base URL and tab anchor.
- *   Example:
- *   341 => [ 'base' => 'https://example.com/dashboard/adminparents/', 'anchor' => '#uagb-tabs__tab0' ],
+ * - `$config_views` Map each GravityView ID to its base URL and tab anchor. Example: `341 => [
+ *   'base' => 'https://example.com/dashboard/adminparents/', 'anchor' => '#uagb-tabs__tab0' ],`
+ * - `$preserve_query`: Set to false to strip query strings when applying anchors.
  *
- * NOTES:
- * - Preserves query parameters where applicable. If a URL already has a fragment, it will be replaced.
+ * FEATURES:
+ * - **Preserves tab navigation** by appending the correct tab ID to GravityView links.
+ * - **Modifies back links** to return users to the correct tab within a tabbed interface.
+ * - **Ensures entry links open** in the correct tab instead of defaulting to the first one.
+ * - **Updates search form actions** to retain the correct tab after filtering results.
+ * - **Adjusts edit links** to keep users within the correct tab context.
+ * - **Customizable for multiple views** by mapping view IDs to specific tab hashes.
  */
 
 ( static function () {

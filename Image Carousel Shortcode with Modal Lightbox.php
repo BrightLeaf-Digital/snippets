@@ -2,34 +2,30 @@
 /**
  * Image Carousel Shortcode with Modal Lightbox
  *
- * GOAL
- * Creates a responsive image carousel with navigation arrows, dots, touch/swipe support,
- * and modal lightbox for full-size image viewing. Accepts image URLs or img tags as content.
+ * @wordpress
  *
- * CONFIGURATION
- * - Optional: Override default styles by targeting class names in theme CSS
- * - Optional: Customize arrow symbols, colors, transitions
+ * GOAL:
+ * Creates a responsive image carousel with navigation arrows, dots, touch/swipe support, and modal
+ * lightbox for full-size image viewing. Accepts image URLs or img tags as content.
  *
- * USAGE
- * Method 1 (URLs):
- * [image_carousel]
- * https://example.com/image1.jpg
- * https://example.com/image2.jpg
- * https://example.com/image3.jpg
- * [/image_carousel]
+ * CONFIGURATION:
+ * Optional: Override default styles by targeting class names in theme CSS Optional: Customize
+ * arrow symbols, colors, transitions
  *
- * Method 2 (IMG tags):
- * [image_carousel]
- * <img src="https://example.com/image1.jpg" alt="Description" />
- * <img src="https://example.com/image2.jpg" alt="Description" />
- * [/image_carousel]
+ * USAGE:
+ * # Method 1 (URLs)
  *
- * NOTES
- * - First slide displays by default
- * - Swipe requires 50px minimum movement to trigger
- * - Modal displays same image in larger size
- * - Click outside modal to close
- * - CSS uses transform for smooth animations
+ * `[image_carousel]` `https://example.com/image1.jpg` `https://example.com/image2.jpg`
+ * `https://example.com/image3.jpg` `[/image_carousel]`
+ *
+ * # Method 2 (IMG tags)
+ *
+ * `[image_carousel]` `<img src="https://example.com/image1.jpg" alt="Description" />` `<img
+ * src="https://example.com/image2.jpg" alt="Description" />` `[/image_carousel]`
+ *
+ * NOTES:
+ * First slide displays by default Swipe requires 50px minimum movement to trigger Modal displays
+ * same image in larger size Click outside modal to close CSS uses transform for smooth animations
  */
 
 add_action(

@@ -1,27 +1,35 @@
 <?php
 /**
- * Ensure Child Form Submissions Don't Exceed GravityView Balance
+ * Ensure child form submissions don't exceed Gravity View balance
+ *
+ * @gravityforms
+ * @gravityperks
  *
  * GOAL:
- * - When adding a child entry via Nested Forms, prevent the batch from requesting more than the available balance.
- *   Available balance = total in the ledger for this person/entity MINUS any of their requests still pending in workflow.
- *
- * REQUIREMENTS:
- * - Gravity Forms and Gravity Perks Nested Forms.
- * - Optional: Gravity Flow (applies the "pending" filter if active).
+ * This code snippet ensures that child form submissions in Gravity Forms do not exceed the
+ * available balance recorded in a GravityView ledger. It validates disbursal requests against the
+ * user's balance, preventing over-allocation of funds across multiple pending and approved
+ * submissions. Each array at the top of the snippet is for a different form with it's own ledger.
+ * You can use this snippet for as many forms/ledgers as many as you want, just make sure they all
+ * have the same structure and to replace the relevant id's.
  *
  * CONFIGURATION:
- * - Edit the configuration block below (Child Form Settings). Add each child form you need to validate.
- *   For each child form:
- *     - child_amount_field_id: The Amount field ID on the child form.
- *     - child_name_field_id:   The field ID on the child form that identifies the person/entity.
- *     - ledger_form_id:        The ID of the separate ledger form holding deposits/credits.
- *     - ledger_name_id:        The field ID on the ledger form that identifies the person/entity.
- *     - ledger_amount_id:      The Amount field ID on the ledger form to total up.
+ * - `$child_forms`: Add each child form you need to validate. `child_amount_field_id`: The Amount
+ *   field ID on the child form. `child_name_field_id`: The field ID on the child form that
+ *   identifies the person/entity. `ledger_form_id`: The ID of the separate ledger form holding
+ *   deposits/credits. `ledger_name_id`: The field ID on the ledger form that identifies the
+ *   person/entity. `ledger_amount_id`: The Amount field ID on the ledger form to total up.
  *
- * NOTES:
- * - Amounts use the site's currency format for accurate math.
- * - This checks: current child amount + any existing child entries in this parent batch + any pending requests in workflow.
+ * FEATURES:
+ * - **Prevents over-disbursement** by checking the requested amount against the available balance.
+ * - **Validates nested child form entries** to ensure total requests do not exceed the ledger
+ *   balance.
+ * - **Supports multiple forms** by allowing configuration for different form setups.
+ * - **Includes pending disbursals** in the balance calculation for real-time accuracy.
+ * - **Displays a detailed validation message** when the requested amount exceeds the available
+ *   balance.
+ * - **Efficiently retrieves and processes Gravity Forms entries** with pagination for large
+ *   datasets.
  */
 
 ( static function () {

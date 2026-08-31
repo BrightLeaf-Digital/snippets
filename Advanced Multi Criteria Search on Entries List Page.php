@@ -1,12 +1,12 @@
 <?php
 /**
- * Advanced multi-criteria search on Entries list
+ * Advanced Multi Criteria Search on Entries List Page
  *
- * Plugin Name: BL GF Advanced Filters
- * Description: Advanced multi-criteria search on Gravity Forms Entries list (wp-admin)
- * Version: 2.5
+ * @gravityforms
  *
- * @package BL_GF_Advanced_Filters
+ * GOAL:
+ * This snippet adds advanced search capabilities to the entries list page, allowing you to search
+ * by multiple criteria with ANY or ALL of the conditions evaluating to true.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

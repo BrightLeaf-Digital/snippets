@@ -1,6 +1,12 @@
 <?php
 /**
- * Re-sync APC-managed posts when supported entry update paths run.
+ * Update APC Post After Entry Update
+ *
+ * @gravityforms
+ * @gravityview
+ *
+ * GOAL:
+ * This snippet updates a post created by APC when the entry is updated.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -1,21 +1,30 @@
 <?php
 /**
- * Validate Form: No Duplicate Values Across Selected Field Groups
+ * Validate form for no duplicate values across X, Y, Z fields
+ *
+ * @gravityforms
  *
  * GOAL:
- * - Prevent submission when any configured group contains duplicate values across its fields.
- *   Works with text, number, name, address, and checkbox fields.
+ * This snippet ensures that specific groups of fields within a **Gravity Forms** form do not
+ * contain duplicate values. It allows you to define multiple sets of fields for validation,
+ * ensuring that no two fields within a group share the same value. If duplicates are found, a
+ * **custom validation error message** is displayed for each affected field.
  *
  * CONFIGURATION:
- * - Edit the configuration block below. Add your form ID as a key and provide one or more groups.
- *   Each group is an array of field_id => 'error message'. If two or more fields in that group
- *   have the same value, those fields will fail validation with the provided message.
+ * - `$forms`: Each group is an array of field_id => 'error message'. If two or more fields in that
+ *   group have the same value, those fields will fail validation with the provided message.
  *
- *   Example configuration for a single form:
- *   63 => [
- *     [ 21 => 'These fields must be different.', 23 => 'These fields must be different.' ],
- *     [ 25 => 'Please provide unique values.', 26 => 'Please provide unique values.' ],
- *   ],
+ * FEATURES:
+ * ✔ **Prevents Duplicate Values** – Ensures that no two fields within specified groups have
+ * the same value. ✔ **Supports Multiple Field Groups** – Each form can have multiple sets of
+ * fields that must be unique within their group. ✔ **Custom Error Messages** – Define a
+ * specific validation error message for each field when duplicates are detected. ✔ **Works
+ * Across Multiple Forms** – The validation can be applied to different forms with custom field
+ * configurations. ✔ **Supports Multi-Input Fields** – Handles complex field types such as
+ * **Name, Address, and Checkbox fields**. ✔ **Optimized Duplicate Detection** – Uses efficient
+ * logic to check and flag duplicate values only when necessary. This snippet is particularly
+ * useful for scenarios like **ensuring unique user IDs, email addresses, product SKUs, or any
+ * other critical values** in Gravity Forms.
  *
  * NOTES:
  * - Multi‑input fields (Name, Address, Checkbox) are concatenated using a pipe (|) separator for

@@ -1,9 +1,17 @@
 <?php
 /**
- * GoGetThis Merge Tag
- * Global {gogetthis:param} merge tag for URL parameters.
+ * Merge tag to retrieve GET parameters
  *
- * Usage: {gogetthis:coupon} → value of ?coupon= in the URL
+ * @wordpress
+ * @gravityforms
+ * @gravityview
+ *
+ * GOAL:
+ * Creates a new merge tag-available anywhere, not just in standard Gravity Forms areas-that
+ * retrieves the specified GET parameter.
+ *
+ * It will look for "parameter name" in the query strings of the URL and replace the merge tag with
+ * the value for that paramater.
  */
 
 if ( ! function_exists( 'bl_gogetthis_replace_tags' ) ) {

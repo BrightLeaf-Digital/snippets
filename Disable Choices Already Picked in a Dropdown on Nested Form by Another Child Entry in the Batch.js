@@ -1,25 +1,35 @@
 /* eslint-env browser, jquery */
 /* global jQuery, GFFORMID */
 /**
- * Disable Already-Selected Choices in a Nested Forms Child Dropdown (Batch-Scope)
+ * Disable Choices Already Picked in a Dropdown on Nested Form by Another Child Entry in the Batch
+ *
+ * @gravityperks
+ * @gravityforms
  *
  * GOAL:
- * - Disables options in a specific child dropdown if those values are already used by other child entries in
- *   the current Nested Forms batch/session. Re-enables options when entries are removed or edited.
- *
- * REQUIREMENTS:
- * - Gravity Forms and Gravity Perks Nested Forms.
+ * This JavaScript snippet disables dropdown choices in a Gravity Forms nested form to prevent
+ * duplicate selections across child entries within the same batch. When a user selects an option
+ * in one child entry, it becomes unavailable in subsequent child entries, ensuring unique
+ * selections. JS snippet to be installed on child form. Make sure to replace the parent form id,
+ * the field id of the dropdown and the field id of the nested form on the parent form.
  *
  * CONFIGURATION:
- * - Edit the cfg block below:
- *   - parentFormId: ID of the parent form that contains the Nested Form field
- *   - nestedFieldId: Field ID of the Nested Form field on the parent form
- *   - childDropdownFieldId: Field ID of the dropdown on the child form
- *   - compareBy: 'value' (recommended) or 'label' to compare against saved values or visible labels
+ * - `parentFormId`: ID of the parent form that contains the Nested Form field
+ * - `nestedFieldId`: Field ID of the Nested Form field on the parent form
+ * - `childDropdownFieldId`: Field ID of the dropdown on the child form
+ * - `compareBy`: 'value' (recommended) or 'label' to compare against saved values or visible
+ *   labels
+ *
+ * FEATURES:
+ * - **Prevents duplicate selections** in a dropdown field within nested forms.
+ * - **Dynamically disables options** that have already been chosen by other child entries.
+ * - **Works within the same batch of child entries** in a Gravity Forms parent form.
+ * - **Ensures data integrity** by restricting users from selecting the same option multiple times.
+ * - **Customizable field IDs** to match your specific form setup.
+ * - **Lightweight and efficient** JavaScript solution that runs client-side.
  *
  * NOTES:
- * - Adds class 'bld-disabled-choice' to disabled <option> and sets a helpful title.
- * @param $
+ * - Adds class 'bld-disabled-choice' to disabled and sets a helpful title.
  */
 (function ($) {
     'use strict';

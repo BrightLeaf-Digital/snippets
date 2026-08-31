@@ -1,20 +1,28 @@
 <?php
 /**
- * Proper Case (Capitalize First Letter of Each Word) Field Values Before Saving
+ * Proper Case (capitalize first letter of each word) Field Values before Saving
+ *
+ * @gravityforms
  *
  * GOAL:
- * Automatically converts field values to proper/title case (first letter of each word capitalized)
- * before saving entries. Uses ucwords() PHP function to transform text like "john doe" to "John Doe".
- * Configurable for specific forms and fields.
+ * This code snippet automatically **capitalizes the first letter of each word** in specified
+ * Gravity Forms fields before saving the entry. It ensures that user inputs, such as names or
+ * addresses, are stored in **proper case formatting**, enhancing data consistency and readability.
  *
- * CONFIGURATION REQUIRED:
- * - $form_and_field_ids: change the key to form ID and sub-array values to field IDs
- * - Example: 3 => [5,8,12] - this will apply to form 3, fields 5, 8, and 12
- * - Add more form/field combinations by duplicating the pattern
- * - Example: 3 => [5,8,12], 7 => [2,4]
- * - This will apply to text fields, textarea fields, and any field that stores string values
- * - Note: Consider if email fields, URL fields, or other special fields are in your list
- * - Note: for more complex transformations, see our other snippet: https://brightleafdigital.io/code/entry/31-capitalize-specific-field-value-before-saving-entry/
+ * CONFIGURATION:
+ * - `$form_and_field_ids`: change the key to form ID and sub-array values to field IDs. Example:
+ *   `3 => [5,8,12]` - this will apply to form 3, fields 5, 8, and 12. Add more form/field
+ *   combinations by duplicating the pattern.
+ * - This will apply to text fields, textarea fields, and any field that stores string values.
+ * - Note: Consider if email fields, URL fields, or other special fields are in your list.
+ * - Note: for more complex transformations, see our other snippet.
+ *
+ * FEATURES:
+ * - **Automatically applies proper case** (capitalizes the first letter of each word).
+ * - **Works on specified form and field IDs**, allowing customization for different forms.
+ * - **Ensures data consistency** for user-entered text fields like names and addresses.
+ * - **Applies the transformation before saving**, ensuring uniform formatting in stored entries.
+ * - **Easy to configure** by specifying the relevant form and field IDs.
  */
 
 add_filter(

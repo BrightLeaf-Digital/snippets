@@ -1,15 +1,28 @@
 /**
- * Confirm Specific Radio Selections Before Submitting (per‑form, configurable)
+ * Prompt user to confirm radio selection before submitting form
+ *
+ * @gravityforms
  *
  * GOAL:
- * - Shows a confirmation dialog when a selected radio value matches configured choices. Prevents
- *   accidental submissions for critical options.
+ * This JavaScript snippet prompts users with a confirmation message before submitting a **Gravity
+ * Form** when they select a specific radio button choice. If the user selects a designated choice,
+ * a confirmation dialog appears, requiring them to confirm their selection before the form is
+ * submitted. This ensures that users intentionally proceed with their chosen option. Remember to
+ * update the choices and messages on the top of the snippet. And update the name of the radio
+ * button a few lines down. If you are unsure what the name is right click on the radio field,
+ * click inspect and you will be able to see the html element name.
  *
  * CONFIGURATION:
- * - Edit cfg below:
- *   - fieldId: numeric field ID of the radio field (e.g., 3)
- *   - messages: map of radio option value => confirmation message
- *   - applyToFormIds: optional array of form IDs; empty means apply to any form on the page
+ * - `cfg`: `fieldId`: numeric field ID of the radio field (e.g., 3) `messages`: map of radio
+ *   option value => confirmation message `applyToFormIds`: optional array of form IDs; empty means
+ *   apply to any form on the page
+ *
+ * FEATURES:
+ * - **Prompts users with a confirmation message** before submitting the form.
+ * - **Works specifically for radio button fields**, allowing customized messages for each choice.
+ * - **Prevents accidental submissions** by requiring user confirmation.
+ * - **Customizable messages** for different radio button options.
+ * - **Lightweight and runs client-side** for a seamless user experience.
  */
 
 (function ($) {

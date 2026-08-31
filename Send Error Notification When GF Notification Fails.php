@@ -1,18 +1,22 @@
 <?php
 /**
- * Send Error Notification - Notification Didn't Send
+ * Send Error Notification When GF Notification Fails
+ *
+ * @gravityforms
  *
  * GOAL:
- * Alerts administrators when Gravity Forms fails to send email notifications. Critical for ensuring
- * important notifications (confirmations, alerts, assignments) aren't silently lost. Includes full
- * email details and error message to help diagnose SMTP/email configuration issues.
+ * Alerts administrators when Gravity Forms fails to send email notifications. Critical for
+ * ensuring important notifications (confirmations, alerts, assignments) aren't silently lost.
+ * Includes full email details and error message to help diagnose SMTP/email configuration issues.
  *
- * DISCLAIMER:
+ * CONFIGURATION:
+ * - `$to`: Add recipient email address in $to variable (currently empty). Defaults to site admin
+ *   email.
+ *
+ * NOTES:
  * This snippet only catches notifications that Gravity Forms detected as failed. It does not catch
- * errors that occur during email sending, such as SMTP connection issues, invalid email addresses, or wp_mail() failing.
- *
- * CONFIGURATION REQUIRED:
- * - $to: - Add recipient email address in $to variable (currently empty). Else, defaults to admin email.
+ * errors that occur during email sending, such as SMTP connection issues, invalid email addresses,
+ * or wp_mail() failing.
  */
 
 add_action(

@@ -1,24 +1,17 @@
 <?php
 /* phpcs:disable WordPress.Files.FileName */
 /**
- * Create Gravity Flow Step to Generate Coupon Codes
+ * Gravity Flow Step to Create Coupon Code
+ *
+ * @gravityflow
+ * @gravityforms
  *
  * GOAL:
- * - Adds a custom Gravity Flow step type that generates Gravity Forms Coupons dynamically during a workflow.
- * - Provides full UI to configure code, name, amount, type, target form, dates, limits, and stackability.
- * - Registers {coupon_code} and {coupon_code:FORM_ID} merge tags which output the code created for the entry.
- *
- * NOTES:
- * - Idempotent per target form: will not create a second coupon for the same target form; stores codes in entry meta
- *   under created_coupon_codes (array keyed by form ID).
- * - Duplicate detection: if a code already exists for the target form, the step will auto‑increment with a numeric
- *   suffix (e.g., CODE, CODE-1, CODE-2…) up to a bounded number of attempts.
- * - Timezone awareness: date inputs are treated as MM/DD/YYYY strings for the Coupons add‑on; consider using site
- *   timezone (current_time/wp_date) when generating dynamic dates in settings.
- * - Error handling: adds timeline notes indicating success or failure of coupon creation; gracefully aborts if
- *   required dependencies are not available or the target form cannot be found.
- * - Implementation detail: Coupons v2 exposes gf_coupons(); this snippet still includes a compatibility fallback
- *   for older APIs. The internal load of Coupons config is retained but guarded.
+ * - Adds a custom Gravity Flow step type that generates Gravity Forms Coupons dynamically during a
+ *   workflow.
+ * - Provides full UI to configure code, name, amount, type, target form, dates, limits, and
+ *   stackability.
+ * - Registers a `{coupon_code}` merge tag which outputs the code created for the entry.
  */
 
 add_action(

@@ -1,18 +1,21 @@
 <?php
 /**
- * SNIPPET: Send Error Notification - 0 Value in Donation Form Ledger Amount Field
+ * Send Error Notification When Specified Form Field Has 0 value
+ *
+ * @gravityforms
  *
  * GOAL:
- * Monitors donation/ledger forms for critical fields that have zero or empty values after submission.
- * Sends email alert to administrators when amount fields are empty, which could indicate data loss,
- * calculation errors, or payment processing issues. Includes user info and timestamp for debugging.
+ * Monitors donation/ledger forms for critical fields that have zero or empty values after
+ * submission. Sends email alert to administrators when amount fields are empty, which could
+ * indicate data loss, calculation errors, or payment processing issues. Includes user info and
+ * timestamp for debugging.
  *
- * CONFIGURATION REQUIRED:
- * - $to: Add recipient email address in $to variable. Else, defaults to admin email.
- * - $form_ids: Configure form IDs and field IDs to monitor:
- *   - Form 30: Checks fields 4, 8, 11 for empty values
- *   - Form 60: Checks fields 13, 16 for empty values
- * - Add more forms by adding to $form_ids array: form_id => [field_id_1, field_id_2]
+ * CONFIGURATION:
+ * - `$to`: Add the recipient email address (in between the quotes) where notifications should be
+ *   sent. Defaults to site admin email.
+ * - `$form_ids`: Configure form IDs and field IDs to monitor. As of now it checks fields 4, 8, and
+ *   11 on form 30 and fields 13 and 16 on form 60. Modify the id's to your own forms. Remove or
+ *   add as necessary.
  */
 
 add_action(

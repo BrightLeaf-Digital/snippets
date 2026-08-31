@@ -1,27 +1,34 @@
 <?php
 /**
- * Ensure Single Form Submission Doesn't Exceed Balance
+ * Ensure single form submission doesn't exceed balance
+ *
+ * @gravityforms
  *
  * GOAL:
- * - Prevents a single (non-nested) form submission from requesting more than the available balance
- *   in your ledger. The available balance is calculated as: total in the ledger for this person/entity
- *   minus any of their requests that are still pending in workflow.
- *
- * REQUIREMENTS:
- * - Gravity Forms installed (uses GFAPI, GFCommon).
- * - Optional: Gravity Flow installed (the "pending" filter is only applied when Gravity Flow is active).
+ * This code snippet ensures that a single form submission in Gravity Forms does not exceed the
+ * available balance recorded in a GravityView ledger. It validates the requested amount against
+ * the user's balance and any pending disbursals, preventing over-allocation of funds. The array at
+ * the top of the snippet is for a one form. You can use this snippet for as many forms/ledgers as
+ * many as you want by duplicating the array, just make sure each form has the right structure and
+ * to replace the relevant id's in the array.
  *
  * CONFIGURATION:
- * - Edit the configuration block below (Form Settings). You can add multiple forms.
- *   For each form:
- *     - amount_field_id: The Amount field on the form being submitted.
- *     - name_field_id:   The field that identifies the person/entity (used to match to the ledger entries).
- *     - ledger_form_id:  The ID of the separate "ledger" form holding deposits/credits.
- *     - ledger_name_id:  The field on the ledger form that identifies the person/entity.
- *     - ledger_amount_id:The Amount field on the ledger form to total up.
+ * - `$form_settings`: For each form: `amount_field_id`: The Amount field on the form being
+ *   submitted. `name_field_id`: The field that identifies the person/entity (used to match to the
+ *   ledger entries). `ledger_form_id`: The ID of the separate "ledger" form holding
+ *   deposits/credits. `ledger_name_id`: The field on the ledger form that identifies the
+ *   person/entity. `ledger_amount_id`: The Amount field on the ledger form to total up.
  *
- * NOTES:
- * - Amounts are parsed using the site's currency format for accuracy.
+ * FEATURES:
+ * - **Prevents over-disbursement** by ensuring that the requested amount does not exceed the
+ *   available balance.
+ * - **Validates a single form submission** against the user's balance in a linked GravityView
+ *   ledger.
+ * - **Includes pending disbursals** in the calculation to ensure accurate fund tracking.
+ * - **Supports multiple forms** by allowing configuration for different form setups.
+ * - **Dynamically retrieves and processes ledger entries** with pagination for large datasets.
+ * - **Displays a detailed validation message** when the requested amount exceeds the available
+ *   balance.
  */
 
 ( static function () {

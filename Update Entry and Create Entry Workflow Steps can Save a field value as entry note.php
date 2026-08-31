@@ -1,11 +1,24 @@
 <?php
 /* phpcs:disable WordPress.Files.FileName */
 /**
- * Create/Update Entry Steps: Save Field Value as Entry Note
+ * Update Entry and Create Entry Workflow Steps can Save a field value as entry note
+ *
+ * @gravityflow
  *
  * GOAL:
- * - Adds a text setting to Gravity Flow Form Connector steps (Create Entry, Update an Entry) to save a
- *   value (supports merge tags) as a note on the created/updated entry.
+ * This snippet enhances the **Update Entry** and **Create Entry** workflow steps in **Gravity
+ * Flow** by allowing a field value to be automatically saved as an **entry note**. The note is
+ * recorded when a new entry is created or an existing entry is updated via workflow automation.
+ *
+ * FEATURES:
+ * ✔ **Save Field Value as Entry Note** – Select a field whose value should be recorded as a
+ * note when the workflow step runs. ✔ **Works with “Create Entry” and “Update Entry”
+ * Steps** – Supports workflows that create new entries or update existing ones. ✔ **Merge Tag
+ * Support** – Dynamically replaces variables within the selected field to generate meaningful
+ * notes. ✔ **User Identification** – Captures the user ID and display name when saving the
+ * entry note. ✔ **Seamless Automation** – Automatically applies to workflow steps without
+ * requiring additional manual intervention. This snippet is useful for keeping a record of form
+ * updates or tracking important changes directly within the **Gravity Forms** entry notes.
  */
 
 ( static function () {

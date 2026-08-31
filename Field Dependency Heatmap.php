@@ -1,21 +1,26 @@
 <?php
 /**
- * Field Dependency Heatmap — Single‑file Gravity Forms Snippet
+ * Field Dependency Heatmap
  *
- * Goal
+ * @gravityforms
+ *
+ * GOAL:
  * - Provide a visual representation of field dependencies in the Gravity Forms editor.
- * - Make it easy to see where a field is used in conditional logic, calculations, and notifications.
+ * - Make it easy to see where a field is used in conditional logic, calculations, and
+ *   notifications.
  * - Give form editors a way to quickly audit references without opening every field or setting.
  *
- * Features
- * - Color-coded badges for different reference types (conditional logic, calculations, notifications).
+ * REQUIREMENTS:
+ * - User must have 'gform_full_access' capability.
+ *
+ * FEATURES:
+ * - Color-coded badges for different reference types (conditional logic, calculations,
+ *   notifications).
  * - Interactive modal showing exactly which rules, formulas, or notifications refer to a field.
  * - Automatic updates after AJAX saves (no page reload needed) using Gravity Forms action hooks.
- * - Integration with Gravity Wiz's inline field ID pills, with a clean fallback for standard labels.
+ * - Integration with Gravity Wiz's inline field ID pills, with a clean fallback for standard
+ *   labels.
  * - Real-time badge rendering as fields are added or modified in the editor via MutationObserver.
- *
- * Requirements
- * - User must have 'gform_full_access' capability.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

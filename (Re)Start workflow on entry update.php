@@ -1,17 +1,19 @@
 <?php
 /**
- * (Re-)start a Gravity Flow workflow when an entry is updated and now meets a step's conditions.
+ * (Re)Start workflow on entry update
  *
- * Adds a checkbox to every workflow step: "Send to this step when the entry is updated".
- * Only one step per form may have this enabled.
+ * @gravityflow
+ * @gravityforms
  *
- * Use case: an entry that did not meet a step's conditions at submission (so the workflow
- * skipped/completed) is later edited to meet them. On update, if the workflow is not currently
- * active on another step and the flagged step's conditional logic is now met, the entry is
- * sent to that step and the workflow (re-)starts there.
- *
- * Update channels handled: admin entry-detail edits (gform_after_update_entry) and
- * GravityView Edit Entry / programmatic GFAPI::update_entry() (gform_post_update_entry).
+ * GOAL:
+ * This snippet adds a checkbox to your workflow steps. When checked the snippet will send the
+ * entry, when it is updated, to the workflow step. If the step has conditional logic it will check
+ * the logic and do nothing if it doesn't pass. Only one step per workflow can have this setting
+ * checked at a time. If the entry is on a step already this does nothing. Useful for situations
+ * where your entry does not meet the conditions for your workflow at submission time but will be
+ * updated later (manually or automatically) and you want to run it when it now meets the
+ * condition. Note that this will run the workflow every time the entry is updated and it meets the
+ * conditions.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -1,4 +1,18 @@
 <?php
+/**
+ * Embed Form in Admin Dashboard Widget
+ *
+ * @wordpress
+ * @gravityforms
+ *
+ * GOAL:
+ * This snippet adds a widget to your admin dashboard and embeds your selected form in it. Works
+ * well with many add ons such as Nested Forms and Populate Anything and Live Merge Tags. Displays
+ * a custom confirmation with a link to the entry (opened in a new tab). Can easily reload the form
+ * after submissions. Triggers feeds and notifications and anything a regular form submission
+ * would.
+ */
+
 add_action(
     'wp_dashboard_setup',
     function () {

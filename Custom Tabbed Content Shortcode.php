@@ -2,32 +2,23 @@
 /**
  * Custom Tabbed Content Shortcode
  *
- * GOAL
- * Creates a tabbed interface by parsing nested div structures into clickable tabs
- * with associated content panels. Supports nested shortcodes and DOM-based parsing.
+ * @wordpress
  *
- * CONFIGURATION REQUIRED
- * - CSS: Style .tabbed-content-wrapper, .tabbed-content-tabs, .tab-label, .tab-panel
- * - CSS: Define .active class for selected tab and visible panel
- * - Structure: Content must follow specific div nesting (see usage)
+ * GOAL:
+ * **GOAL** Creates a tabbed interface by parsing nested div structures into clickable tabs with
+ * associated content panels. Supports nested shortcodes and DOM-based parsing.
  *
- * USAGE
- * [tabbed_content]
- *   <div>
- *     <div>Tab 1 Label</div>
- *     <div>Tab 1 content here...</div>
- *   </div>
- *   <div>
- *     <div>Tab 2 Label</div>
- *     <div>Tab 2 content here...</div>
- *   </div>
- * [/tabbed_content]
+ * CONFIGURATION:
+ * CSS: Style .tabbed-content-wrapper, .tabbed-content-tabs, .tab-label, .tab-panel CSS: Define
+ * .active class for selected tab and visible panel Structure: Content must follow specific div
+ * nesting (see usage)
  *
+ * USAGE:
+ * `[tabbed_content]` `<div>` `<div>Tab 1 Label</div>` `<div>Tab 1 content here...</div>` `</div>`
+ * `<div>` `<div>Tab 2 Label</div>` `<div>Tab 2 content here...</div>` `</div>` `[/tabbed_content]`
  *
- * NOTES
- * - First tab is active by default
- * - Supports nested shortcodes
- * - Only one panel visible at a time
+ * NOTES:
+ * First tab is active by default Supports nested shortcodes Only one panel visible at a time
  */
 
 add_shortcode(
