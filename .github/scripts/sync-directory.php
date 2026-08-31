@@ -329,12 +329,14 @@ function read_config() {
 function read_changes( string $input ): array {
 	$changes = [];
 	$seen    = [];
+	$lines   = 0;
 
 	foreach ( preg_split( '/\R/', $input ) ?: [] as $line ) {
 		if ( '' === trim( $line ) ) {
 			continue;
 		}
 
+		++$lines;
 		$parts  = explode( "\t", $line );
 		$status = strtoupper( substr( trim( (string) array_shift( $parts ) ), 0, 1 ) );
 
@@ -343,8 +345,8 @@ function read_changes( string $input ): array {
 		}
 
 		// A rename line carries the old path first, then the new one.
-		$previous = 'R' === $status && count( $parts ) > 1 ? trim( (string) array_shift( $parts ) ) : null;
-		$path     = trim( (string) array_shift( $parts ) );
+		$previous = 'R' === $status && count( $parts ) > 1 ? unquote_git_path( (string) array_shift( $parts ) ) : null;
+		$path     = unquote_git_path( (string) array_shift( $parts ) );
 
 		if ( ! is_publishable_path( $path ) || isset( $seen[ $path ] ) ) {
 			continue;
@@ -358,7 +360,63 @@ function read_changes( string $input ): array {
 		];
 	}
 
+	// Surfacing the count makes a silently dropped path visible against the change list the
+	// workflow prints. A quoted filename went missing here once without a word.
+	printf( "%d change line(s), %d publishable snippet(s).\n", $lines, count( $changes ) );
+
 	return $changes;
+}
+
+/**
+ * Decodes a path as git writes it in --name-status output.
+ *
+ * Git wraps a path in double quotes and C-escapes it whenever it contains a quote, a backslash
+ * or a control character. core.quotepath=false only suppresses that for non-ASCII bytes, so a
+ * filename such as Create "user role" merge tag.php still arrives quoted and escaped.
+ *
+ * @param string $path Raw path field.
+ *
+ * @return string
+ */
+function unquote_git_path( string $path ): string {
+	$path = trim( $path );
+
+	if ( strlen( $path ) < 2 || ! str_starts_with( $path, '"' ) || ! str_ends_with( $path, '"' ) ) {
+		return $path;
+	}
+
+	$body   = substr( $path, 1, -1 );
+	$out    = '';
+	$length = strlen( $body );
+
+	for ( $i = 0; $i < $length; $i++ ) {
+		if ( '\\' !== $body[ $i ] || $i + 1 >= $length ) {
+			$out .= $body[ $i ];
+			continue;
+		}
+
+		$next = $body[ ++$i ];
+
+		// An octal escape carries one raw byte of a multi-byte character.
+		if ( ctype_digit( $next ) && $i + 2 < $length ) {
+			$octal = $next . $body[ $i + 1 ] . $body[ $i + 2 ];
+			if ( 1 === preg_match( '/^[0-7]{3}$/', $octal ) ) {
+				$out .= chr( (int) octdec( $octal ) );
+				$i   += 2;
+				continue;
+			}
+		}
+
+		$out .= [
+			'n'  => "\n",
+			't'  => "\t",
+			'r'  => "\r",
+			'"'  => '"',
+			'\\' => '\\',
+		][ $next ] ?? $next;
+	}
+
+	return $out;
 }
 
 /**
@@ -465,10 +523,12 @@ function sync_one( array $change, array $config, array $choices ) {
 		FIELD_INSTALL     => $data['install_with'],
 	];
 
-	$tags = encode_entry_tags( $data['ecosystems'], $choices );
-	if ( is_string( $tags ) ) {
-		return $tags;
+	$encoded = encode_entry_tags( $data['ecosystems'], $choices );
+	if ( is_string( $encoded ) ) {
+		return $encoded;
 	}
+
+	$tags = $encoded['json'];
 
 	// A rename keeps the entry the old filename owned.
 	$lookup   = null !== $change['previous'] ? title_from_path( $change['previous'] ) : $title;
@@ -585,7 +645,10 @@ function encode_path( string $path ): string {
  * @param array<int, string> $values  Ecosystem choice values from the docblock.
  * @param array              $choices Configured choice records keyed by value.
  *
- * @return string Tagify JSON, or an error message. A leading "[" marks success.
+ * @return array{json: string}|string The encoded tags, or an error message. Success is wrapped
+ *                                     in an array so the caller can tell it apart from an error
+ *                                     with is_string(); returning the JSON bare made every
+ *                                     success look like a failure.
  */
 function encode_entry_tags( array $values, array $choices ) {
 	$unknown = array_values( array_diff( $values, array_keys( $choices ) ) );
@@ -621,7 +684,7 @@ function encode_entry_tags( array $values, array $choices ) {
 
 	$encoded = json_encode( $tags, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 
-	return is_string( $encoded ) ? $encoded : 'The Ecosystem tags could not be JSON encoded.';
+	return is_string( $encoded ) ? [ 'json' => $encoded ] : 'The Ecosystem tags could not be JSON encoded.';
 }
 
 /**

@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       snippet_path:
-        description: PHP or JavaScript snippet to sync
+        description: 'PHP or JavaScript snippet to sync, or "all" for every tracked snippet'
         required: true
         type: string
 
@@ -53,7 +53,15 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+          if [ "$EVENT_NAME" = "workflow_dispatch" ] && [ "$MANUAL_SNIPPET_PATH" = "all" ]; then
+            # Backfill: every tracked snippet, upserted. Used to re-sync after a sync-side fix,
+            # since a change under .github does not itself trigger a run. No SYNC_RANGE is set,
+            # so a backfill never notifies subscribers.
+            git -c core.quotepath=false ls-files -z -- '*.php' '*.js' '*.PHP' '*.JS' \
+              | tr '\0' '\n' \
+              | grep -v '^\.github/' \
+              | sed 's/^/M\t/' > changes.tsv
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
             case "$MANUAL_SNIPPET_PATH" in
               ''|/*|../*|*/../*|.github/*|*/.github/*|.*|*/.*)
                 echo "::error::Invalid snippet path: $MANUAL_SNIPPET_PATH"
