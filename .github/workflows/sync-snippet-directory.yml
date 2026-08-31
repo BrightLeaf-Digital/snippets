@@ -1,0 +1,113 @@
+name: Sync Snippet Directory
+
+# Upserts one Code Snippets Directory entry per published snippet file. A file the directory
+# has not seen is created, one it already has is updated in place, and a renamed file updates
+# the entry its old filename owned. Everything the entry needs comes from the file's header
+# docblock; see docs/snippet-directory.md in the project docs repo for the format.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.php'
+      - '**.js'
+      # The scripts under .github are .php files themselves; changing one is not a snippet
+      # change, and this keeps a tooling-only push from starting a run at all.
+      - '!.github/**'
+  workflow_dispatch:
+    inputs:
+      snippet_path:
+        description: PHP or JavaScript snippet to sync
+        required: true
+        type: string
+
+# Two runs writing the same entry could both miss it on lookup and create a duplicate, so
+# runs queue instead of overlapping. Never cancel: a cancelled run leaves entries half-synced.
+concurrency:
+  group: snippet-directory-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # The change list is a diff against the push's base commit.
+
+      - name: Check the runtime
+        run: |
+          set -euo pipefail
+          php -v
+          php -r 'exit( extension_loaded( "curl" ) && extension_loaded( "json" ) ? 0 : 1 );' \
+            || { echo "::error::PHP is missing the curl or json extension."; exit 1; }
+
+      - name: Build the change list
+        env:
+          MANUAL_SNIPPET_PATH: ${{ inputs.snippet_path }}
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_COMMIT: ${{ github.event.before }}
+          HEAD_COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            case "$MANUAL_SNIPPET_PATH" in
+              ''|/*|../*|*/../*|.github/*|*/.github/*|.*|*/.*)
+                echo "::error::Invalid snippet path: $MANUAL_SNIPPET_PATH"
+                exit 1
+                ;;
+              *.php|*.js|*.PHP|*.JS)
+                if ! git ls-files --error-unmatch -- "$MANUAL_SNIPPET_PATH" >/dev/null 2>&1; then
+                  echo "::error::Not a tracked file: $MANUAL_SNIPPET_PATH"
+                  exit 1
+                fi
+                ;;
+              *)
+                echo "::error::Snippet path must end in .php or .js: $MANUAL_SNIPPET_PATH"
+                exit 1
+                ;;
+            esac
+
+            # The sync is an upsert, so a dispatch of an already-published path updates its
+            # entry rather than creating a second one. M and A are handled identically.
+            printf 'M\t%s\n' "$MANUAL_SNIPPET_PATH" > changes.tsv
+          else
+            BASE="$BEFORE_COMMIT"
+            if [ -z "$BASE" ] \
+              || [ "$BASE" = "0000000000000000000000000000000000000000" ] \
+              || ! git rev-parse --verify --quiet "${BASE}^{commit}" >/dev/null; then
+              echo "Base commit $BASE is unavailable; falling back to HEAD~1."
+              BASE="$(git rev-parse --verify --quiet 'HEAD~1^{commit}' || true)"
+            fi
+
+            if [ -z "$BASE" ]; then
+              # Rather than treat every tracked snippet as new and mass-create entries.
+              echo "::error::No usable base commit to diff against. Sync the file(s) with the workflow_dispatch trigger instead."
+              exit 1
+            fi
+
+            # -M detects renames so a renamed file updates its existing entry. quotepath=false
+            # keeps non-ASCII filenames (there are several) as raw UTF-8 rather than escapes.
+            git -c core.quotepath=false diff -M --name-status --diff-filter=AMR "$BASE" "$HEAD_COMMIT" > changes.tsv
+
+            # The sync reads the per-file commit message out of this range for the subscriber
+            # notification. A dispatch deliberately leaves it unset: a retry is not news.
+            echo "SYNC_RANGE=${BASE}..${HEAD_COMMIT}" >> "$GITHUB_ENV"
+          fi
+
+          echo "Change list:"
+          cat changes.tsv
+
+      - name: Sync the directory
+        env:
+          GF_WEBHOOK_URL: ${{ secrets.GF_WEBHOOK_URL }}
+          GF_UPDATE_WEBHOOK_URL: ${{ secrets.GF_UPDATE_WEBHOOK_URL }}
+          GF_CONSUMER_KEY: ${{ secrets.GF_CONSUMER_KEY }}
+          GF_CONSUMER_SECRET: ${{ secrets.GF_CONSUMER_SECRET }}
+          GITHUB_REPO: ${{ github.repository }}
+          GITHUB_BRANCH: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: php .github/scripts/sync-directory.php < changes.tsv
