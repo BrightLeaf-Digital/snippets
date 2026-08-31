@@ -554,6 +554,16 @@ function sync_one( array $change, array $config, array $choices ) {
 
 		$entry_id = $created;
 		$action   = 'CREATE';
+
+		// A dry run did not really create anything, so there is no entry to write the tags to.
+		if ( $config['dry_run'] ) {
+			return [
+				'action'   => $action,
+				'entry_id' => 'would be created',
+				'title'    => $title,
+			];
+		}
+
 		// The submission cannot carry the Ecosystem value, so it is written in the update
 		// below: the Entry Tags field stores Tagify JSON, and form submission processing
 		// would flatten it into a plain value list that renders as nothing.
@@ -744,7 +754,7 @@ function find_entry_id( array $config, string $title ) {
 				]
 			),
 			'paging'  => [
-				'page_size' => 2,
+				'page_size' => 20,
 			],
 			'sorting' => [
 				'key'       => 'id',
@@ -760,18 +770,30 @@ function find_entry_id( array $config, string $title ) {
 	}
 
 	$entries = is_array( $response['entries'] ?? null ) ? $response['entries'] : [];
-	if ( [] === $entries ) {
+
+	// Gravity Forms' "is" filter over-matches a value containing double quotes - the title
+	// Create "user role" merge tag matched several entries - so the returned set is narrowed to
+	// exact matches here rather than trusted. Without this the duplicate guard below fires on a
+	// title that is in fact unique.
+	$exact = [];
+	foreach ( $entries as $entry ) {
+		if ( (string) ( $entry[ FIELD_TITLE ] ?? '' ) === $title ) {
+			$exact[] = $entry;
+		}
+	}
+
+	if ( [] === $exact ) {
 		return null;
 	}
 
-	if ( count( $entries ) > 1 ) {
+	if ( count( $exact ) > 1 ) {
 		return sprintf(
 			'More than one entry has the title "%s". Resolve the duplicate before syncing.',
 			$title
 		);
 	}
 
-	$id = (string) ( $entries[0]['id'] ?? '' );
+	$id = (string) ( $exact[0]['id'] ?? '' );
 
 	return ctype_digit( $id ) ? (int) $id : 'The entry lookup returned an entry with no usable ID.';
 }
