@@ -855,7 +855,16 @@ function update_entry( array $config, int $entry_id, array $values ) {
 		return true;
 	}
 
-	$response = api_request( $config, 'PUT', $url, array_merge( $current, $values ) );
+	// NOT array_merge(): PHP casts the integer-like field IDs ('1', '3', '5') to integer keys,
+	// and array_merge renumbers numeric keys from zero. That silently rewrites every field
+	// value into a different field - the title into field 5, the description into field 4 -
+	// and GF stores the result. Assign key by key so the field IDs survive.
+	$merged = $current;
+	foreach ( $values as $field_id => $value ) {
+		$merged[ $field_id ] = $value;
+	}
+
+	$response = api_request( $config, 'PUT', $url, $merged );
 
 	return is_string( $response ) ? 'The entry update failed: ' . $response : true;
 }
@@ -915,7 +924,7 @@ function api_request( array $config, string $method, string $url, ?array $body =
 		return sprintf( '%s %s failed: %s', $method, redact( $url ), '' === $error ? 'unknown transport error' : $error );
 	}
 
-	$decoded = json_decode( (string) $raw, true );
+	$decoded = decode_json_body( (string) $raw );
 
 	if ( $status < 200 || $status >= 300 ) {
 		return sprintf(
@@ -932,6 +941,48 @@ function api_request( array $config, string $method, string $url, ?array $body =
 	}
 
 	return $decoded;
+}
+
+/**
+ * Decodes a JSON response body, tolerating output echoed ahead of it.
+ *
+ * A plugin or snippet that echoes during the request - a stray debug print, a notice - lands
+ * ahead of the JSON in the response body. The write has already happened by then, so treating
+ * the whole response as unreadable reports a completed write as a failure. Live snippet 21 on
+ * the directory site did exactly this, echoing <script>console.log(...)</script> from
+ * gform_after_update_entry, and turned 57 successful writes into 57 reported failures.
+ *
+ * @param string $raw Raw response body.
+ *
+ * @return array|null Decoded array, or null when there is no JSON in the body.
+ */
+function decode_json_body( string $raw ) {
+	$decoded = json_decode( $raw, true );
+	if ( is_array( $decoded ) ) {
+		return $decoded;
+	}
+
+	// Retry from the first plausible JSON opener.
+	$start = strcspn( $raw, '{[' );
+	if ( $start >= strlen( $raw ) ) {
+		return null;
+	}
+
+	$decoded = json_decode( substr( $raw, $start ), true );
+	if ( is_array( $decoded ) ) {
+		fwrite(
+			STDERR,
+			sprintf(
+				"Note: %d byte(s) of output preceded the JSON response and were ignored: %s\n",
+				$start,
+				substr( $raw, 0, min( $start, 120 ) )
+			)
+		);
+
+		return $decoded;
+	}
+
+	return null;
 }
 
 /**
