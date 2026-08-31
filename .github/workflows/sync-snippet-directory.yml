@@ -21,6 +21,11 @@ on:
         description: 'PHP or JavaScript snippet to sync, or "all" for every tracked snippet'
         required: true
         type: string
+      dry_run:
+        description: 'Read and report only - make no writes'
+        required: false
+        default: false
+        type: boolean
 
 # Two runs writing the same entry could both miss it on lookup and create a duplicate, so
 # runs queue instead of overlapping. Never cancel: a cancelled run leaves entries half-synced.
@@ -118,4 +123,5 @@ jobs:
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_BRANCH: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}
+          GF_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
         run: php .github/scripts/sync-directory.php < changes.tsv
