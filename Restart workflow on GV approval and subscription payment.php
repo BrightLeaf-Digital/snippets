@@ -15,6 +15,8 @@
  *   upon form submission.
  * - **Restart the workflow** upon each subscription payment for recurring payment scenarios.
  * - **Update a date field** when the workflow restarts to reflect the latest payment or approval.
+ * - **Expose the restart date** as a `{workflow_restart_date}` merge tag that scheduled steps
+ *   can still read, since the date field itself is restored as soon as the request ends.
  * - **Manually restart workflows** from the entry detail sidebar in the admin panel.
  *
  * FEATURES:
@@ -24,9 +26,14 @@
  * making it useful for recurring payments. ✔ **Configurable Options in Gravity Flow Step
  * Settings** – Adds checkboxes in **Workflow Start steps** to enable these behaviors
  * selectively. ✔ **Auto-Update Date Field** – Updates a selected date field when the workflow
- * restarts, ensuring accurate tracking. ✔ **Manual Workflow Restart from Admin Panel** – Adds
+ * restarts, ensuring accurate tracking. ✔ **Restart Date Merge Tag** – Records each restart's
+ * date in entry meta and exposes it as `{workflow_restart_date}`, so **delayed or scheduled
+ * steps** (which run in a later cron pass, after the date field has been restored) can still
+ * map the date the restart actually represents; falls back to the configured date field when
+ * no restart has happened. ✔ **Manual Workflow Restart from Admin Panel** – Adds
  * buttons in the **entry detail sidebar**, allowing admins to manually restart workflows for
- * **GravityView approval** or **subscription payments**. ✔ **Ensures Workflow Integrity** –
+ * **GravityView approval** or **subscription payments**, with an optional date so a catch-up
+ * run records the date it actually represents rather than the date it was clicked. ✔ **Ensures Workflow Integrity** –
  * Automatically cancels the initial workflow if delayed until GravityView approval to prevent
  * redundant execution. This snippet integrates seamlessly with **Gravity Flow, GravityView, and
  * Gravity Forms Subscription Payments**, enabling more **dynamic and automated workflow
@@ -157,6 +164,106 @@ add_action(
 	5
 );
 
+if ( ! function_exists( 'bld_workflow_restart_record_date' ) ) {
+	/**
+	 * Records the date a restart represents, in entry meta, so later steps can read it.
+	 *
+	 * WHY THIS EXISTS
+	 * "Update Date Field" writes today into the date field and restores the original
+	 * on gravityflow_post_process_workflow — which fires as soon as workflow processing
+	 * ends, in the same request. A step that runs immediately therefore sees the new
+	 * date, but a SCHEDULED step (any delay at all, even a minute) runs in a later cron
+	 * pass, long after the restore, and reads the original date. Downstream steps that
+	 * map the date field — a Form Connector step writing a ledger row, say — silently
+	 * record the wrong date for every restart.
+	 *
+	 * Rather than hold a donor-facing field hostage across a cron boundary, the date is
+	 * recorded here as entry meta and exposed as the {workflow_restart_date} merge tag,
+	 * which resolves correctly whenever the step actually runs. Map that in scheduled
+	 * steps. The date-field behaviour above is untouched, so existing setups are
+	 * unaffected.
+	 *
+	 * The date is the payment's own date when the payment action supplies one
+	 * ($action['payment_date'] — optional, not part of Gravity Forms' action shape, but
+	 * an add-on may include it), otherwise today. A webhook-driven add-on can be several
+	 * days behind the charge it reports, and the ledger should carry the date the money
+	 * moved, not the date we heard about it. Filter 'bld_workflow_restart_date' for full
+	 * control.
+	 *
+	 * @param array       $entry      The entry being restarted.
+	 * @param array|null  $action     The payment action, when a payment triggered this.
+	 * @param object|null $start_step The workflow start step.
+	 *
+	 * @return string The recorded date, Y-m-d.
+	 */
+	function bld_workflow_restart_record_date( $entry, $action = null, $start_step = null ) {
+		$date = '';
+
+		if ( is_array( $action ) && ! empty( $action['payment_date'] ) ) {
+			$timestamp = strtotime( (string) $action['payment_date'] );
+			if ( $timestamp ) {
+				$date = gmdate( 'Y-m-d', $timestamp );
+			}
+		}
+
+		if ( '' === $date ) {
+			$date = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
+		}
+
+		/**
+		 * Filters the date a workflow restart represents.
+		 *
+		 * @param string      $date       Y-m-d.
+		 * @param array       $entry      The entry being restarted.
+		 * @param array|null  $action     The payment action, when a payment triggered this.
+		 * @param object|null $start_step The workflow start step.
+		 */
+		$date = apply_filters( 'bld_workflow_restart_date', $date, $entry, $action, $start_step );
+
+		if ( is_string( $date ) && '' !== $date && ! empty( $entry['id'] ) && function_exists( 'gform_update_meta' ) ) {
+			gform_update_meta( (int) $entry['id'], 'bld_workflow_restart_date', $date );
+		}
+
+		return $date;
+	}
+}
+
+// {workflow_restart_date} — the date of the most recent restart, for mapping in steps
+// that run later than the request the restart happened in.
+add_filter(
+	'gform_replace_merge_tags',
+	static function ( $text, $form, $entry ) {
+		// GravityView and Populate Anything hydration hand this filter an array rather
+		// than a string; running a string function on it fatals the whole page.
+		if ( ! is_string( $text ) || false === strpos( $text, '{workflow_restart_date}' ) ) {
+			return $text;
+		}
+		if ( ! is_array( $entry ) || empty( $entry['id'] ) ) {
+			return str_replace( '{workflow_restart_date}', '', $text );
+		}
+
+		$date = function_exists( 'gform_get_meta' ) ? gform_get_meta( (int) $entry['id'], 'bld_workflow_restart_date' ) : '';
+
+		// No restart has happened yet: fall back to the configured date field, so a step
+		// mapping this tag behaves exactly as one mapping that field used to.
+		if ( ! $date && function_exists( 'gravity_flow' ) ) {
+			$start_step = gravity_flow()->get_workflow_start_step( isset( $entry['form_id'] ) ? (int) $entry['form_id'] : 0, $entry );
+			$field_id   = $start_step ? $start_step->__get( 'update_date_field' ) : '';
+			if ( $field_id && isset( $entry[ $field_id ] ) ) {
+				$date = $entry[ $field_id ];
+			}
+		}
+
+		if ( ! $date && ! empty( $entry['date_created'] ) ) {
+			$date = gmdate( 'Y-m-d', strtotime( (string) $entry['date_created'] ) );
+		}
+
+		return str_replace( '{workflow_restart_date}', (string) $date, $text );
+	},
+	10,
+	3
+);
+
 // to start workflow on approval
 add_action(
 	'gravityview/approve_entries/approved',
@@ -209,6 +316,7 @@ add_action(
 		// comment in the subscription-payment handler.
 		$field_id = $start_step->__get( 'update_date_field' );
 		if ( $start_step->__get( 'also_for_gv' ) && $field_id && isset( $entry[ $field_id ] ) ) {
+			bld_workflow_restart_record_date( $entry, null, $start_step );
 			$original_date = $entry[ $field_id ];
 			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
 			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
@@ -257,8 +365,8 @@ add_action(
 		// Test for the presence of a current step rather than matching status
 		// strings. get_status() returns the *step's* evaluated status while a step is
 		// live, and that vocabulary is open-ended — 'pending', but also 'queued'
-		// (scheduled/delayed steps, which is exactly how the Crowded balance-gate step
-		// parks an entry), an approval step's 'approved'/'rejected' mid-processing, a
+		// (any scheduled or delayed step parks an entry that way), an approval step's
+		// 'approved'/'rejected' mid-processing, a
 		// webhook step's 'error_client'/'error_server', and anything a custom step or
 		// the gravityflow_step_status_evaluation_approval filter invents. No string
 		// list stays correct. get_current_step() returning false is the unambiguous
@@ -288,6 +396,8 @@ add_action(
 		// restore in the same breath. Updating it before the target step was resolved
 		// left the field permanently overwritten with today whenever the restart then
 		// bailed, because the restore was only ever hooked on the success path.
+		bld_workflow_restart_record_date( $entry, $action, $start );
+
 		$field_id = $start->__get( 'update_date_field' );
 		if ( $field_id && isset( $entry[ $field_id ] ) ) {
 			$original_date = $entry[ $field_id ];
@@ -352,7 +462,21 @@ add_action(
 					$target_step = $steps[0] ?? null;
 				}
 				if ( $target_step ) {
+					// A manual re-run is usually catching up on something that happened
+					// earlier, so "today" would be no more accurate than the date already on
+					// the entry. The person clicking the button does know the real date
+					// though, so record it when they supply one and leave the entry alone
+					// when they don't — blank keeps {workflow_restart_date} falling back to
+					// the configured date field, exactly as before.
+					$manual_date = isset( $_POST['restart_workflow_date'] ) ? sanitize_text_field( wp_unslash( $_POST['restart_workflow_date'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+					if ( '' !== $manual_date && strtotime( $manual_date ) ) {
+						bld_workflow_restart_record_date( $entry, [ 'payment_date' => $manual_date ], $start_step );
+					}
+
 					$reason = ( 'restart_workflow_checkbox' === $btn ) ? 'Subscription Payment (manual)' : 'Gravity View Approval (manual)';
+					if ( '' !== $manual_date && strtotime( $manual_date ) ) {
+						$reason .= ', dated ' . gmdate( 'Y-m-d', strtotime( $manual_date ) );
+					}
 					$gwf->add_timeline_note( $entry['id'], 'Workflow started manually: ' . $reason );
 					$api->send_to_step( $entry, $target_step->get_id() );
                     GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
@@ -371,6 +495,13 @@ add_action(
 			</div>
 			<div class="inside">
 				<input type="hidden" name="restart_workflow_nonce" value="<?php echo esc_attr( $nonce ); ?>" />
+				<p style="margin:0 0 10px">
+					<label for="restart_workflow_date" style="display:block;margin-bottom:4px">
+						Date this restart represents
+					</label>
+					<input type="date" id="restart_workflow_date" name="restart_workflow_date" value="" />
+					<span class="description" style="display:block">Optional. Leave blank to keep the entry's existing date.</span>
+				</p>
 				<?php if ( $delay_view_approval ) : ?>
 					<button class="button button-large" name="restart-workflow-button" value="delay_workflow_checkbox">GV Approval</button><br /><br />
 				<?php endif; ?>
