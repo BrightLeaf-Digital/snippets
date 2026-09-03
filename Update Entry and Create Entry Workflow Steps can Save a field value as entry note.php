@@ -11,14 +11,18 @@
  * recorded when a new entry is created or an existing entry is updated via workflow automation.
  *
  * FEATURES:
- * ✔ **Save Field Value as Entry Note** – Select a field whose value should be recorded as a
- * note when the workflow step runs. ✔ **Works with “Create Entry” and “Update Entry”
- * Steps** – Supports workflows that create new entries or update existing ones. ✔ **Merge Tag
- * Support** – Dynamically replaces variables within the selected field to generate meaningful
- * notes. ✔ **User Identification** – Captures the user ID and display name when saving the
- * entry note. ✔ **Seamless Automation** – Automatically applies to workflow steps without
- * requiring additional manual intervention. This snippet is useful for keeping a record of form
- * updates or tracking important changes directly within the **Gravity Forms** entry notes.
+ * - **Save Field Value as Entry Note** – Select a field whose value should be recorded as a note
+ *   when the workflow step runs.
+ * - **Works with “Create Entry” and “Update Entry” Steps** – Supports workflows that create new
+ *   entries or update existing ones.
+ * - **Merge Tag Support** – Dynamically replaces variables within the selected field to generate
+ *   meaningful notes.
+ * - **User Identification** – Captures the user ID and display name when saving the entry note.
+ * - **Seamless Automation** – Automatically applies to workflow steps without requiring
+ *   additional manual intervention.
+ *
+ * This snippet is useful for keeping a record of form updates or tracking important changes
+ * directly within the **Gravity Forms** entry notes.
  */
 
 ( static function () {

@@ -12,23 +12,28 @@
  *
  * CONFIGURATION:
  * - `$forms`: Each group is an array of field_id => 'error message'. If two or more fields in that
- *   group have the same value, those fields will fail validation with the provided message.
+ * group have the same value, those fields will fail validation with the provided message.
  *
  * FEATURES:
- * ✔ **Prevents Duplicate Values** – Ensures that no two fields within specified groups have
- * the same value. ✔ **Supports Multiple Field Groups** – Each form can have multiple sets of
- * fields that must be unique within their group. ✔ **Custom Error Messages** – Define a
- * specific validation error message for each field when duplicates are detected. ✔ **Works
- * Across Multiple Forms** – The validation can be applied to different forms with custom field
- * configurations. ✔ **Supports Multi-Input Fields** – Handles complex field types such as
- * **Name, Address, and Checkbox fields**. ✔ **Optimized Duplicate Detection** – Uses efficient
- * logic to check and flag duplicate values only when necessary. This snippet is particularly
- * useful for scenarios like **ensuring unique user IDs, email addresses, product SKUs, or any
- * other critical values** in Gravity Forms.
+ * - **Prevents Duplicate Values** – Ensures that no two fields within specified groups have the
+ *   same value.
+ * - **Supports Multiple Field Groups** – Each form can have multiple sets of fields that must be
+ *   unique within their group.
+ * - **Custom Error Messages** – Define a specific validation error message for each field when
+ *   duplicates are detected.
+ * - **Works Across Multiple Forms** – The validation can be applied to different forms with custom
+ *   field configurations.
+ * - **Supports Multi-Input Fields** – Handles complex field types such as **Name, Address, and
+ *   Checkbox fields**.
+ * - **Optimized Duplicate Detection** – Uses efficient logic to check and flag duplicate values
+ *   only when necessary.
+ *
+ * This snippet is particularly useful for scenarios like **ensuring unique
+ *   user IDs, email addresses, product SKUs, or any other critical values** in Gravity Forms.
  *
  * NOTES:
  * - Multi‑input fields (Name, Address, Checkbox) are concatenated using a pipe (|) separator for
- *   comparison to avoid accidental matches on spaces.
+ * comparison to avoid accidental matches on spaces.
  */
 
 ( static function () {

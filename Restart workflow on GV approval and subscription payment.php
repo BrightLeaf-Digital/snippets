@@ -12,32 +12,35 @@
  * based on **GravityView approval** and **subscription payments**. It provides options to:
  *
  * - **Delay workflow initiation** until an entry is approved in GravityView instead of starting
- *   upon form submission.
+ * upon form submission.
  * - **Restart the workflow** upon each subscription payment for recurring payment scenarios.
  * - **Update a date field** when the workflow restarts to reflect the latest payment or approval.
  * - **Expose the restart date** as a `{workflow_restart_date}` merge tag that scheduled steps
- *   can still read, since the date field itself is restored as soon as the request ends.
+ * can still read, since the date field itself is restored as soon as the request ends.
  * - **Manually restart workflows** from the entry detail sidebar in the admin panel.
  *
  * FEATURES:
- * ✔ **Delay Workflow Until Approval** – Prevents workflows from starting immediately on form
- * submission and instead begins only after **GravityView approval**. ✔ **Restart Workflow on
- * Subscription Payment** – When a new payment is received, the workflow restarts automatically,
- * making it useful for recurring payments. ✔ **Configurable Options in Gravity Flow Step
- * Settings** – Adds checkboxes in **Workflow Start steps** to enable these behaviors
- * selectively. ✔ **Auto-Update Date Field** – Updates a selected date field when the workflow
- * restarts, ensuring accurate tracking. ✔ **Restart Date Merge Tag** – Records each restart's
- * date in entry meta and exposes it as `{workflow_restart_date}`, so **delayed or scheduled
- * steps** (which run in a later cron pass, after the date field has been restored) can still
- * map the date the restart actually represents; falls back to the configured date field when
- * no restart has happened. ✔ **Manual Workflow Restart from Admin Panel** – Adds
- * buttons in the **entry detail sidebar**, allowing admins to manually restart workflows for
- * **GravityView approval** or **subscription payments**, with an optional date so a catch-up
- * run records the date it actually represents rather than the date it was clicked. ✔ **Ensures Workflow Integrity** –
- * Automatically cancels the initial workflow if delayed until GravityView approval to prevent
- * redundant execution. This snippet integrates seamlessly with **Gravity Flow, GravityView, and
- * Gravity Forms Subscription Payments**, enabling more **dynamic and automated workflow
- * management**.
+ * - **Delay Workflow Until Approval** – Prevents workflows from starting immediately on form
+ *   submission and instead begins only after **GravityView approval**.
+ * - **Restart Workflow on Subscription Payment** – When a new payment is received, the workflow
+ *   restarts automatically, making it useful for recurring payments.
+ * - **Configurable Options in Gravity Flow Step Settings** – Adds checkboxes in **Workflow Start
+ *   steps** to enable these behaviors selectively.
+ * - **Auto-Update Date Field** – Updates a selected date field when the workflow restarts,
+ *   ensuring accurate tracking.
+ * - **Restart Date Merge Tag** – Records each restart's date in entry meta and exposes it as
+ *   `{workflow_restart_date}`, so **delayed or scheduled steps** (which run in a later cron pass,
+ *   after the date field has been restored) can still map the date the restart actually
+ *   represents; falls back to the configured date field when no restart has happened.
+ * - **Manual Workflow Restart from Admin Panel** – Adds buttons in the **entry detail sidebar**,
+ *   allowing admins to manually restart workflows for **GravityView approval** or **subscription
+ *   payments**, with an optional date so a catch-up run records the date it actually represents
+ *   rather than the date it was clicked.
+ * - **Ensures Workflow Integrity** – Automatically cancels the initial workflow if delayed until
+ *   GravityView approval to prevent redundant execution.
+ *
+ * This snippet integrates seamlessly with **Gravity Flow, GravityView, and Gravity Forms
+ * Subscription Payments**, enabling more **dynamic and automated workflow management**.
  */
 
 	// to add checkboxes

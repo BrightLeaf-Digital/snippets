@@ -6,8 +6,8 @@
  *
  * GOAL:
  * - Show a simple popup based on three common behaviors: Exit intent (when a desktop user moves
- *   the mouse toward the browser’s top bar) Idle time (after a visitor hasn’t
- *   moved/typed/scrolled for N seconds) After scrolling a specified amount down the page.
+ * the mouse toward the browser’s top bar) Idle time (after a visitor hasn’t moved/typed/scrolled
+ * for N seconds) After scrolling a specified amount down the page.
  * - Keep everything self‑contained: the shortcode prints its own minimal CSS and JS inline.
  * - Work nicely with normal page content, including Gravity Forms shortcodes inside the popup.
  *
@@ -47,19 +47,20 @@
  * # [/gosmartmodal]
  *
  * - **width**: limits the popup’s max width. Number only → pixels (e.g., 700 → 700px) CSS
- *   length value → 70vw, 90%, 40rem, 32em, 720px Default: 700px Note: calc() not supported.
+ * length value → 70vw, 90%, 40rem, 32em, 720px Default: 700px Note: calc() not supported.
  * - **id**: unique identifier used to scope dismissal memory. Letters, numbers, underscore, hyphen
- *   Default: auto‑generated Reusing id shares dismissal memory.
+ * Default: auto‑generated Reusing id shares dismissal memory.
  *
  * # Inner blocks: each <div> controls one popup
  *
  * - **open_on** (required): when to open the popup. "exit" or "exit-intent" "idle:N" → N seconds
- *   inactivity (decimals allowed) "scroll:X%" → X percent down page "scroll:Ypx" → Y pixels
- *   down page
+ * - inactivity (decimals allowed) "scroll:X%"
+ * - X percent down page "scroll:Ypx"
+ * - Y pixels down page
  * - **position**: top, center (default), bottom
  * - **dismiss**: auto‑close timer "10s", "2.5s", "5000ms", "10000" 0 disables
  * - **dismiss_for**: how long the popup stays dismissed "10s", "2.5s", "30m", "1h", "5000ms", bare
- *   ms 0 disables Default: 30m
+ * ms 0 disables Default: 30m
  *
  * # Full Attribute Reference (Quick Lookup)
  *
@@ -133,16 +134,17 @@
  *
  * FEATURES:
  * - Three triggers you can use together or separately: open_on="exit" → show on exit intent
- *   (desktop browsers) open_on="idle:3" → show after 3 seconds of inactivity
- *   open_on="scroll:50%" → show after the visitor has scrolled 50% of the page
+ * - (desktop browsers) open_on="idle:3"
+ * - show after 3 seconds of inactivity open_on="scroll:50%"
+ * - show after the visitor has scrolled 50% of the page
  * - Choose where the popup sits: position="top", "center" (default), or "bottom".
  * - Optional auto‑close timer: dismiss="10s" closes it after 10 seconds.
  * - A ready‑made Close button (×), backdrop click to close, and ESC key support.
  * - Any link inside the popup with class "gosmartmodalbutton" will close the popup first, then
- *   continue to that link. If it’s a #section link, the page will smooth‑scroll there.
+ * continue to that link. If it’s a #section link, the page will smooth‑scroll there.
  * - Friendly with Gravity Forms: you can place a [gravityform] shortcode inside the popup.
  * - Respectful behavior: if a visitor closed a popup, it won’t pop again for its dismiss_for
- *   duration (30 minutes by default).
+ * duration (30 minutes by default).
  */
 
 // Security: don't load directly.

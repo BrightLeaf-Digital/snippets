@@ -16,12 +16,15 @@
  * - `$to`: Add recipient email address in $to variable. Else, defaults to admin email.
  *
  * FEATURES:
- * ✓ Workflow configuration details ✓ Conditional logic evaluation (shows if conditions are
- * met/not met and why) ✓ Rule-by-rule breakdown with field values vs expected values ✓
- * Overview of all workflow steps and their conditional logic status ✓ Direct link to entry in
- * admin panel ✓ Works with both parent and nested child forms ✓ Excludes workflows with
- * "delay_workflow_checkbox" (intentionally delayed workflows, see our snippet here
- * (https://brightleafdigital.io/view/code-snippet-directory/entry/49-restart-workflow-on-gv-approval-and-subscription-payment/))
+ * - Workflow configuration details
+ * - Conditional logic evaluation (shows if conditions are met/not met and why)
+ * - Rule-by-rule breakdown with field values vs expected values
+ * - Overview of all workflow steps and their conditional logic status
+ * - Direct link to entry in admin panel
+ * - Works with both parent and nested child forms
+ * - Excludes workflows with "delay_workflow_checkbox" (intentionally delayed workflows, see our
+ *   snippet here (https://brightleafdigital.io/view/code-snippet-directory/entry/49-restart-
+ *   workflow-on-gv-approval-and-subscription-payment/))
  */
 
 add_action(
