@@ -12,6 +12,7 @@
  * GravityView entries.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$config_views` Map each GravityView ID to its base URL and tab anchor. Example: `341 => [
  *   'base' => 'https://example.com/dashboard/adminparents/', 'anchor' => '#uagb-tabs__tab0' ],`
  * - `$preserve_query`: Set to false to strip query strings when applying anchors.
@@ -25,9 +26,9 @@
  * - **Customizable for multiple views** by mapping view IDs to specific tab hashes.
  */
 
-( static function () {
-    // === Configuration: View → { base, anchor } (edit these) ====================
-    $config_views   = [
+// === BEGIN CONFIG ===
+/** @config array Map of GravityView ID to base URL and tab anchor */
+const BLD_GV_TABS_VIEWS = [
             341  => [
                     'base'   => 'https://example.com/dashboard/adminparents/',
                     'anchor' => '#uagb-tabs__tab0',
@@ -53,7 +54,17 @@
                     'anchor' => '#uagb-tabs__tab2',
             ],
     ];
-    $preserve_query = true; // Set to false to strip query strings when applying anchors.
+
+/** @config bool Keep the query string when applying tab anchors */
+const BLD_GV_TABS_PRESERVE_QUERY = true;
+
+// === END CONFIG ===
+
+
+( static function () {
+    // === Configuration: View → { base, anchor } (edit these) ====================
+    $config_views = BLD_GV_TABS_VIEWS;
+    $preserve_query = BLD_GV_TABS_PRESERVE_QUERY; // Set to false to strip query strings when applying anchors.
     // ==========================================================================
 
     $with_anchor = static function ( $url, $anchor ) use ( $preserve_query ) {

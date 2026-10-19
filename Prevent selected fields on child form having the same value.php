@@ -11,6 +11,7 @@
  * field).
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$forms_and_fields`: Add your child form ID as the key, and list the child field IDs you want
  *   to keep unique with the message users should see if they choose a duplicate.
  * - Example: 66 => [ 4 => 'Please choose a unique value.', 2 => 'First and last name must be
@@ -23,9 +24,9 @@
  *   item is skipped.
  */
 
-( static function () {
-	// === Settings: Child form → [ field_id => message ] (edit these) ===
-	$forms_and_fields = [
+// === BEGIN CONFIG ===
+/** @config array Child form ID mapped to field ID and the duplicate message */
+const BLD_CHILD_UNIQUE_FIELDS = [
 		66 => [
 			4 => 'Please use a unique number.',
 			2 => 'Please use a unique name (first and last together).',
@@ -33,6 +34,13 @@
 		],
 		// Add more forms as needed...
 	];
+
+// === END CONFIG ===
+
+
+( static function () {
+	// === Settings: Child form → [ field_id => message ] (edit these) ===
+	$forms_and_fields = BLD_CHILD_UNIQUE_FIELDS;
 	// ===============================================================
 
 	if ( ! class_exists( 'GFAPI' ) ) {

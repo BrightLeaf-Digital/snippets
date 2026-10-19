@@ -13,6 +13,7 @@
  * to replace the relevant id's in the array.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$form_settings`: For each form: `amount_field_id`: The Amount field on the form being
  *   submitted. `name_field_id`: The field that identifies the person/entity (used to match to the
  *   ledger entries). `ledger_form_id`: The ID of the separate "ledger" form holding
@@ -31,9 +32,9 @@
  *   balance.
  */
 
-( static function () {
-	// === Form Settings (edit these IDs to match your site) ===
-	$form_settings = [
+// === BEGIN CONFIG ===
+/** @config array Form ID mapped to amount, name, and ledger field IDs */
+const BLD_SINGLE_BALANCE_FORMS = [
 		46 => [
 			'amount_field_id'  => 8,
 			'name_field_id'    => 19,
@@ -44,6 +45,13 @@
 		// Add more forms like this:
 		// 123 => [ 'amount_field_id' => 1, 'name_field_id' => 2, 'ledger_form_id' => 10, 'ledger_name_id' => 1, 'ledger_amount_id' => 3 ],
 	];
+
+// === END CONFIG ===
+
+
+( static function () {
+	// === Form Settings (edit these IDs to match your site) ===
+	$form_settings = BLD_SINGLE_BALANCE_FORMS;
 	// ============================================
 
 	// Dependency guards: if GFAPI is missing, bail early.

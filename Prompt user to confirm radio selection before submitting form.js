@@ -13,9 +13,11 @@
  * click inspect and you will be able to see the html element name.
  *
  * CONFIGURATION:
- * - `cfg`: `fieldId`: numeric field ID of the radio field (e.g., 3) `messages`: map of radio
- *   option value => confirmation message `applyToFormIds`: optional array of form IDs; empty means
- *   apply to any form on the page
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive
+ *   snippet updates.
+ * - `bldRadioFieldId`: numeric field ID of the radio field (e.g., 3)
+ * - `bldRadioMessages`: map of radio option value to confirmation message
+ * - `bldRadioFormIds`: optional array of form IDs; empty means apply to any form on the page
  *
  * FEATURES:
  * - **Prompts users with a confirmation message** before submitting the form.
@@ -25,19 +27,23 @@
  * - **Lightweight and runs client-side** for a seamless user experience.
  */
 
+// === BEGIN CONFIG ===
+/** @config int Numeric field ID of the radio field */
+const bldRadioFieldId = 3;
+/** @config object Map of radio option value to confirmation message */
+const bldRadioMessages = {'First Choice': 'Are you sure you want to submit First Choice?', 'Second Choice': 'Are you sure you want to submit Second Choice?'};
+/** @config array Form IDs to apply to. Empty array applies to every form on the page */
+const bldRadioFormIds = [];
+// === END CONFIG ===
+
 (function ($) {
     'use strict';
 
-    // === Configuration (edit these) ============================================
     const cfg = {
-        fieldId: 3,
-        messages: {
-            'First Choice': 'Are you sure you want to submit First Choice?',
-            'Second Choice': 'Are you sure you want to submit Second Choice?',
-        },
-        applyToFormIds: [], // e.g., [1, 7]
+        fieldId: bldRadioFieldId,
+        messages: bldRadioMessages,
+        applyToFormIds: bldRadioFormIds,
     };
-    // ==========================================================================
 
     function shouldApply(formId) {
         if (

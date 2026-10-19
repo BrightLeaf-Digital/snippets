@@ -10,6 +10,7 @@
  * addresses, are stored in **proper case formatting**, enhancing data consistency and readability.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$form_and_field_ids`: change the key to form ID and sub-array values to field IDs. Example:
  *   `3 => [5,8,12]` - this will apply to form 3, fields 5, 8, and 12. Add more form/field
  *   combinations by duplicating the pattern.
@@ -25,12 +26,19 @@
  * - **Easy to configure** by specifying the relevant form and field IDs.
  */
 
+// === BEGIN CONFIG ===
+/** @config array Form ID mapped to the field IDs that should be proper-cased */
+const BLD_PROPER_CASE_FIELDS = [
+                    0 => [ 0, 0 ],
+            ];
+
+// === END CONFIG ===
+
+
 add_filter(
         'gform_save_field_value',
         function ( $value, $entry, $field, $form ) {
-            $form_and_field_ids = [
-                    0 => [ 0, 0 ],
-            ];
+            $form_and_field_ids = BLD_PROPER_CASE_FIELDS;
             if ( in_array( intval( $form['id'] ), array_map( 'intval', array_keys( $form_and_field_ids ) ), true )
                  && in_array( intval( $field['id'] ), array_map( 'intval', $form_and_field_ids[ intval( $form['id'] ) ] ), true ) ) {
                 $value = ucwords( sanitize_text_field( $value ) );

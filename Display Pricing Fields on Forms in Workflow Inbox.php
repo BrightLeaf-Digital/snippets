@@ -10,6 +10,7 @@
  * "Pricing fields are not editable" message with the real field input.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$workflow_form_ids`: Update to include the form IDs where pricing fields should be editable.
  * - Optionally restrict to certain pricing field types via `$allowed_pricing_types`.
  *
@@ -17,10 +18,20 @@
  * - Applies only on the Gravity Flow inbox entry view (page=gravityflow-inbox&view=entry).
  */
 
+// === BEGIN CONFIG ===
+/** @config array Form IDs where pricing fields should be editable in the workflow inbox */
+const BLD_PRICING_INBOX_FORM_IDS = [ 5 ];
+
+/** @config array Pricing field types to allow. Empty array allows every pricing type */
+const BLD_PRICING_INBOX_TYPES = [ 'product', 'option', 'shipping', 'quantity', 'subtotal', 'total' ];
+
+// === END CONFIG ===
+
+
 ( static function () {
     // === Configure forms and optional allowed pricing types =====================
-    $workflow_form_ids     = [ 5 ]; // e.g., [ 5, 12, 23 ]
-    $allowed_pricing_types = [ 'product', 'option', 'shipping', 'quantity', 'subtotal', 'total' ]; // leave as [] to allow all pricing types
+    $workflow_form_ids = BLD_PRICING_INBOX_FORM_IDS; // e.g., [ 5, 12, 23 ]
+    $allowed_pricing_types = BLD_PRICING_INBOX_TYPES; // leave as [] to allow all pricing types
     // ==========================================================================
 
     if ( ! class_exists( 'GFCommon' ) || ! class_exists( 'GFAPI' ) ) {

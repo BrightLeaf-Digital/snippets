@@ -10,6 +10,7 @@
  * forms, confusing validation rules, or user experience issues that need attention.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - $to: Add the recipient email address (in between the quotes) where notifications should be
  *   sent. Defaults to site admin email.
  * - $whitelist: Choose which forms to monitor - Leave empty [] to monitor ALL forms - Add form IDs
@@ -20,13 +21,26 @@
  *   blacklist takes priority
  */
 
+// === BEGIN CONFIG ===
+/** @config array Form IDs to monitor. Empty array monitors every form */
+const BLD_VAL_FAIL_WHITELIST = [];
+
+/** @config array Form IDs to skip. Blacklist wins when both lists are set */
+const BLD_VAL_FAIL_BLACKLIST = [];
+
+/** @config email Recipient email. Leave empty to use the site admin email */
+const BLD_VAL_FAIL_TO = '';
+
+// === END CONFIG ===
+
+
 add_action(
 	'gform_post_process',
 	function ( $form ) {
 
-		$whitelist = []; // Empty = monitor all forms. Add form IDs like [1, 5, 12] to monitor only those forms
-		$blacklist = []; // Empty = exclude no forms. Add form IDs like [3, 7] to skip those forms. If both configured, blacklist wins
-		$to        = ''; // add email here
+		$whitelist = BLD_VAL_FAIL_WHITELIST; // Empty = monitor all forms. Add form IDs like [1, 5, 12] to monitor only those forms
+		$blacklist = BLD_VAL_FAIL_BLACKLIST; // Empty = exclude no forms. Add form IDs like [3, 7] to skip those forms. If both configured, blacklist wins
+		$to = BLD_VAL_FAIL_TO; // add email here
 
         if ( empty( $to ) ) {
             $to = get_option( 'admin_email' );

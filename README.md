@@ -27,6 +27,7 @@ Snippets are provided as-is, with no warranty and no support commitment — see 
 ## Repository layout
 
 ```
+├── snippets.json           # GOCSM library manifest (the file GOCSM fetches)
 ├── <Snippet Name>.php      # one snippet per file; the filename is its title
 ├── <Snippet Name>.js
 └── .github/
@@ -35,6 +36,16 @@ Snippets are provided as-is, with no warranty and no support commitment — see 
 ```
 
 There is no build step and no dependency between snippets: each file stands alone.
+
+## Installing with GravityOps Code Snippet Manager
+
+GOCSM imports this repository as a snippet library. It fetches `snippets.json` from the
+repository root — not `manifest.json` — then loads each file listed there.
+
+Snippets that need a form ID, field ID, email, or similar site-specific value declare those
+values in a config block (`// === BEGIN CONFIG ===` … `// === END CONFIG ===`) immediately
+after the header docblock. In GOCSM those values are fields on the snippet, so applying an
+update does not wipe them. Snippets with nothing to configure have no config block.
 
 ## The header docblock
 

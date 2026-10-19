@@ -9,6 +9,8 @@
  * matches an existing active entry. If a duplicate is found, shows custom messages on the relevant
  * fields. **CONFIGURATION**
  *
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive
+ *   snippet updates.
  * - `$forms`: Add your form ID as a key, and set the field IDs to check. Then set the
  *   corresponding error messages.
  * - Optionally set the `window_days` key to limit check to recent entries. Leave at 0 to remove
@@ -20,13 +22,9 @@
  * - Can be used for multiple forms by duplicating the inner array with a new form key, etc.
  */
 
-( static function () {
-	if ( ! class_exists( 'GFAPI' ) ) {
-		return;
-	}
-
-	// === Configuration: per-form settings (edit these) =========================
-	$forms = [
+// === BEGIN CONFIG ===
+/** @config array Form ID mapped to the fields and messages used for the duplicate check */
+const BLD_DUP_MATCH_FORMS = [
 		77 => [
 			'name_field_id' => 5,
 			'num_field_id'  => 3,
@@ -41,6 +39,17 @@
 		],
 		// Add more forms as needed...
 	];
+
+// === END CONFIG ===
+
+
+( static function () {
+	if ( ! class_exists( 'GFAPI' ) ) {
+		return;
+	}
+
+	// === Configuration: per-form settings (edit these) =========================
+	$forms = BLD_DUP_MATCH_FORMS;
 	// ==========================================================================
 
 	$parse_date_to_ymd = static function ( $date_str ) {

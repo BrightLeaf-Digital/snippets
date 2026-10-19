@@ -1,0 +1,1421 @@
+{
+    "manifest_version": "1.0",
+    "collection": {
+        "name": "BrightLeaf Digital Code Snippets",
+        "slug": "brightleaf-code-snippets",
+        "version": "1.0.0",
+        "description": "Free, self-contained code snippets for Gravity Forms and its ecosystem."
+    },
+    "snippets": [
+        {
+            "id": "re-start-workflow-on-entry-update",
+            "name": "(Re)Start workflow on entry update",
+            "description": "This snippet adds a checkbox to your workflow steps.",
+            "type": "php",
+            "file": "(Re)Start workflow on entry update.php",
+            "hash": "sha256:6aece069290f225dd957fb5e10591e4076caf2f043d94b8300274da7734852b7",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "ab-testing-utilities",
+            "name": "AB Testing Utilities",
+            "description": "A production-ready, client-first A/B testing utility designed for WordPress.",
+            "type": "php",
+            "file": "AB Testing Utilities.php",
+            "hash": "sha256:bb7ad8c68a3c643d47e0bf119cd147767da1f10bd0f7183b68f783d60fa13d75",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "add-category-to-body-class",
+            "name": "Add Category to Body Class",
+            "description": "Adds category slugs as CSS classes to the body tag on single posts and category archives, enabling category-specific styling without custom templates.",
+            "type": "php",
+            "file": "Add Category to Body Class.php",
+            "hash": "sha256:38ae9d0402fc1d3686c10b4a5effcf77dda8a15390029dfcb4e7a0f45f2a0382",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "add-fields-on-gravity-flow-approve-step-to-customize-approve-and-reject-buttons",
+            "name": "Add Fields on Gravity Flow Approve Step to Customize Approve and Reject Buttons",
+            "description": "New: The snippet now also supports custom labels for the revert button on an Approval step, as well as Custom Submit Form label, Custom Update label, and Custom Save Progress label for the User Input step.",
+            "type": "php",
+            "file": "Add Fields on Gravity Flow Approve Step to Customize Approve and Reject Buttons.php",
+            "hash": "sha256:11180739eb8561b12fb2b9c7ace673e427a32728e82e006eed316745795b0b74",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "advanced-multi-criteria-search-on-entries-list-page",
+            "name": "Advanced Multi Criteria Search on Entries List Page",
+            "description": "This snippet adds advanced search capabilities to the entries list page, allowing you to search by multiple criteria with ANY or ALL of the conditions evaluating to true.",
+            "type": "php",
+            "file": "Advanced Multi Criteria Search on Entries List Page.php",
+            "hash": "sha256:bc00636da43153960229703fcd72cc409f758a64b05844f95d0800768b24d360",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "bulk-edit-field-settings",
+            "name": "Bulk Edit Field Settings",
+            "description": "This snippet allows you to bulk edit field properties like \"Required,\" \"Visibility,\" \"Allow Duplicates\" and more.",
+            "type": "php",
+            "file": "Bulk Edit Field Settings.php",
+            "hash": "sha256:93b413ba4718151559cb57f35d2525750edd771f6727743337756ce120f10a90",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "capitalize-specific-field-value-before-saving-entry",
+            "name": "Capitalize Specific Field Value Before Saving Entry",
+            "description": "By default this code snippet automatically converts the value of a specific text field to uppercase before saving the entry in Gravity Forms.",
+            "type": "php",
+            "file": "Capitalize Specific Field Value Before Saving Entry.php",
+            "hash": "sha256:bb8cc6a838b0030c56ef87a710648e629dfd455db9bcaf15c7b1cc74e622eb9e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "check-all-child-entries-don-t-exceed-total-field-on-parent-form",
+            "name": "Check all child entries don't exceed total field on parent form",
+            "description": "This code snippet ensures that the sum of all child entries in a Gravity Forms nested form does not exceed the total specified in the parent form.",
+            "type": "php",
+            "file": "Check all child entries don't exceed total field on parent form.php",
+            "hash": "sha256:0c1734f07372c766ebac95311e466f0c4b32c36118bafc50f7bca6543564aa47",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "checkbox-to-pause-workflow-on-step",
+            "name": "Checkbox to pause workflow on step",
+            "description": "Adds a setting to every Gravity Flow workflow step that pauses the entry on that step.",
+            "type": "php",
+            "file": "Checkbox to pause workflow on step.php",
+            "hash": "sha256:37fe0a56ad84939a2c90514a8173bf2f53fdc7d7943ed9bfae8e87087055171d",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "correct-gravity-view-links-to-work-with-tabs",
+            "name": "Correct Gravity View Links to Work with Tabs",
+            "description": "This code snippet ensures that GravityView links correctly navigate back to the appropriate tab when using tabbed navigation (such as those created with the Spectra/UAGB Tabs block).",
+            "type": "php",
+            "file": "Correct Gravity View Links to Work with Tabs.php",
+            "hash": "sha256:b0c5ebcad6e617d6bfc9821ff4c3544bf22f5a7b43cd5f3d4f9fb31d10f01b6c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "countdown-timer-shortcode",
+            "name": "Countdown Timer Shortcode",
+            "description": "Creates a real-time countdown timer displaying days, hours, minutes, and seconds until a specified date.",
+            "type": "php",
+            "file": "Countdown Timer Shortcode.php",
+            "hash": "sha256:ae75162f6a808b4b404200ee9c44cb648f978d9c999a1d644e2fc946d4abd8c4",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "create-user-role-merge-tag",
+            "name": "Create \"user role\" merge tag",
+            "description": "This code snippet creates a custom {user_role} merge tag for Gravity Forms.",
+            "type": "php",
+            "file": "Create \"user role\" merge tag.php",
+            "hash": "sha256:727e1f35568280c32fbc73d863703c18913e4a91e352912d2f3db75a1e352376",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "custom-tabbed-content-shortcode",
+            "name": "Custom Tabbed Content Shortcode",
+            "description": "GOAL Creates a tabbed interface by parsing nested div structures into clickable tabs with associated content panels.",
+            "type": "php",
+            "file": "Custom Tabbed Content Shortcode.php",
+            "hash": "sha256:e48b13257cfa7bd3b642f4485d2af94ee7c840d244c180ed53935332f7ea88e6",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "disable-choices-already-picked-in-a-dropdown-on-nested-form-by-another-child-entry-in-the-batch",
+            "name": "Disable Choices Already Picked in a Dropdown on Nested Form by Another Child Entry in the Batch",
+            "description": "This JavaScript snippet disables dropdown choices in a Gravity Forms nested form to prevent duplicate selections across child entries within the same batch.",
+            "type": "js",
+            "file": "Disable Choices Already Picked in a Dropdown on Nested Form by Another Child Entry in the Batch.js",
+            "hash": "sha256:29bcffd6d6c1abb936f87e6d7d81302df4a196794d2adefce990ab65e56a8f6e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Perks",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "frontend",
+                "location": "footer",
+                "strategy": "defer",
+                "dependencies": "jquery"
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityperks/gravityperks.php",
+                    "gravityforms/gravityforms.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "display-pricing-fields-on-forms-in-workflow-inbox",
+            "name": "Display Pricing Fields on Forms in Workflow Inbox",
+            "description": "Allows editing of pricing fields in the Gravity Flow inbox entry view, replacing the usual \"Pricing fields are not editable\" message with the real field input.",
+            "type": "php",
+            "file": "Display Pricing Fields on Forms in Workflow Inbox.php",
+            "hash": "sha256:fa097369c51caadb3a66f7b3c1a22d8f3b849647d2cc934920793ecaed5fe1f1",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "embed-form-in-admin-dashboard-widget",
+            "name": "Embed Form in Admin Dashboard Widget",
+            "description": "This snippet adds a widget to your admin dashboard and embeds your selected form in it.",
+            "type": "php",
+            "file": "Embed Form in Admin Dashboard Widget.php",
+            "hash": "sha256:3cc61f67dc2642a1d0c8cab019606e1c3d5f56e819134870808104c75bf1c5fb",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "ensure-child-form-submissions-don-t-exceed-gravity-view-balance",
+            "name": "Ensure child form submissions don't exceed Gravity View balance",
+            "description": "This code snippet ensures that child form submissions in Gravity Forms do not exceed the available balance recorded in a GravityView ledger.",
+            "type": "php",
+            "file": "Ensure child form submissions don't exceed Gravity View balance.php",
+            "hash": "sha256:f33cff5b71784d00a3de5062f0a7399279f6a8c91de4b168764bcd452365c6eb",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "ensure-single-form-submission-doesn-t-exceed-balance",
+            "name": "Ensure single form submission doesn't exceed balance",
+            "description": "This code snippet ensures that a single form submission in Gravity Forms does not exceed the available balance recorded in a GravityView ledger.",
+            "type": "php",
+            "file": "Ensure single form submission doesn't exceed balance.php",
+            "hash": "sha256:430fc6f1cd6a81de9c801eac1083cb0151143e10407432bc039cd01cfa2cf717",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "exit-intent-idle-modal-shortcode",
+            "name": "Exit Intent & Idle Modal Shortcode",
+            "description": "- Show a simple popup based on three common behaviors: Exit intent (when a desktop user moves the mouse toward the browser’s top bar) Idle time (after a visitor hasn’t moved/typed/scrolled for N seconds) After scrolling a specified amount down the page.",
+            "type": "php",
+            "file": "Exit Intent & Idle Modal Shortcode.php",
+            "hash": "sha256:19f709bcf318fc697d44873d1d610f661c13d0eb0ddc9c77ff65a1f9dfd135a2",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "export-filtered-gravity-view",
+            "name": "Export Filtered Gravity View",
+            "description": "Use the simple shortcode [export_filtered_entries] to render a button that triggers a CSV download of the entire GravityView dataset matching the current filters/search.",
+            "type": "php",
+            "file": "Export Filtered Gravity View.php",
+            "hash": "sha256:38e6d67878eee216aacb7ce45f1d40aaceca63ee29962e86b6f7a83c402592cd",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity View",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityview/gravityview.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "export-form-layout-to-google-doc",
+            "name": "Export Form Layout to Google Doc",
+            "description": "Adds an \"Export Layout\" button to the Gravity Forms editor that copies a full HTML visual layout of the form to the clipboard, ready to paste straight into a Google Doc.",
+            "type": "php",
+            "file": "Export Form Layout to Google Doc.php",
+            "hash": "sha256:0977f17e0ebc97bded828acd8767e5a13df34ebe3ab8dfcf2a321088621400a6",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php"
+                ]
+            }
+        },
+        {
+            "id": "export-forms-as-text-file",
+            "name": "Export forms as text file",
+            "description": "This code snippet adds an \"Export Forms as Text\" feature to Gravity Forms, allowing administrators to export form structures, confirmations, notifications, and workflow steps as a downloadable text file.",
+            "type": "php",
+            "file": "Export forms as text file.php",
+            "hash": "sha256:13a71e52505f2473e8b3c9aaef271959a2fa724250aa426cfa48f6c7fb066d0d",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "field-dependency-heatmap",
+            "name": "Field Dependency Heatmap",
+            "description": "- Provide a visual representation of field dependencies in the Gravity Forms editor.",
+            "type": "php",
+            "file": "Field Dependency Heatmap.php",
+            "hash": "sha256:ee1bd9d1b395c6cae522e14635da085f8fd89f49f16ab42cd1caad953878c32a",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "fix-apc-s-handling-of-cross-domain-file-upload-urls",
+            "name": "Fix APC's handling of cross-domain File Upload URLs",
+            "description": "This snippet fixes APC's handling of remote URL's in a file upload field.",
+            "type": "php",
+            "file": "Fix APC's handling of cross-domain File Upload URLs.php",
+            "hash": "sha256:35aedd3200c35c804bb811e0427286537f57c1e3b1fd89def778acf04a28b8f0",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "fix-form-connectors-creation-of-new-entry-with-upload-multi-files",
+            "name": "Fix Form Connectors creation of new entry with upload multi files",
+            "description": "When Gravity Flow Form Connector creates a new entry, ensure multi‑file upload values are arrays (not JSON strings).",
+            "type": "php",
+            "file": "Fix Form Connectors creation of new entry with upload multi files.php",
+            "hash": "sha256:27cabe2127dab08e16443128168df629ff1cc289092067a73118cb619fcd9131",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityflowformconnector/formconnector.php"
+                ]
+            }
+        },
+        {
+            "id": "form-styler-feed",
+            "name": "Form Styler Feed",
+            "description": "BrightLeaf Digital GF Form Styler (Feed Add-On) Goal - Provide a user-friendly, non-destructive way to style Gravity Forms without writing manual CSS.",
+            "type": "php",
+            "file": "Form Styler Feed.php",
+            "hash": "sha256:cf3033f03feb8eb2d0ca20faf516da693bd6aa1a933d0d7fa9cd98980b11b973",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-flow-step-to-create-coupon-code",
+            "name": "Gravity Flow Step to Create Coupon Code",
+            "description": "- Adds a custom Gravity Flow step type that generates Gravity Forms Coupons dynamically during a workflow.",
+            "type": "php",
+            "file": "Gravity Flow Step to Create Coupon Code.php",
+            "hash": "sha256:5e4898e45c6a04181a2ecf39d3a3f061fbf0e97ef40264946eedb985c6811f86",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-forms-advanced-conditional-logic-editor-ui",
+            "name": "Gravity Forms Advanced Conditional Logic Editor UI",
+            "description": "GOAL Adds a powerful \"Advanced Conditional Groups\" interface to the Gravity Forms editor.",
+            "type": "php",
+            "file": "Gravity Forms Advanced Conditional Logic Editor UI.php",
+            "hash": "sha256:c5c9c096708f9af42a9b1cfcc08056552aaa6a30b1dbbe0331e5b0acce51b7cb",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-forms-advanced-conditional-logic-runtime-engine",
+            "name": "Gravity Forms Advanced Conditional Logic Runtime Engine",
+            "description": "GOAL Provides the \"engine\" that makes advanced conditional logic work on your live forms.",
+            "type": "php",
+            "file": "Gravity Forms Advanced Conditional Logic Runtime Engine.php",
+            "hash": "sha256:18120ca553cea2f4fe5963139651bc6a10d0b5db3fd73b7a09151fe51f9d069c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-forms-layout-exporter",
+            "name": "Gravity Forms Layout Exporter",
+            "description": "Adds \"Export Layout\" button to Gravity Forms editor that exports form structure as formatted HTML table to clipboard.",
+            "type": "php",
+            "file": "Gravity Forms Layout Exporter.php",
+            "hash": "sha256:2013f1a55765d368ad2dff8ab6803a67d32c63f5d40bda5afb77d0707d7921e8",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-forms-progress-meter-shortcode",
+            "name": "Gravity Forms Progress Meter Shortcode",
+            "description": "Creates a visual progress meter that calculates the sum of a specific numeric field from Gravity Forms entries and displays progress toward a goal.",
+            "type": "php",
+            "file": "Gravity Forms Progress Meter Shortcode.php",
+            "hash": "sha256:1c42df282947ada2f30b82e297d61303a9f6e3d3a9bd4427f3cd05efe37208f0",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravityops-search-special-merge-tag-for-gravitymath",
+            "name": "GravityOps Search special merge tag for GravityMath",
+            "description": "This snippet creates a special merge tag syntax for GravityMath shortcodes.",
+            "type": "php",
+            "file": "GravityOps Search special merge tag for GravityMath.php",
+            "hash": "sha256:5a21209c3a80e40354486465fb81636c688cdd7af76208f691b80a54d56e407f",
+            "version": "1.0.0",
+            "tags": [
+                "GravityOps",
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "image-carousel-shortcode-with-modal-lightbox",
+            "name": "Image Carousel Shortcode with Modal Lightbox",
+            "description": "Creates a responsive image carousel with navigation arrows, dots, touch/swipe support, and modal lightbox for full-size image viewing.",
+            "type": "php",
+            "file": "Image Carousel Shortcode with Modal Lightbox.php",
+            "hash": "sha256:619dac525d24cf64492f27e877b88990e32b6664dab2c40f07a5d72e1c648d88",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "merge-tag-for-gravity-view-edit-entry-link",
+            "name": "Merge Tag for Gravity View Edit Entry link",
+            "description": "Create a custom merge tag that outputs a secure GravityView Edit Entry link for the current entry when displayed inside a GravityView context.",
+            "type": "php",
+            "file": "Merge Tag for Gravity View Edit Entry link.php",
+            "hash": "sha256:c74b0cd228cd3c3bb0dc0bf258af46158f544c4ab5a4979c367e4740cc4b7e70",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity View",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityview/gravityview.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "merge-tag-to-retrieve-get-parameters",
+            "name": "Merge tag to retrieve GET parameters",
+            "description": "Creates a new merge tag-available anywhere, not just in standard Gravity Forms areas-that retrieves the specified GET parameter.",
+            "type": "php",
+            "file": "Merge tag to retrieve GET parameters.php",
+            "hash": "sha256:ff1501b315cc3e790111df1a5e4b2f624f05d4b309e9007f1d2b576a7ee0c38d",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress",
+                "Gravity Forms",
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "mobile-accordion-shortcode",
+            "name": "Mobile Accordion Shortcode",
+            "description": "Creates a mobile-friendly accordion component that parses nested divs into collapsible sections.",
+            "type": "php",
+            "file": "Mobile Accordion Shortcode.php",
+            "hash": "sha256:bb81e309e79209e22e7ba7b2a9579ec46f3ab932b73ab7f99f9ce3719e50922f",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "prevent-duplicate-submission-if-multiple-fields-match-existing-entries",
+            "name": "Prevent duplicate submission if multiple fields match existing entries",
+            "description": "Prevents duplicate submissions when a specific combination of fields (Name, Number, Date) matches an existing active entry.",
+            "type": "php",
+            "file": "Prevent duplicate submission if multiple fields match existing entries.php",
+            "hash": "sha256:dcbfa73e64c6c79595db7dae7bfbf983129d00f0c4f6cbd9727459ce613a1b48",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "prevent-selected-fields-on-child-form-having-the-same-value",
+            "name": "Prevent selected fields on child form having the same value",
+            "description": "When using Nested Forms, prevent duplicate values across multiple child entries in the same batch/session for specific fields you choose (e.g., a number field, a name field, or a date field).",
+            "type": "php",
+            "file": "Prevent selected fields on child form having the same value.php",
+            "hash": "sha256:2a8c00e7f889e31ae77045a963d9284bc158b9244341af7cb8e68cfd1cb3c72e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "pricing-table-shortcode",
+            "name": "Pricing Table Shortcode",
+            "description": "# BrightLeaf Pricing Table — Single-File Shortcode Snippet # Goal - Make it easy to add a clear, modern pricing table to any page with simple shortcodes.",
+            "type": "php",
+            "file": "Pricing Table Shortcode.php",
+            "hash": "sha256:e92a5c0b16354cb9ce3b309a4c8b962d651b18b65c164d33d8b1827d4825a20b",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "prompt-user-to-confirm-radio-selection-before-submitting-form",
+            "name": "Prompt user to confirm radio selection before submitting form",
+            "description": "This JavaScript snippet prompts users with a confirmation message before submitting a Gravity Form when they select a specific radio button choice.",
+            "type": "js",
+            "file": "Prompt user to confirm radio selection before submitting form.js",
+            "hash": "sha256:b1c9605dec60ac2108c0fc19f57ebab566ab1f3480e5d723737c09d99c4add9c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "frontend",
+                "location": "footer",
+                "strategy": "defer",
+                "dependencies": "jquery"
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "proper-case-capitalize-first-letter-of-each-word-field-values-before-saving",
+            "name": "Proper Case (capitalize first letter of each word) Field Values before Saving",
+            "description": "This code snippet automatically capitalizes the first letter of each word in specified Gravity Forms fields before saving the entry.",
+            "type": "php",
+            "file": "Proper Case (capitalize first letter of each word) Field Values before Saving.php",
+            "hash": "sha256:6269d23156bb0072b6faf154508e43425ede31e735760f9fbd10406510311e31",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "protect-hidden-calculation-fields-during-approval-step",
+            "name": "Protect Hidden Calculation Fields during Approval Step",
+            "description": "GravityFlow Approval and User Input steps have a little known quirk.",
+            "type": "php",
+            "file": "Protect Hidden Calculation Fields during Approval Step.php",
+            "hash": "sha256:00412e5a814cc7c7196ba36211de7e3cc8e6bb66a8f689ce1798d276d564f1a1",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "rename-workflow-complete-step",
+            "name": "Rename Workflow Complete Step",
+            "description": "This code snippet renames the \"Workflow Complete\" step in Gravity Flow by dynamically replacing it with the actual name of the last completed step in the workflow.",
+            "type": "php",
+            "file": "Rename Workflow Complete Step.php",
+            "hash": "sha256:93140b1ca7ab4f262b9c715314ce24a3f609c478493fd6b9148efb01c5255149",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "require-at-least-one-child-entry-in-batch-to-have-specified-value-for-selected-field",
+            "name": "Require at least one child entry in batch to have specified value for selected field",
+            "description": "This code snippet enforces validation on a Gravity Forms Nested Form field, ensuring that at least one child entry in a batch contains a specific value in a selected field.",
+            "type": "php",
+            "file": "Require at least one child entry in batch to have specified value for selected field.php",
+            "hash": "sha256:a1c4c3cd10df45b97a9e89351992fe694dc6217024a7257ad2be212b249809b5",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "restart-workflow-on-gv-approval-and-subscription-payment",
+            "name": "Restart workflow on GV approval and subscription payment",
+            "description": "This code snippet enhances Gravity Flow by allowing workflows to be delayed or restarted based on GravityView approval and subscription payments.",
+            "type": "php",
+            "file": "Restart workflow on GV approval and subscription payment.php",
+            "hash": "sha256:2868c6183eeba92feaad067125dafb289ab706aae64e50e55ae42cf7c36e6a9c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity View",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityview/gravityview.php",
+                    "gravityforms/gravityforms.php",
+                    "gravityflowformconnector/formconnector.php"
+                ]
+            }
+        },
+        {
+            "id": "revert-an-approval-step-to-any-step",
+            "name": "Revert an Approval Step to Any Step",
+            "description": "Gravity Flow's Approval step can show a third \"Revert\" button beside Approve and Reject, but the step it reverts to can only be a User Input step, and the setting is hidden altogether in a workflow that has no User Input step.",
+            "type": "php",
+            "file": "Revert an Approval Step to Any Step.php",
+            "hash": "sha256:fd777b45accf2bc7efbdff2bb467df76d0eedf290dcb05deab1ea2b60e5859d5",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "send-error-notification-when-form-s-fail-validation",
+            "name": "Send Error Notification When Form(s) Fail Validation",
+            "description": "Sends email notification to administrators whenever any form submission fails validation.",
+            "type": "php",
+            "file": "Send Error Notification When Form(s) Fail Validation.php",
+            "hash": "sha256:482f5c22172483688cd6a653546ef540fc0ede3b94c01ef3ad08372e7c58471e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "send-error-notification-when-gf-notification-fails",
+            "name": "Send Error Notification When GF Notification Fails",
+            "description": "Alerts administrators when Gravity Forms fails to send email notifications.",
+            "type": "php",
+            "file": "Send Error Notification When GF Notification Fails.php",
+            "hash": "sha256:710e702ad72f00db15622fce7f65ab7456ca65f7144b9ed9e4438c2274c4e5dc",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "send-error-notification-when-gravity-flow-workflow-fails-to-run",
+            "name": "Send Error Notification When Gravity Flow Workflow Fails to Run",
+            "description": "Monitors Gravity Flow workflows and alerts administrators when workflow fails to start after form submission.",
+            "type": "php",
+            "file": "Send Error Notification When Gravity Flow Workflow Fails to Run.php",
+            "hash": "sha256:121cb39efbb0c9fe38370abcbc8d9fe6b8195b8e422fdd2de56869ead01038a2",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms",
+                "Gravity Perks"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityforms/gravityforms.php",
+                    "gravityperks/gravityperks.php",
+                    "gp-nested-forms/gp-nested-forms.php"
+                ]
+            }
+        },
+        {
+            "id": "send-error-notification-when-specified-form-field-has-0-value",
+            "name": "Send Error Notification When Specified Form Field Has 0 value",
+            "description": "Monitors donation/ledger forms for critical fields that have zero or empty values after submission.",
+            "type": "php",
+            "file": "Send Error Notification When Specified Form Field Has 0 value.php",
+            "hash": "sha256:f025243e5c7197ac301958456790fa83f3f262ac3c8d96c77b49915de8f8b37c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "shortcode-to-display-and-copy-text",
+            "name": "Shortcode to display and copy text",
+            "description": "This snippet creates a shortcode that displays the configured text along with a copy button to easily display copyable content on your site.",
+            "type": "php",
+            "file": "Shortcode to display and copy text.php",
+            "hash": "sha256:6f0f99576a90d8680d94e2a4f22c263fed355af55d66a986ccc8660867de64f8",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        },
+        {
+            "id": "snippet-to-get-github-snippets",
+            "name": "Snippet to get GitHub snippets",
+            "description": "This is the snippet that powers this snippet directory.",
+            "type": "js",
+            "file": "Snippet to get GitHub snippets.js",
+            "hash": "sha256:03ca69e8403f716281cf3eaed78b14d81222d47cce0823e3ab41aaec9d35a267",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "frontend",
+                "location": "footer",
+                "strategy": "defer"
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityview/gravityview.php"
+                ]
+            }
+        },
+        {
+            "id": "update-apc-post-after-entry-update",
+            "name": "Update APC Post After Entry Update",
+            "description": "This snippet updates a post created by APC when the entry is updated.",
+            "type": "php",
+            "file": "Update APC Post After Entry Update.php",
+            "hash": "sha256:e579d79453e7db1c8da06f903b1b508abb3d627303384f0ef6dfc4df184afe33",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms",
+                "Gravity View"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityview/gravityview.php",
+                    "gravityformsadvancedpostcreation/advancedpostcreation.php"
+                ]
+            }
+        },
+        {
+            "id": "update-entry-and-create-entry-workflow-steps-can-save-a-field-value-as-entry-note",
+            "name": "Update Entry and Create Entry Workflow Steps can Save a field value as entry note",
+            "description": "This snippet enhances the Update Entry and Create Entry workflow steps in Gravity Flow by allowing a field value to be automatically saved as an entry note.",
+            "type": "php",
+            "file": "Update Entry and Create Entry Workflow Steps can Save a field value as entry note.php",
+            "hash": "sha256:50f76fa57171af30e3377e5bfb16d66cfed3411df97c15b720d5dde67db79be3",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php",
+                    "gravityflowformconnector/formconnector.php"
+                ]
+            }
+        },
+        {
+            "id": "update-workflow-label-field-value-in-entry-as-workflow-runs",
+            "name": "Update Workflow Label Field Value in Entry as Workflow Runs",
+            "description": "Keeps a designated field (label default: \"Workflow Step Field\") up to date with the workflow status: - On step start: current step name - On workflow complete: complete step name - On workflow cancel: \"Cancelled\"",
+            "type": "php",
+            "file": "Update Workflow Label Field Value in Entry as Workflow Runs.php",
+            "hash": "sha256:a8e8d357f623342099848eff899c2dd41f724a6ba2d1d6dfcd1df2e628eb6994",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-form-for-no-duplicate-values-across-x-y-z-fields",
+            "name": "Validate form for no duplicate values across X, Y, Z fields",
+            "description": "This snippet ensures that specific groups of fields within a Gravity Forms form do not contain duplicate values.",
+            "type": "php",
+            "file": "Validate form for no duplicate values across X, Y, Z fields.php",
+            "hash": "sha256:5b0e164fc75a9e0ff4e17268270003dfc14d5290aa6c22e8273db1525e26b250",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "wp-repo-plugin-widget",
+            "name": "WP repo plugin widget",
+            "description": "Creates a shortcode to display simple information about a plugin hosted in the WP repo.",
+            "type": "php",
+            "file": "WP repo plugin widget.php",
+            "hash": "sha256:6e70a280877f690dc939d3ff07ae58ec5d8b1dbe2b2e00da44f64a7dd1dea137",
+            "version": "1.0.0",
+            "tags": [
+                "WordPress"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": []
+            }
+        }
+    ]
+}

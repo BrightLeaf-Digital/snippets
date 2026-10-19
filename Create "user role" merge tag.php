@@ -35,6 +35,7 @@
  * # For users with multiple roles, the primary role is the first in their roles array.
  *
  * **CONFIGURATION:**
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  *
  * - Adjust the defaults in the $cfg block below if desired. `separator`: string used to join roles
  *   for `{user_role}`. `logged_out_label`: what to output for logged-out users (empty string by
@@ -55,17 +56,24 @@
  * - **Usable in** notifications, confirmations, field labels, and default values.
  */
 
+// === BEGIN CONFIG ===
+/** @config array Defaults: separator, logged_out_label, and prefer_display_names */
+const BLD_USER_ROLE_CFG = [
+        'separator'            => ', ',
+        'logged_out_label'     => '',
+        'prefer_display_names' => false,
+    ];
+
+// === END CONFIG ===
+
+
 ( static function () {
     if ( ! function_exists( 'wp_get_current_user' ) ) {
         return;
     }
 
     // === Defaults (edit these) =================================================
-    $cfg = [
-        'separator'            => ', ',
-        'logged_out_label'     => '',
-        'prefer_display_names' => false,
-    ];
+    $cfg = BLD_USER_ROLE_CFG;
     // ==========================================================================
 
     // Cache of role display names for this request.

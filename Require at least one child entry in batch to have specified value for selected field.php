@@ -11,18 +11,17 @@
  * entry meets the requirement, the form submission is blocked, and a validation message is
  * displayed. **CONFIGURATION**
  *
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive
+ *   snippet updates.
+ *
  * - `$forms`: `nested_field_id`: ID of the Nested Form field on the parent form `child_field_id`:
  *   ID of the field on the child form to check `required_value`: String value required in at least
  *   one child entry `message`: Validation message to show if requirement is not met
  */
 
-( static function () {
-    if ( ! class_exists( 'GFAPI' ) ) {
-        return;
-    }
-
-    // === Configuration: parent form → rules (edit these) =======================
-    $forms = [
+// === BEGIN CONFIG ===
+/** @config array Parent form settings for the required child-entry value */
+const BLD_CHILD_REQUIRED_FORMS = [
             71 => [
                     'nested_field_id' => 1,
                     'child_field_id'  => 1,
@@ -35,6 +34,17 @@
             ],
         // Add more parent forms as needed...
     ];
+
+// === END CONFIG ===
+
+
+( static function () {
+    if ( ! class_exists( 'GFAPI' ) ) {
+        return;
+    }
+
+    // === Configuration: parent form → rules (edit these) =======================
+    $forms = BLD_CHILD_REQUIRED_FORMS;
     // ==========================================================================
 
     $flatten = static function ( $items ) use ( &$flatten ) {

@@ -22,6 +22,7 @@
  *   skips.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$child_field_label`: label of the Number field on the child form that represents the amount
  *   to add (default: "Amount").
  * - `$parent_field_label`: label of the Calculated/Number field on the parent that represents the
@@ -36,12 +37,22 @@
  * - **Displays a validation message** when the limit is exceeded, preventing submission errors.
  */
 
+// === BEGIN CONFIG ===
+/** @config string Label of the parent form field that holds the total */
+const BLD_CHILD_TOTAL_PARENT_LABEL = 'Total';
+
+/** @config string Label of the child form field that holds the amount to add */
+const BLD_CHILD_TOTAL_CHILD_LABEL = 'Amount';
+
+// === END CONFIG ===
+
+
 add_filter(
         'gform_validation',
         function ( $validation_result ) {
             // Configuration: adjust these labels to match your forms.
-            $parent_field_label = 'Total';
-            $child_field_label  = 'Amount';
+            $parent_field_label = BLD_CHILD_TOTAL_PARENT_LABEL;
+            $child_field_label = BLD_CHILD_TOTAL_CHILD_LABEL;
 
             // Get the current form from the validation result.
             $form = $validation_result['form'] ?? null;

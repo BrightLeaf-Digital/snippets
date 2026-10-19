@@ -14,6 +14,7 @@
  * have the same structure and to replace the relevant id's.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$child_forms`: Add each child form you need to validate. `child_amount_field_id`: The Amount
  *   field ID on the child form. `child_name_field_id`: The field ID on the child form that
  *   identifies the person/entity. `ledger_form_id`: The ID of the separate ledger form holding
@@ -32,9 +33,9 @@
  *   datasets.
  */
 
-( static function () {
-	// === Child Form Settings (edit these IDs to match your site) ===
-	$child_forms = [
+// === BEGIN CONFIG ===
+/** @config array Child form ID mapped to amount, name, and ledger field IDs */
+const BLD_CHILD_BALANCE_FORMS = [
 		32 => [
 			'child_amount_field_id' => 8,
 			'child_name_field_id'   => 19,
@@ -58,6 +59,13 @@
 		],
 		// Add more like: 123 => [ 'child_amount_field_id' => 1, 'child_name_field_id' => 2, 'ledger_form_id' => 10, 'ledger_name_id' => 1, 'ledger_amount_id' => 3 ],
 	];
+
+// === END CONFIG ===
+
+
+( static function () {
+	// === Child Form Settings (edit these IDs to match your site) ===
+	$child_forms = BLD_CHILD_BALANCE_FORMS;
 	// ==============================================================
 
 	if ( ! class_exists( 'GFAPI' ) ) {

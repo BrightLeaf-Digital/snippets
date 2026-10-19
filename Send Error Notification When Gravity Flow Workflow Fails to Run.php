@@ -13,6 +13,7 @@
  * child forms.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$to`: Add recipient email address in $to variable. Else, defaults to admin email.
  *
  * FEATURES:
@@ -27,6 +28,13 @@
  *   workflow-on-gv-approval-and-subscription-payment/))
  */
 
+// === BEGIN CONFIG ===
+/** @config email Recipient email. Leave empty to use the site admin email */
+const BLD_FLOW_FAIL_TO = '';
+
+// === END CONFIG ===
+
+
 add_action(
     'gform_after_submission',
     function ( $entry, $form ) {
@@ -35,7 +43,7 @@ add_action(
             return;
         }
 
-        $to = ''; // add email here.
+        $to = BLD_FLOW_FAIL_TO; // add email here.
 
         if ( empty( $to ) ) {
             $to = get_option( 'admin_email' );

@@ -16,13 +16,14 @@
  * - Special: string reversal
  *
  * CONFIGURATION:
- * - `gform_save_field_value_3_16`: Change '3' to your target form ID (or remove '_3' to apply to
- *   all forms)
- * - `gform_save_field_value_3_16`: Change '16' to your target field ID (or remove '_16' to apply
- *   to all fields on the form)
- * - `$apply`: Default is set to uppercase ('upper'). Other options include: 'lower', 'title',
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive
+ *   snippet updates.
+ * - `BLD_CAP_FORM_ID`: target form ID. Use 0 to apply to every form.
+ * - `BLD_CAP_FIELD_ID`: target field ID. Use 0 to apply to every field on the form. Ignored when
+ *   the form ID is 0.
+ * - `BLD_CAP_APPLY`: transformations to apply, in order. Options: 'upper', 'lower', 'title',
  *   'camel', 'pascal', 'sentence', 'slug', 'trim', 'collapse', 'alphanumeric', 'phone',
- *   'strip_tags', 'reverse'. Add or modify transformations as needed.
+ *   'strip_tags', 'reverse'.
  *
  * FEATURES:
  * - Ensures uniform formatting for data consistency.
@@ -34,8 +35,27 @@
  * - Sanitizes output for security
  */
 
+// === BEGIN CONFIG ===
+/** @config int Target form ID. Use 0 to apply to every form */
+const BLD_CAP_FORM_ID = 3;
+
+/** @config int Target field ID. Use 0 to apply to every field on the form. Ignored when the form ID is 0 */
+const BLD_CAP_FIELD_ID = 16;
+
+/** @config array Transformations to apply, in order */
+const BLD_CAP_APPLY = [ 'upper' ];
+// === END CONFIG ===
+
+$bld_cap_hook = 'gform_save_field_value';
+if ( BLD_CAP_FORM_ID > 0 ) {
+    $bld_cap_hook .= '_' . BLD_CAP_FORM_ID;
+    if ( BLD_CAP_FIELD_ID > 0 ) {
+        $bld_cap_hook .= '_' . BLD_CAP_FIELD_ID;
+    }
+}
+
 add_filter(
-        'gform_save_field_value_3_16',
+        $bld_cap_hook,
         function ( $value, $entry, $field ) {
             $transformations = [
                     'upper'        => 'strtoupper',           // ALL CAPS
@@ -74,7 +94,7 @@ add_filter(
 
             if ( $field instanceof GF_Field && $field->get_input_type() === 'text' && ! empty( $value ) ) {
                 // Apply multiple transformations in order
-                $apply = [ 'upper' ];
+                $apply = BLD_CAP_APPLY;
 
                 foreach ( $apply as $transform_type ) {
                     if ( isset( $transformations[ $transform_type ] ) ) {

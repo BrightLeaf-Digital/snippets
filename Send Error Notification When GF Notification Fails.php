@@ -10,6 +10,7 @@
  * Includes full email details and error message to help diagnose SMTP/email configuration issues.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$to`: Add recipient email address in $to variable (currently empty). Defaults to site admin
  *   email.
  *
@@ -19,6 +20,13 @@
  * or wp_mail() failing.
  */
 
+// === BEGIN CONFIG ===
+/** @config email Recipient email. Leave empty to use the site admin email */
+const BLD_GF_NOTIFY_FAIL_TO = '';
+
+// === END CONFIG ===
+
+
 add_action(
     'gform_send_email_failed',
     function ( $error, $email, $entry ) {
@@ -26,7 +34,7 @@ add_action(
             return;
         }
 
-        $to = ''; // add email here
+        $to = BLD_GF_NOTIFY_FAIL_TO; // add email here
 
         if ( empty( $to ) ) {
             $to = get_option( 'admin_email' );

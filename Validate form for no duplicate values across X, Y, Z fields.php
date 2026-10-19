@@ -11,6 +11,7 @@
  * **custom validation error message** is displayed for each affected field.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$forms`: Each group is an array of field_id => 'error message'. If two or more fields in that
  * group have the same value, those fields will fail validation with the provided message.
  *
@@ -36,13 +37,9 @@
  * comparison to avoid accidental matches on spaces.
  */
 
-( static function () {
-    if ( ! class_exists( 'GFAPI' ) ) {
-        return;
-    }
-
-    // === Configuration: per‑form duplicate groups (edit these) ==================
-    $forms = [
+// === BEGIN CONFIG ===
+/** @config array Form ID mapped to field ID and the duplicate message */
+const BLD_NO_DUP_FIELDS_FORMS = [
             63 => [
                     [
                             21 => 'Please provide different values.',
@@ -71,6 +68,17 @@
             ],
         // Add more forms as needed...
     ];
+
+// === END CONFIG ===
+
+
+( static function () {
+    if ( ! class_exists( 'GFAPI' ) ) {
+        return;
+    }
+
+    // === Configuration: per‑form duplicate groups (edit these) ==================
+    $forms = BLD_NO_DUP_FIELDS_FORMS;
     // ==========================================================================
 
     // Helpers.

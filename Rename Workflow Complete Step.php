@@ -12,15 +12,23 @@
  * GravityView entries.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$form_ids`: Update to the list of form IDs this should apply to.
  *
  * NOTES:
  * - Runs only when the field value is exactly "Workflow Complete".
  */
 
+// === BEGIN CONFIG ===
+/** @config array Form IDs whose Workflow Complete step should be renamed */
+const BLD_RENAME_COMPLETE_FORM_IDS = [ 3, 45, 5, 7, 21, 51, 25, 11, 29 ];
+
+// === END CONFIG ===
+
+
 ( static function () {
     // === Configure applicable form IDs =========================================
-    $form_ids = [ 3, 45, 5, 7, 21, 51, 25, 11, 29 ];
+    $form_ids = BLD_RENAME_COMPLETE_FORM_IDS;
     // ==========================================================================
 
     add_filter(

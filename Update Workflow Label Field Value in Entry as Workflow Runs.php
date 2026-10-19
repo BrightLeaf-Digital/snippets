@@ -13,15 +13,23 @@
  * - On workflow cancel: "Cancelled"
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$status_field_label`: If you use a different field label, change to your field label.
  */
+
+// === BEGIN CONFIG ===
+/** @config string Label of the field that stores the current workflow step */
+const BLD_WF_LABEL_FIELD = 'Workflow Step Field';
+
+// === END CONFIG ===
+
 
 ( static function () {
     if ( ! class_exists( 'GFAPI' ) ) {
         return;
     }
 
-    $status_field_label = 'Workflow Step Field'; // Edit if your label differs
+    $status_field_label = BLD_WF_LABEL_FIELD; // Edit if your label differs
 
     $get_status_field_id = static function ( $form ) use ( $status_field_label ) {
         static $cache = [];

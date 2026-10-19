@@ -11,6 +11,7 @@
  * timestamp for debugging.
  *
  * CONFIGURATION:
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive snippet updates.
  * - `$to`: Add the recipient email address (in between the quotes) where notifications should be
  *   sent. Defaults to site admin email.
  * - `$form_ids`: Configure form IDs and field IDs to monitor. As of now it checks fields 4, 8, and
@@ -18,17 +19,12 @@
  *   add as necessary.
  */
 
-add_action(
-    'gform_after_submission',
-    function ( $entry, $form ) {
+// === BEGIN CONFIG ===
+/** @config email Recipient email. Leave empty to use the site admin email */
+const BLD_ZERO_FIELD_TO = '';
 
-        $to = ''; // add email here
-
-        if ( empty( $to ) ) {
-            $to = get_option( 'admin_email' );
-        }
-
-        $form_ids = [
+/** @config array Form ID mapped to the field IDs that should not be 0 */
+const BLD_ZERO_FIELD_FORMS = [
             30 => [
                 4,
                 8,
@@ -39,6 +35,21 @@ add_action(
                 16,
             ],
         ];
+
+// === END CONFIG ===
+
+
+add_action(
+    'gform_after_submission',
+    function ( $entry, $form ) {
+
+        $to = BLD_ZERO_FIELD_TO; // add email here
+
+        if ( empty( $to ) ) {
+            $to = get_option( 'admin_email' );
+        }
+
+        $form_ids = BLD_ZERO_FIELD_FORMS;
 
         $warning = [];
         if ( in_array( intval( $form['id'] ), array_map( 'intval', array_keys( $form_ids ) ), true ) ) {

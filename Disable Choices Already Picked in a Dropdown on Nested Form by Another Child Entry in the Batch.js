@@ -14,11 +14,13 @@
  * the field id of the dropdown and the field id of the nested form on the parent form.
  *
  * CONFIGURATION:
- * - `parentFormId`: ID of the parent form that contains the Nested Form field
- * - `nestedFieldId`: Field ID of the Nested Form field on the parent form
- * - `childDropdownFieldId`: Field ID of the dropdown on the child form
- * - `compareBy`: 'value' (recommended) or 'label' to compare against saved values or visible
- *   labels
+ * - Edit the config block below. Installed through GOCSM, these values are fields and survive
+ *   snippet updates.
+ * - `bldNestedParentFormId`: ID of the parent form that contains the Nested Form field
+ * - `bldNestedFieldId`: Field ID of the Nested Form field on the parent form
+ * - `bldNestedChildDropdownFieldId`: Field ID of the dropdown on the child form
+ * - `bldNestedCompareBy`: 'value' (recommended) or 'label' to compare against saved values or
+ *   visible labels
  *
  * FEATURES:
  * - **Prevents duplicate selections** in a dropdown field within nested forms.
@@ -31,17 +33,27 @@
  * NOTES:
  * - Adds class 'bld-disabled-choice' to disabled and sets a helpful title.
  */
+
+// === BEGIN CONFIG ===
+/** @config int ID of the parent form that contains the Nested Form field */
+const bldNestedParentFormId = 23;
+/** @config int Field ID of the Nested Form field on the parent form */
+const bldNestedFieldId = 1;
+/** @config int Field ID of the dropdown on the child form */
+const bldNestedChildDropdownFieldId = 1;
+/** @config string Compare saved values or visible labels: value or label */
+const bldNestedCompareBy = 'value';
+// === END CONFIG ===
+
 (function ($) {
     'use strict';
 
-    // === Configuration (edit these) ============================================
     const cfg = {
-        parentFormId: 23,
-        nestedFieldId: 1,
-        childDropdownFieldId: 1,
-        compareBy: 'value', // 'value' | 'label'
+        parentFormId: bldNestedParentFormId,
+        nestedFieldId: bldNestedFieldId,
+        childDropdownFieldId: bldNestedChildDropdownFieldId,
+        compareBy: bldNestedCompareBy,
     };
-    // ==========================================================================
 
     function ns() {
         const key = `GPNestedForms_${cfg.parentFormId}_${cfg.nestedFieldId}`;
