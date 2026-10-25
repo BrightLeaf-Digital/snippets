@@ -69,9 +69,12 @@ class BL_GF_AdvLogic {
 	 * gform_form_tag) and the runtime JS (via wp_footer).
 	 *
 	 * @param array $form GF form array.
-	 * @return array Modified form array.
+	 * @return array Modified form array, or the unchanged unexpected filter value.
 	 */
-	public static function attach( array $form ): array {
+	public static function attach( $form ) {
+		if ( ! is_array( $form ) || ! is_array( rgar( $form, 'fields' ) ) || ! is_numeric( rgar( $form, 'id' ) ) ) {
+			return $form;
+		}
 		// Auto-import native conditionalLogic → blAdvLogic if not already set.
 		// Imported configs have enabled=false so they pre-populate the editor for migration
 		// but do not activate the advanced system until the user explicitly enables them.
@@ -112,7 +115,10 @@ class BL_GF_AdvLogic {
 				: '';
 			add_filter(
 				'gform_form_tag',
-				static function ( string $form_tag, array $f ) use ( $form_id, $css, $config_script ): string {
+				static function ( $form_tag, $f ) use ( $form_id, $css, $config_script ) {
+					if ( ! is_string( $form_tag ) || ! is_array( $f ) || ! is_numeric( rgar( $f, 'id' ) ) ) {
+						return $form_tag;
+					}
 					if ( intval( $f['id'] ) !== $form_id ) {
 						return $form_tag;
 					}
@@ -137,9 +143,12 @@ class BL_GF_AdvLogic {
 	 * Does not rebuild CSS/JSON or re-register hooks (already done via gform_pre_render).
 	 *
 	 * @param array $form GF form array.
-	 * @return array Modified form array.
+	 * @return array Modified form array, or the unchanged unexpected filter value.
 	 */
-	public static function attach_for_validation( array $form ): array {
+	public static function attach_for_validation( $form ) {
+		if ( ! is_array( $form ) || ! is_array( rgar( $form, 'fields' ) ) ) {
+			return $form;
+		}
 		foreach ( $form['fields'] as &$field ) {
 			if (
 				empty( self::get_field_prop( $field, 'blAdvLogic' ) ) &&
@@ -848,7 +857,10 @@ class BL_GF_AdvLogic {
 	 *
 	 * @param array $form GF form array passed by GF's action.
 	 */
-	public static function enforce_server_side( array $form ): void {
+	public static function enforce_server_side( $form ) {
+		if ( ! is_array( $form ) || ! is_array( rgar( $form, 'fields' ) ) || ! is_numeric( rgar( $form, 'id' ) ) ) {
+			return;
+		}
 		// Auto-import native CL if not yet done — gform_pre_validation (where attach() runs)
 		// fires after gform_pre_submission, so we replicate the import here.
 		foreach ( $form['fields'] as &$field ) {
@@ -883,15 +895,18 @@ class BL_GF_AdvLogic {
      * @param mixed        $_value unused.
      * @param array        $_form unused.
      * @param object|array $field GF field.
-     * @return array
+     * @return mixed Validation result, preserving unexpected filter values.
      */
-	public static function skip_validation_if_hidden( array $result, $_value, array $_form, $field ): array {
+	public static function skip_validation_if_hidden( $result, $_value, $_form, $field ) {
+		if ( ! is_array( $result ) || ! is_array( $_form ) || ( ! is_object( $field ) && ! is_array( $field ) ) ) {
+			return $result;
+		}
 		$adv = self::get_field_prop( $field, 'blAdvLogic' );
 		if ( is_string( $adv ) && '' !== $adv ) {
 			$decoded = json_decode( $adv, true );
 			$adv     = is_array( $decoded ) ? $decoded : null;
 		}
-		if ( empty( $adv['enabled'] ) ) {
+		if ( ! is_array( $adv ) || empty( $adv['enabled'] ) ) {
 			return $result;
 		}
 
