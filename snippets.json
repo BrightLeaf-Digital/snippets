@@ -1101,8 +1101,8 @@
             "description": "This code snippet enhances Gravity Flow by allowing workflows to be delayed or restarted based on GravityView approval and subscription payments.",
             "type": "php",
             "file": "Restart workflow on GV approval and subscription payment.php",
-            "hash": "sha256:2868c6183eeba92feaad067125dafb289ab706aae64e50e55ae42cf7c36e6a9c",
-            "version": "1.0.0",
+            "hash": "sha256:18161877ff4a80d8e09e0835bcec8aa52acd418f329092368d875bb4e7a429a1",
+            "version": "1.1.0",
             "tags": [
                 "Gravity Flow",
                 "Gravity View",

@@ -234,17 +234,20 @@ if ( ! function_exists( 'bld_workflow_restart_record_date' ) ) {
 }
 
 // {workflow_restart_date} — the date of the most recent restart, for mapping in steps
-// that run later than the request the restart happened in.
+// that run later than the request the restart happened in. Prints Y-m-d; add a PHP
+// date format to display it differently, e.g. {workflow_restart_date:d/m/Y} on a
+// receipt that is sent after the date field has been restored.
 add_filter(
 	'gform_replace_merge_tags',
 	static function ( $text, $form, $entry ) {
 		// GravityView and Populate Anything hydration hand this filter an array rather
 		// than a string; running a string function on it fatals the whole page.
-		if ( ! is_string( $text ) || false === strpos( $text, '{workflow_restart_date}' ) ) {
+		if ( ! is_string( $text ) || false === strpos( $text, '{workflow_restart_date' ) ) {
 			return $text;
 		}
+		$pattern = '/\{workflow_restart_date(?::([^{}]+))?\}/';
 		if ( ! is_array( $entry ) || empty( $entry['id'] ) ) {
-			return str_replace( '{workflow_restart_date}', '', $text );
+			return preg_replace( $pattern, '', $text );
 		}
 
 		$date = function_exists( 'gform_get_meta' ) ? gform_get_meta( (int) $entry['id'], 'bld_workflow_restart_date' ) : '';
@@ -263,7 +266,15 @@ add_filter(
 			$date = gmdate( 'Y-m-d', strtotime( (string) $entry['date_created'] ) );
 		}
 
-		return str_replace( '{workflow_restart_date}', (string) $date, $text );
+		return preg_replace_callback(
+			$pattern,
+			static function ( $matches ) use ( $date ) {
+				// A calendar date, not a moment: format it in UTC so no timezone shifts the day.
+				$parsed = ! empty( $matches[1] ) && $date ? date_create_immutable( (string) $date, new DateTimeZone( 'UTC' ) ) : false;
+				return $parsed ? $parsed->format( $matches[1] ) : (string) $date;
+			},
+			$text
+		);
 	},
 	10,
 	3
