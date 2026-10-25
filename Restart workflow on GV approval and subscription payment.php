@@ -23,7 +23,9 @@
  * - **Delay Workflow Until Approval** – Prevents workflows from starting immediately on form
  *   submission and instead begins only after **GravityView approval**.
  * - **Restart Workflow on Subscription Payment** – When a new payment is received, the workflow
- *   restarts automatically, making it useful for recurring payments.
+ *   restarts automatically, making it useful for recurring payments. A payment that arrives while
+ *   the workflow is still running is queued (timeline note plus the "Subscription Payment
+ *   Queued" notification event) and replayed once the workflow completes, one payment per run.
  * - **Configurable Options in Gravity Flow Step Settings** – Adds checkboxes in **Workflow Start
  *   steps** to enable these behaviors selectively.
  * - **Auto-Update Date Field** – Updates a selected date field when the workflow restarts,
@@ -360,22 +362,48 @@ add_action(
 		if ( ! $is_checked ) {
 			return;
 		}
-		$api = new Gravity_Flow_API( $form_id );
+		bld_workflow_restart_on_payment( $entry, $action, $start );
+	},
+	10,
+	2
+);
 
-		// Never disturb a workflow that is currently live on a step: a recurring
-		// payment arriving while the entry sits on a step must not discard it.
-		//
-		// Test for the presence of a current step rather than matching status
-		// strings. get_status() returns the *step's* evaluated status while a step is
-		// live, and that vocabulary is open-ended — 'pending', but also 'queued'
-		// (any scheduled or delayed step parks an entry that way), an approval step's
-		// 'approved'/'rejected' mid-processing, a
-		// webhook step's 'error_client'/'error_server', and anything a custom step or
-		// the gravityflow_step_status_evaluation_approval filter invents. No string
-		// list stays correct. get_current_step() returning false is the unambiguous
-		// "workflow has ended" signal, whatever final status it ended on.
-		if ( false !== $api->get_current_step( $entry ) ) {
-			return;
+if ( ! function_exists( 'bld_workflow_restart_on_payment' ) ) {
+	/**
+	 * Restarts the workflow for one subscription payment, or queues the payment when
+	 * the workflow is still live so it is replayed once the workflow ends.
+	 *
+	 * Never disturb a workflow that is currently live on a step: a recurring payment
+	 * arriving while the entry sits on a step must not discard it. That used to skip
+	 * the payment silently — no ledger row, no receipt, no trace. A payment that lands
+	 * while an earlier restart is still queued on a delayed step (a signup on the
+	 * last day of a month, say, when the processor charges on the 1st) is now kept in
+	 * entry meta and replayed when the workflow completes.
+	 *
+	 * Test for the presence of a current step rather than matching status strings.
+	 * get_status() returns the *step's* evaluated status while a step is live, and
+	 * that vocabulary is open-ended — 'pending', but also 'queued' (any scheduled or
+	 * delayed step parks an entry that way), an approval step's 'approved'/'rejected'
+	 * mid-processing, a webhook step's 'error_client'/'error_server', and anything a
+	 * custom step or the gravityflow_step_status_evaluation_approval filter invents. No
+	 * string list stays correct. get_current_step() returning false is the unambiguous
+	 * "workflow has ended" signal, whatever final status it ended on.
+	 *
+	 * @param array  $entry  The entry.
+	 * @param array  $action The payment action.
+	 * @param object $start  The workflow start step.
+	 *
+	 * @return bool True when the workflow was restarted, false when queued or failed.
+	 */
+	function bld_workflow_restart_on_payment( $entry, $action, $start ) {
+		$form_id = isset( $entry['form_id'] ) ? (int) $entry['form_id'] : 0;
+		$gwf     = gravity_flow();
+		$api     = new Gravity_Flow_API( $form_id );
+
+		$current = $api->get_current_step( $entry );
+		if ( false !== $current ) {
+			bld_workflow_restart_queue_payment( $entry, $action, $current );
+			return false;
 		}
 
 		$target_step_id = $start->__get( 'restart_target_step' );
@@ -392,20 +420,21 @@ add_action(
 		}
 		if ( ! $target_step ) {
 			GFAPI::add_note( $entry['id'], 0, 'bld-restart-workflow', 'Step not found, unable to restart workflow.' );
-			return;
+			return false;
 		}
 
 		// Bump the date field only once the restart is certain, and register the
 		// restore in the same breath. Updating it before the target step was resolved
 		// left the field permanently overwritten with today whenever the restart then
 		// bailed, because the restore was only ever hooked on the success path.
-		bld_workflow_restart_record_date( $entry, $action, $start );
+		// The field gets the date the payment represents, not the day we heard about
+		// it: a late webhook must not date a receipt into the wrong month or tax year.
+		$restart_date = bld_workflow_restart_record_date( $entry, $action, $start );
 
 		$field_id = $start->__get( 'update_date_field' );
 		if ( $field_id && isset( $entry[ $field_id ] ) ) {
 			$original_date = $entry[ $field_id ];
-			$today         = function_exists( 'wp_date' ) ? wp_date( 'Y-m-d', current_time( 'timestamp' ) ) : date( 'Y-m-d' ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date, WordPress.DateTime.CurrentTimeTimestamp.Requested
-			GFAPI::update_entry_field( $entry['id'], $field_id, $today );
+			GFAPI::update_entry_field( $entry['id'], $field_id, $restart_date );
 			add_action(
 				'gravityflow_post_process_workflow',
 				static function () use ( $entry, $field_id, $original_date ) {
@@ -414,12 +443,120 @@ add_action(
 			);
 		}
 
-		$gwf->add_timeline_note( $entry['id'], 'Workflow started because of subscription payment.' );
+		$gwf->add_timeline_note( $entry['id'], 'Workflow started because of subscription payment' . ( ! empty( $action['transaction_id'] ) ? ' ' . $action['transaction_id'] : '' ) . ', dated ' . $restart_date . '.' );
 		$api->send_to_step( $entry, $target_step->get_id() );
 		GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
+		return true;
+	}
+}
+
+if ( ! function_exists( 'bld_workflow_restart_queue_payment' ) ) {
+	/**
+	 * Keeps a payment that arrived while the workflow was live, for replay when it ends.
+	 *
+	 * Adds a timeline note and fires the 'BLD Snippet - Subscription Payment Queued'
+	 * notification event so staff can see the restart is waiting.
+	 *
+	 * @param array  $entry   The entry.
+	 * @param array  $action  The payment action.
+	 * @param object $current The step the workflow is live on.
+	 *
+	 * @return void
+	 */
+	function bld_workflow_restart_queue_payment( $entry, $action, $current ) {
+		$queue = gform_get_meta( (int) $entry['id'], 'bld_workflow_restart_queue' );
+		$queue = is_array( $queue ) ? $queue : [];
+
+		// A processor retry of the same payment must not queue twice.
+		$transaction_id = isset( $action['transaction_id'] ) ? (string) $action['transaction_id'] : '';
+		if ( '' !== $transaction_id && in_array( $transaction_id, wp_list_pluck( $queue, 'transaction_id' ), true ) ) {
+			return;
+		}
+
+		$item    = [
+			'type'            => 'add_subscription_payment',
+			'transaction_id'  => $transaction_id,
+			'subscription_id' => isset( $action['subscription_id'] ) ? (string) $action['subscription_id'] : '',
+			'amount'          => isset( $action['amount'] ) ? (string) $action['amount'] : '',
+			'payment_date'    => bld_workflow_restart_payment_date( $action ),
+			'queued_at'       => gmdate( 'Y-m-d H:i:s' ),
+		];
+		$queue[] = $item;
+		gform_update_meta( (int) $entry['id'], 'bld_workflow_restart_queue', $queue );
+
+		$step_name = is_object( $current ) && method_exists( $current, 'get_name' ) ? $current->get_name() : 'a step';
+		gravity_flow()->add_timeline_note(
+			$entry['id'],
+			sprintf(
+				'Subscription payment %s (%s) arrived while the workflow is on "%s". Queued: the workflow restarts for it when the current run completes (%d waiting).',
+				'' !== $transaction_id ? $transaction_id : '(no transaction ID)',
+				$item['payment_date'],
+				$step_name,
+				count( $queue )
+			)
+		);
+		GFAPI::send_notifications( GFAPI::get_form( (int) $entry['form_id'] ), $entry, 'bld_restart_workflow_queued' );
+	}
+}
+
+if ( ! function_exists( 'bld_workflow_restart_payment_date' ) ) {
+	/**
+	 * The date a payment action represents, Y-m-d; today when it carries none.
+	 *
+	 * @param array $action The payment action.
+	 *
+	 * @return string
+	 */
+	function bld_workflow_restart_payment_date( $action ) {
+		$timestamp = is_array( $action ) && ! empty( $action['payment_date'] ) ? strtotime( (string) $action['payment_date'] ) : false;
+		return $timestamp ? gmdate( 'Y-m-d', $timestamp ) : ( function_exists( 'wp_date' ) ? wp_date( 'Y-m-d' ) : gmdate( 'Y-m-d' ) );
+	}
+}
+
+// Replay queued payments once the workflow ends. Deferred to cron rather than run
+// inside gravityflow_workflow_complete, which fires mid-processing: restarting from
+// there would re-enter the workflow engine for the same entry.
+add_action(
+	'gravityflow_workflow_complete',
+	static function ( $entry_id ) {
+		$queue = function_exists( 'gform_get_meta' ) ? gform_get_meta( (int) $entry_id, 'bld_workflow_restart_queue' ) : [];
+		if ( is_array( $queue ) && $queue && ! wp_next_scheduled( 'bld_workflow_restart_replay', [ (int) $entry_id ] ) ) {
+			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'bld_workflow_restart_replay', [ (int) $entry_id ] );
+		}
 	},
 	10,
-	2
+	1
+);
+
+add_action(
+	'bld_workflow_restart_replay',
+	static function ( $entry_id ) {
+		if ( ! function_exists( 'gravity_flow' ) || ! class_exists( 'GFAPI' ) || ! class_exists( 'Gravity_Flow_API' ) ) {
+			return;
+		}
+		$entry = GFAPI::get_entry( (int) $entry_id );
+		$queue = gform_get_meta( (int) $entry_id, 'bld_workflow_restart_queue' );
+		if ( is_wp_error( $entry ) || ! is_array( $queue ) || ! $queue ) {
+			return;
+		}
+		$start = gravity_flow()->get_workflow_start_step( (int) $entry['form_id'], $entry );
+		if ( ! $start || ! $start->__get( 'restart_workflow_checkbox' ) ) {
+			return;
+		}
+		$api = new Gravity_Flow_API( (int) $entry['form_id'] );
+		if ( false !== $api->get_current_step( $entry ) ) {
+			return; // Live again; gravityflow_workflow_complete schedules the next try.
+		}
+
+		// One payment per run: each restart gets its own ledger row and receipt, and
+		// the next one replays when this run completes.
+		$action = array_shift( $queue );
+		gform_update_meta( (int) $entry_id, 'bld_workflow_restart_queue', $queue );
+		gravity_flow()->add_timeline_note( $entry['id'], 'Replaying queued subscription payment' . ( ! empty( $action['transaction_id'] ) ? ' ' . $action['transaction_id'] : '' ) . '.' );
+		bld_workflow_restart_on_payment( $entry, $action, $start );
+	},
+	10,
+	1
 );
 
 
@@ -523,7 +660,8 @@ add_action(
 add_filter(
     'gform_notification_events',
     static function ( $notification_events ) {
-		$notification_events['bld_restart_workflow'] = 'BLD Snippet - Restart Workflow on GV Approval or Subscription Payment';
+		$notification_events['bld_restart_workflow']        = 'BLD Snippet - Restart Workflow on GV Approval or Subscription Payment';
+		$notification_events['bld_restart_workflow_queued'] = 'BLD Snippet - Subscription Payment Queued (workflow still running)';
 		return $notification_events;
 	}
 );
