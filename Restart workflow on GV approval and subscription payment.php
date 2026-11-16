@@ -40,6 +40,8 @@
  *   rather than the date it was clicked.
  * - **Ensures Workflow Integrity** – Automatically cancels the initial workflow if delayed until
  *   GravityView approval to prevent redundant execution.
+ * - **Route Disapprovals** – Optionally sends a delayed entry to a chosen step when it is
+ *   disapproved in GravityView, as long as its workflow never ran. Defaults to doing nothing.
  *
  * This snippet integrates seamlessly with **Gravity Flow, GravityView, and Gravity Forms
  * Subscription Payments**, enabling more **dynamic and automated workflow management**.
@@ -98,6 +100,21 @@ add_filter(
 						'type'    => 'select',
 						'choices' => $step_choices,
 						'tooltip' => 'Select which step to send the entry to when workflow restarts. Defaults to first step.',
+					];
+					$settings[0]['fields'][] = [
+						'name'    => 'disapprove_target_step',
+						'label'   => 'On GravityView Disapproval, Send to Step',
+						'type'    => 'select',
+						'choices' => array_merge(
+							[
+								[
+									'label' => 'Do nothing',
+									'value' => '',
+								],
+							],
+							$step_choices
+						),
+						'tooltip' => 'Only used when the workflow is delayed until GravityView approval. Disapproving an entry whose delayed workflow never ran sends it to this step. Leave on "Do nothing" to ignore disapprovals.',
 					];
 				}
 				$form        = gravity_flow()->get_current_form();
@@ -347,6 +364,57 @@ add_action(
 		$gwf->add_timeline_note( $entry['id'], 'Workflow started because of Gravity View Approval.' );
 		$api->send_to_step( $entry, $target_step->get_id() );
 		GFAPI::send_notifications( GFAPI::get_form( $form_id ), $entry, 'bld_restart_workflow' );
+	},
+	10,
+	1
+);
+
+// to route the delayed workflow on GravityView disapproval
+add_action(
+	'gravityview/approve_entries/disapproved',
+	static function ( $entry_id ) {
+		if ( ! function_exists( 'gravity_flow' ) || ! class_exists( 'GFAPI' ) || ! class_exists( 'Gravity_Flow_API' ) ) {
+			return;
+		}
+		$entry = GFAPI::get_entry( (int) $entry_id );
+		if ( is_wp_error( $entry ) || empty( $entry ) ) {
+			return;
+		}
+		$form_id    = isset( $entry['form_id'] ) ? (int) $entry['form_id'] : 0;
+		$gwf        = gravity_flow();
+		$start_step = $gwf->get_workflow_start_step( $form_id, $entry );
+		if ( ! $start_step || ! $start_step->__get( 'delay_workflow_checkbox' ) ) {
+			return;
+		}
+		$target_step_id = $start_step->__get( 'disapprove_target_step' );
+		if ( ! $target_step_id ) {
+			return;
+		}
+		$api = new Gravity_Flow_API( $form_id );
+
+		// Same rule as approval: never disturb a workflow that is live on a step.
+		if ( false !== $api->get_current_step( $entry ) ) {
+			return;
+		}
+
+		// Only route entries whose delayed workflow never ran. With the delay on,
+		// a fresh entry ends "cancelled" at Start. "complete" means the approval
+		// path (or an earlier disapproval) already ran; undoing that is a manual
+		// job, not something a status flip should trigger.
+		$final_status = (string) gform_get_meta( (int) $entry_id, 'workflow_final_status' );
+		if ( '' !== $final_status && 'cancelled' !== $final_status ) {
+			$gwf->add_timeline_note( (int) $entry_id, 'GravityView disapproval not routed: the workflow already finished (' . $final_status . '). Reverse any completed steps manually.' );
+			return;
+		}
+
+		$target_step = $gwf->get_step( $target_step_id );
+		if ( ! $target_step || $target_step->get_form_id() !== $form_id ) {
+			GFAPI::add_note( (int) $entry_id, 0, 'bld-restart-workflow', 'Disapproval step not found, unable to route workflow.' );
+			return;
+		}
+
+		$gwf->add_timeline_note( (int) $entry_id, 'Workflow sent to "' . $target_step->get_name() . '" because of GravityView disapproval.' );
+		$api->send_to_step( $entry, $target_step->get_id() );
 	},
 	10,
 	1
