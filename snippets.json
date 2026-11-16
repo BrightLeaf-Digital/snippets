@@ -851,8 +851,8 @@
             "description": "Creates a new merge tag-available anywhere, not just in standard Gravity Forms areas-that retrieves the specified GET parameter.",
             "type": "php",
             "file": "Merge tag to retrieve GET parameters.php",
-            "hash": "sha256:ff1501b315cc3e790111df1a5e4b2f624f05d4b309e9007f1d2b576a7ee0c38d",
-            "version": "1.0.0",
+            "hash": "sha256:03da7acc2acf653e8ccdbd1c5b995ca2d0691892b090df8511bcb40c13a4f7e9",
+            "version": "1.0.1",
             "tags": [
                 "WordPress",
                 "Gravity Forms",

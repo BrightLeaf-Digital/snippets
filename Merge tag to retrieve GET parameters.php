@@ -92,4 +92,4 @@ add_filter( 'gform_pre_replace_merge_tags', 'bl_gogetthis_replace_tags', 10, 1 )
  * This lets you use {gogetthis:*} in GravityView Custom Content fields
  * and any other field output that passes through GravityView’s renderer.
  */
-add_filter( 'gravityview_field_output', 'bl_gogetthis_replace_tags', 12, 1 );
+add_filter( 'gravityview/field_output/html', 'bl_gogetthis_replace_tags', 12, 1 );
