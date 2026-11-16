@@ -57,6 +57,13 @@ add_filter(
 	'gform_replace_merge_tags',
 	function ( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 
+		// GF hands this filter an ARRAY when a multi-input field has an array
+		// default value (GF_Field::get_value_default -> replace_variables_prepopulate),
+		// which strpos() rejects with a fatal TypeError. Bail on non-strings.
+		if ( ! is_string( $text ) ) {
+			return $text;
+		}
+
 		// Fast exit if tag not present.
 		if ( false === strpos( $text, '{gview_edit_entry_link' ) ) {
 			return $text;

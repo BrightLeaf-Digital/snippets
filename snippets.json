@@ -825,8 +825,8 @@
             "description": "Create a custom merge tag that outputs a secure GravityView Edit Entry link for the current entry when displayed inside a GravityView context.",
             "type": "php",
             "file": "Merge Tag for Gravity View Edit Entry link.php",
-            "hash": "sha256:c74b0cd228cd3c3bb0dc0bf258af46158f544c4ab5a4979c367e4740cc4b7e70",
-            "version": "1.0.0",
+            "hash": "sha256:75f83c432be31cdde386f1b99d4cbf089ce68307e90789d0ea9c964dc2aac6c5",
+            "version": "1.0.1",
             "tags": [
                 "Gravity View",
                 "Gravity Forms"
