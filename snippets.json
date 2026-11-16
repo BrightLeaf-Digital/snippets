@@ -704,8 +704,8 @@
             "description": "GOAL Provides the \"engine\" that makes advanced conditional logic work on your live forms.",
             "type": "php",
             "file": "Gravity Forms Advanced Conditional Logic Runtime Engine.php",
-            "hash": "sha256:18120ca553cea2f4fe5963139651bc6a10d0b5db3fd73b7a09151fe51f9d069c",
-            "version": "1.0.0",
+            "hash": "sha256:d3b7591d74d55668bc1d9c5dd7a23ae5e01039dbe4ac8364a57f65b8389867e4",
+            "version": "1.0.1",
             "tags": [
                 "Gravity Forms"
             ],
