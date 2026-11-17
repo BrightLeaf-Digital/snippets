@@ -176,7 +176,8 @@ function sync_main(): int {
  *
  * The message is the commit message of the commit that actually touched this file inside the
  * pushed range - not the push's tip commit, which in a multi-commit push is whatever landed
- * last and usually describes a different file entirely.
+ * last and usually describes a different file entirely. The snippet's snippets.json version is
+ * sent alongside it when the manifest has one.
  *
  * @param array  $config Config.
  * @param string $title  Entry title.
@@ -212,22 +213,23 @@ function notify_subscribers( array $config, string $title, string $path ) {
 		return false;
 	}
 
+	$version = snippet_version( $path );
+
 	if ( $config['dry_run'] ) {
-		printf( "DRY-RUN notify: %s | %s\n", $title, str_replace( "\n", ' ', $message ) );
+		printf( "DRY-RUN notify: %s | %s | %s\n", $title, '' === $version ? '(no version)' : $version, str_replace( "\n", ' ', $message ) );
 
 		return true;
 	}
 
-	$response = api_request(
-		$config,
-		'POST',
-		$config['update_webhook'],
-		[
-			'input_1' => $title,
-			'input_3' => $message,
-		],
-		false
-	);
+	$fields = [
+		'input_1' => $title,
+		'input_3' => $message,
+	];
+	if ( '' !== $version ) {
+		$fields['input_4'] = $version;
+	}
+
+	$response = api_request( $config, 'POST', $config['update_webhook'], $fields, false );
 
 	return is_string( $response ) ? 'The notification submission failed: ' . $response : true;
 }
@@ -250,6 +252,31 @@ function suppression_marker( string $message ): ?string {
 	}
 
 	return null;
+}
+
+/**
+ * Returns a snippet's version from snippets.json.
+ *
+ * @param string $path Repository-relative path, matched against each manifest entry's "file".
+ *
+ * @return string The version, or an empty string when the manifest has none for this file.
+ */
+function snippet_version( string $path ): string {
+	static $versions = null;
+
+	if ( null === $versions ) {
+		$versions = [];
+		$manifest = dirname( __DIR__, 2 ) . '/snippets.json';
+		$data     = is_file( $manifest ) ? json_decode( (string) file_get_contents( $manifest ), true ) : null;
+
+		foreach ( is_array( $data ) && is_array( $data['snippets'] ?? null ) ? $data['snippets'] : [] as $entry ) {
+			if ( is_array( $entry ) && is_string( $entry['file'] ?? null ) && is_string( $entry['version'] ?? null ) ) {
+				$versions[ $entry['file'] ] = $entry['version'];
+			}
+		}
+	}
+
+	return $versions[ $path ] ?? '';
 }
 
 /**
