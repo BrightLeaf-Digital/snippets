@@ -120,6 +120,7 @@ jobs:
           GF_UPDATE_WEBHOOK_URL: ${{ secrets.GF_UPDATE_WEBHOOK_URL }}
           GF_CONSUMER_KEY: ${{ secrets.GF_CONSUMER_KEY }}
           GF_CONSUMER_SECRET: ${{ secrets.GF_CONSUMER_SECRET }}
+          BLD_API_KEY: ${{ secrets.BLD_API_KEY }}
           GITHUB_REPO: ${{ github.repository }}
           GITHUB_BRANCH: ${{ github.ref_name }}
           GITHUB_SHA: ${{ github.sha }}

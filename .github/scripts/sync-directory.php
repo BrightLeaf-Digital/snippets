@@ -36,6 +36,8 @@
  *   GITHUB_BRANCH        branch for the raw URL
  *   GITHUB_SHA           commit for the blob URL
  *   GF_UPDATE_WEBHOOK_URL  optional; the subscriber notification form's submissions endpoint.
+ *   BLD_API_KEY            optional; reports created and updated snippets to the GravityOps
+ *                          Release Service's recent-updates feed on the same site.
  *                        Unset means no notifications are sent.
  *   SYNC_RANGE           optional; the pushed revision range, used to find the commit message
  *                        that actually touched each file. Unset means no notifications.
@@ -124,6 +126,12 @@ function sync_main(): int {
 		}
 
 		printf( "%s  %s (entry %s)\n", $result['action'], $label, $result['entry_id'] );
+
+		$reported = report_recent_update( $config, $result, $change['path'] );
+		if ( is_string( $reported ) ) {
+			$warnings[ $label ] = $reported;
+			printf( "WARN  %s\n        %s\n", $label, $reported );
+		}
 
 		// Subscribers are told what changed in an existing snippet, never about a new one:
 		// a brand-new entry has no subscribers yet, and the old create workflow never sent one.
@@ -235,6 +243,56 @@ function notify_subscribers( array $config, string $title, string $path ) {
 }
 
 /**
+ * Reports a created or updated snippet to the Release Service's recent-updates feed.
+ *
+ * Follows the same rules as the subscriber notification: only a push range is news, and a
+ * suppression marker in the file's commit message (a sweep) or GF_SKIP_NOTIFY keeps it out.
+ *
+ * @param array  $config Config.
+ * @param array  $result sync_one() result.
+ * @param string $path   Repository-relative path.
+ *
+ * @return bool|string True when reported, false when deliberately skipped, or an error message.
+ */
+function report_recent_update( array $config, array $result, string $path ) {
+	if ( '' === $config['release_key'] || '' === $config['range'] || $config['skip_notify'] ) {
+		return false;
+	}
+
+	if ( ! in_array( $result['action'], [ 'CREATE', 'UPDATE' ], true ) ) {
+		return false;
+	}
+
+	if ( null !== suppression_marker( commit_message_for( $config['range'], $path ) ) ) {
+		return false;
+	}
+
+	$version = snippet_version( $path );
+	if ( '' === $version ) {
+		return 'Not added to the recent-updates feed: snippets.json has no version for this file.';
+	}
+
+	if ( $config['dry_run'] ) {
+		printf( "DRY-RUN recent update: %s | %s\n", $result['title'], $version );
+
+		return true;
+	}
+
+	$body = [
+		'file'    => $path,
+		'name'    => $result['title'],
+		'version' => $version,
+	];
+	if ( ctype_digit( (string) $result['entry_id'] ) ) {
+		$body['entry_id'] = (int) $result['entry_id'];
+	}
+
+	$response = api_request( $config, 'POST', $config['release_url'], $body, false, [ 'X-API-Key: ' . $config['release_key'] ] );
+
+	return is_string( $response ) ? 'The recent-updates report failed: ' . $response : true;
+}
+
+/**
  * Returns the suppression marker found in a commit message, or null when there is none.
  *
  * Lets a sweep that rewrites many files - a formatting or docblock pass - avoid sending one
@@ -328,6 +386,10 @@ function read_config() {
 		'update_webhook' => (string) getenv( 'GF_UPDATE_WEBHOOK_URL' ),
 		'range'          => (string) getenv( 'SYNC_RANGE' ),
 		'skip_notify'    => '1' === (string) getenv( 'GF_SKIP_NOTIFY' ),
+		// Optional: without the key the sync does not report to the recent-updates feed. The
+		// Release Service runs on the same site as the directory form.
+		'release_key'    => (string) getenv( 'BLD_API_KEY' ),
+		'release_url'    => substr( $matches[1], 0, -strlen( '/gf/v2' ) ) . '/gravityops/v1/snippet-updates',
 	];
 
 	if ( '' !== $config['update_webhook'] && ! str_starts_with( $config['update_webhook'], 'https://' ) ) {
@@ -919,7 +981,7 @@ function update_entry( array $config, int $entry_id, array $values ) {
 }
 
 /**
- * Performs one Gravity Forms REST API v2 request.
+ * Performs one REST API request: Gravity Forms v2, or the Release Service with its own header.
  *
  * @param array      $config       Config.
  * @param string     $method       HTTP method.
@@ -928,10 +990,11 @@ function update_entry( array $config, int $entry_id, array $values ) {
  * @param bool       $authenticate Whether to send the REST API credentials. The subscriber
  *                                 notification form is a public submissions endpoint and was
  *                                 always posted to unauthenticated.
+ * @param string[]   $headers      Extra request headers, e.g. the Release Service API key.
  *
  * @return array|string Decoded response, or an error message.
  */
-function api_request( array $config, string $method, string $url, ?array $body = null, bool $authenticate = true ) {
+function api_request( array $config, string $method, string $url, ?array $body = null, bool $authenticate = true, array $headers = [] ) {
 	$handle = curl_init();
 	if ( false === $handle ) {
 		return 'A cURL handle could not be created.';
@@ -942,7 +1005,7 @@ function api_request( array $config, string $method, string $url, ?array $body =
 		CURLOPT_CUSTOMREQUEST  => $method,
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT        => 60,
-		CURLOPT_HTTPHEADER     => [ 'Accept: application/json' ],
+		CURLOPT_HTTPHEADER     => array_merge( [ 'Accept: application/json' ], $headers ),
 	];
 
 	if ( $authenticate ) {
@@ -959,7 +1022,7 @@ function api_request( array $config, string $method, string $url, ?array $body =
 		}
 
 		$options[ CURLOPT_POSTFIELDS ] = $encoded;
-		$options[ CURLOPT_HTTPHEADER ] = [ 'Accept: application/json', 'Content-Type: application/json' ];
+		$options[ CURLOPT_HTTPHEADER ] = array_merge( [ 'Accept: application/json', 'Content-Type: application/json' ], $headers );
 	}
 
 	curl_setopt_array( $handle, $options );
