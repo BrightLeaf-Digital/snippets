@@ -1416,6 +1416,1064 @@
                 "wordpress": "6.0",
                 "plugins": []
             }
+        },
+        {
+            "id": "validate-an-iban",
+            "name": "Validate an IBAN",
+            "description": "Checks that an IBAN comes from a country that issues IBANs, has that country's length, and has correct mod-97 check digits.",
+            "type": "php",
+            "file": "Validate an IBAN.php",
+            "hash": "sha256:ee46c3608c39f4a19bce9b9525e3980ddb87995d5352d8d877a51a65fd5ee198",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-eu-vat-number-format",
+            "name": "Validate EU VAT Number Format",
+            "description": "Checks the format of an EU VAT number (country prefix plus the pattern each member state uses, and XI for Northern Ireland).",
+            "type": "php",
+            "file": "Validate EU VAT Number Format.php",
+            "hash": "sha256:41e5d8d981f3e5c76c73920da982ee888c84665c8fe3233b8a0a62255bc35d0d",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-us-ein",
+            "name": "Validate a US EIN",
+            "description": "Checks the 9-digit format (12-3456789, 12 3456789 or 123456789) and that the first two digits are a prefix the IRS assigns.",
+            "type": "php",
+            "file": "Validate a US EIN.php",
+            "hash": "sha256:aa78ef57a823c93858562395305f2543440bc7ec9ab2fad18efc5d3e88b00155",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-uk-postcode",
+            "name": "Validate a UK Postcode",
+            "description": "Checks the shape of a UK postcode (outward and inward code, with or without the space), including the letters each position allows.",
+            "type": "php",
+            "file": "Validate a UK Postcode.php",
+            "hash": "sha256:5e2828d1edad9edf3522b2a29331a7869f09172d1714f3f8959de7a30bd8e67a",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-israeli-id-number",
+            "name": "Validate an Israeli ID Number",
+            "description": "Checks an Israeli ID number of up to 9 digits (shorter numbers are padded with leading zeros) against its check digit.",
+            "type": "php",
+            "file": "Validate an Israeli ID Number.php",
+            "hash": "sha256:f32b92642122cbb1e0b078ccba4f3a97a17ad7f943fe759962945fcb44b001b5",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-canadian-postal-code",
+            "name": "Validate a Canadian Postal Code",
+            "description": "Checks the A1A 1A1 pattern with the letters Canada Post uses (no D, F, I, O, Q or U, and no W or Z as the first letter).",
+            "type": "php",
+            "file": "Validate a Canadian Postal Code.php",
+            "hash": "sha256:a67ce720699b79be15cd150e119d7d43051064820fa95d70bf11af3dcbf4fa08",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-us-zip-code",
+            "name": "Validate a US ZIP Code",
+            "description": "Accepts 5-digit ZIP codes and ZIP+4 (12345-6789).",
+            "type": "php",
+            "file": "Validate a US ZIP Code.php",
+            "hash": "sha256:c7c7e1794f8704bb8a5278281db6b582d8dbfb35de8d31e6bbef327a4a9321d5",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-aba-routing-number",
+            "name": "Validate an ABA Routing Number",
+            "description": "Checks a 9-digit ABA routing transit number with the 3-7-1 checksum.",
+            "type": "php",
+            "file": "Validate an ABA Routing Number.php",
+            "hash": "sha256:fe007828e0c9dd6c3426d31771513cee5a1b7b83aa650e29b41fd7bda8a3798a",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-swift-bic-code",
+            "name": "Validate a SWIFT BIC Code",
+            "description": "Checks the 8 or 11 character BIC format.",
+            "type": "php",
+            "file": "Validate a SWIFT BIC Code.php",
+            "hash": "sha256:fb768f83799ec0000200a056603817642c78aebc9fa7c7646da934ed5c5e03f4",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-uk-sort-code",
+            "name": "Validate a UK Sort Code",
+            "description": "Accepts six digits as 12-34-56, 12 34 56 or 123456 (one separator style used throughout).",
+            "type": "php",
+            "file": "Validate a UK Sort Code.php",
+            "hash": "sha256:c4c6f65d11f4c70d1407b097c8c90ac5d95dd754343916eec90a32ce4664dbdf",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-uk-national-insurance-number",
+            "name": "Validate a UK National Insurance Number",
+            "description": "Checks the National Insurance number format.",
+            "type": "php",
+            "file": "Validate a UK National Insurance Number.php",
+            "hash": "sha256:aa57cb181a6dbdd3d82d25f288831bf960bbbe1bc1a32d3a8e413915be4d4221",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-uk-company-number",
+            "name": "Validate a UK Company Number",
+            "description": "Checks the 8-character company number.",
+            "type": "php",
+            "file": "Validate a UK Company Number.php",
+            "hash": "sha256:469edcf6f52e9b697a066f5846832aea52c2d7c7ec05328f8c949d0257f1cdd7",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-german-postcode",
+            "name": "Validate a German Postcode",
+            "description": "Checks a 5-digit German Postleitzahl in the range 01001 to 99999.",
+            "type": "php",
+            "file": "Validate a German Postcode.php",
+            "hash": "sha256:8d3638d374c7ea313492563c746689fd4661e6ec27530c5829706dc7706d3d27",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-french-siren-or-siret",
+            "name": "Validate a French SIREN or SIRET",
+            "description": "Checks a 9-digit SIREN or 14-digit SIRET with the Luhn key (and the La Poste SIRET exception).",
+            "type": "php",
+            "file": "Validate a French SIREN or SIRET.php",
+            "hash": "sha256:eab6ccf2edae90007758f4e9eda4c46a589e4eaf6cfa722da6695d77fff355ef",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-dutch-bsn",
+            "name": "Validate a Dutch BSN",
+            "description": "Checks a 9-digit BSN (8-digit numbers get a leading zero) with the eleven test.",
+            "type": "php",
+            "file": "Validate a Dutch BSN.php",
+            "hash": "sha256:ba499a8b857ef18e7b510cf9e6c14508fbc76675e19c481586d59af6e01c9e7b",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-spanish-dni-or-nie",
+            "name": "Validate a Spanish DNI or NIE",
+            "description": "Checks a DNI (8 digits plus control letter) or NIE (X, Y or Z, 7 digits and control letter) against the mod-23 letter.",
+            "type": "php",
+            "file": "Validate a Spanish DNI or NIE.php",
+            "hash": "sha256:f2957ba8a178404f882b96ac08709f902e189324d5a57cc7d6019f389b952e50",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-italian-codice-fiscale",
+            "name": "Validate an Italian Codice Fiscale",
+            "description": "Checks the 16-character personal codice fiscale format (including omocodia letters) and its check character.",
+            "type": "php",
+            "file": "Validate an Italian Codice Fiscale.php",
+            "hash": "sha256:0f2a9597f7f0522a6cf02c440f8b3c922bb998a3b89092e71ff7e0980c102282",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-portuguese-nif",
+            "name": "Validate a Portuguese NIF",
+            "description": "Checks a Portuguese tax number (NIF/NIPC).",
+            "type": "php",
+            "file": "Validate a Portuguese NIF.php",
+            "hash": "sha256:2da98a634a0a97b4cb9c2122977255a1f0ab7ada7f5b2a81b79f769976e09c5c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-brazilian-cpf",
+            "name": "Validate a Brazilian CPF",
+            "description": "Checks an 11-digit CPF (with or without dots and dash) against both check digits, and rejects numbers made of one repeated digit.",
+            "type": "php",
+            "file": "Validate a Brazilian CPF.php",
+            "hash": "sha256:11bab0c97affffdcec9d0793842890490b6111f44cc7419dd4d220b3c9d5ca90",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-brazilian-cnpj",
+            "name": "Validate a Brazilian CNPJ",
+            "description": "Checks a Brazilian company number (CNPJ) and its two check digits.",
+            "type": "php",
+            "file": "Validate a Brazilian CNPJ.php",
+            "hash": "sha256:8d552c36d9f3f075ce6855f1eaf8299d8b27efa83617014c58b9b188d9a98ed6",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-australian-abn",
+            "name": "Validate an Australian ABN",
+            "description": "Checks an 11-digit Australian Business Number with the ATO weighting and mod-89 rule.",
+            "type": "php",
+            "file": "Validate an Australian ABN.php",
+            "hash": "sha256:4cada311d6803e84f49dd36eb8af5613108b1d9561b94671aea52280773c2372",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-australian-tfn",
+            "name": "Validate an Australian TFN",
+            "description": "Checks an 8 or 9 digit Tax File Number with the ATO check weights.",
+            "type": "php",
+            "file": "Validate an Australian TFN.php",
+            "hash": "sha256:4864df0e4b58c03b3185476ffde2a189d67b4a8dbeba011ac870b0d6458b1808",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-australian-postcode",
+            "name": "Validate an Australian Postcode",
+            "description": "Checks a 4-digit Australian postcode, allowing the 02xx, 08xx and 09xx ranges used in the ACT and Northern Territory.",
+            "type": "php",
+            "file": "Validate an Australian Postcode.php",
+            "hash": "sha256:40c29fd3fe4bd2817a118f8eeefffb1712c6fdb9227202ede5a671c73c4b188e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-new-zealand-ird-number",
+            "name": "Validate a New Zealand IRD Number",
+            "description": "Checks an 8 or 9 digit IRD number in the issued range with Inland Revenue's two-weight check digit method.",
+            "type": "php",
+            "file": "Validate a New Zealand IRD Number.php",
+            "hash": "sha256:c0f6016907a4cfaf341344985e43fa393c83e1a363fa1893b8d3ef94e0686299",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-indian-pan",
+            "name": "Validate an Indian PAN",
+            "description": "Checks the 10-character Permanent Account Number format, including the holder- type letter in position 4.",
+            "type": "php",
+            "file": "Validate an Indian PAN.php",
+            "hash": "sha256:b884f47d2d802317260fa02ddff1ff5f2ad826f031da250472bdca0f2ad3239a",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-indian-gstin",
+            "name": "Validate an Indian GSTIN",
+            "description": "Checks a 15-character GSTIN.",
+            "type": "php",
+            "file": "Validate an Indian GSTIN.php",
+            "hash": "sha256:6cc2d581f0c0dc206ac1f6ee6b3a37818afba622561f2e1beaaa341020b09877",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-indian-pin-code",
+            "name": "Validate an Indian PIN Code",
+            "description": "Checks a 6-digit Indian postal PIN code (first digit 1 to 9).",
+            "type": "php",
+            "file": "Validate an Indian PIN Code.php",
+            "hash": "sha256:481889c1ec1703531912d84f6d73fcca961d792058e03b6dd122b2b5bfec2079",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-singapore-nric-or-fin",
+            "name": "Validate a Singapore NRIC or FIN",
+            "description": "Checks a Singapore NRIC or FIN.",
+            "type": "php",
+            "file": "Validate a Singapore NRIC or FIN.php",
+            "hash": "sha256:d5bea7dc606f7c1b71a50f48a53c2e0d96f24d4a3fc3d872e2d5ed4626927a62",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-south-african-id-number",
+            "name": "Validate a South African ID Number",
+            "description": "Checks a 13-digit South African ID number.",
+            "type": "php",
+            "file": "Validate a South African ID Number.php",
+            "hash": "sha256:8c1008844c155145f8bc7ad46e8894d5b92034fa1e2561e4945da1df8bd6d578",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-isbn",
+            "name": "Validate an ISBN",
+            "description": "Checks an ISBN-10 (with X as a possible last character) or ISBN-13 against its check digit.",
+            "type": "php",
+            "file": "Validate an ISBN.php",
+            "hash": "sha256:d6477b37c44fe58aa361954d21c116e5f4275684da49037c0faae0a3b5eba675",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-gtin-barcode-number",
+            "name": "Validate a GTIN Barcode Number",
+            "description": "Checks an 8, 12, 13 or 14 digit GTIN against the GS1 check digit.",
+            "type": "php",
+            "file": "Validate a GTIN Barcode Number.php",
+            "hash": "sha256:3103d6bbc950eed117a447461723f578ce23b44595c87dea4625181cac5b9c44",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-vehicle-identification-number-vin",
+            "name": "Validate a Vehicle Identification Number (VIN)",
+            "description": "Checks a 17-character VIN (no I, O or Q) and the check digit in position 9 used on North American vehicles.",
+            "type": "php",
+            "file": "Validate a Vehicle Identification Number (VIN).php",
+            "hash": "sha256:90216eb3a519f6ab6b544f89d38e0bfea9c5fb00616e03e0ba4f401992e2f9cb",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-imei-number",
+            "name": "Validate an IMEI Number",
+            "description": "Checks a 15-digit IMEI against its Luhn check digit.",
+            "type": "php",
+            "file": "Validate an IMEI Number.php",
+            "hash": "sha256:1568d2d3f28aed55c671e5b1dd4ad1a7dff84d558befcef923a33cfa199a19d6",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-hex-color-code",
+            "name": "Validate a Hex Color Code",
+            "description": "Accepts 3 or 6 digit hex colours with or without the leading #.",
+            "type": "php",
+            "file": "Validate a Hex Color Code.php",
+            "hash": "sha256:70f73493a8a14877566656935d80f801f57bc474002cad66cfa4a2283d83860b",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "require-an-https-website-address",
+            "name": "Require an HTTPS Website Address",
+            "description": "Requires a full web address that starts with https:// and has a real domain name.",
+            "type": "php",
+            "file": "Require an HTTPS Website Address.php",
+            "hash": "sha256:688cb3b9d60fec8b3b39a11e1e5adf360f58fcc9eb15edf25062d7bfc79b2643",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "require-a-business-email-address",
+            "name": "Require a Business Email Address",
+            "description": "Rejects email addresses at free mailbox providers such as Gmail, Outlook and Yahoo, so a lead form only collects work addresses.",
+            "type": "php",
+            "file": "Require a Business Email Address.php",
+            "hash": "sha256:2d7981b52dadf89cb426b7980c802c03312995f9c45b135b7d64506b7b8a1a72",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "block-po-box-addresses",
+            "name": "Block PO Box Addresses",
+            "description": "Rejects addresses that are PO Boxes (PO Box, P.O.",
+            "type": "php",
+            "file": "Block PO Box Addresses.php",
+            "hash": "sha256:77413ae9d76604cd368e709fb81cb28673b2a3b25ad41c1df92ae2581993736e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-an-israeli-phone-number",
+            "name": "Validate an Israeli Phone Number",
+            "description": "Accepts Israeli mobile (05X), landline (02, 03, 04, 08, 09) and 07X numbers, in local form or with +972.",
+            "type": "php",
+            "file": "Validate an Israeli Phone Number.php",
+            "hash": "sha256:b45599bf6c411453fdba3570d4364cada9f26e5c297021ce5b9acd519251a91b",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "require-an-international-phone-number-e-164",
+            "name": "Require an International Phone Number (E.164)",
+            "description": "Requires a phone number in international form.",
+            "type": "php",
+            "file": "Require an International Phone Number (E.164).php",
+            "hash": "sha256:6de6d56a8be54e0435cad63fab3349609e57413f989b61aa5bca2380a3ec4975",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "validate-a-us-or-canadian-phone-number",
+            "name": "Validate a US or Canadian Phone Number",
+            "description": "Checks a 10-digit North American number with an optional +1 or 1.",
+            "type": "php",
+            "file": "Validate a US or Canadian Phone Number.php",
+            "hash": "sha256:8611730b1f16387d834437612e9b34f2adae4262d7e89bfa765dab11150c3596",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "gravity-flow-stalled-entries-dashboard-widget",
+            "name": "Gravity Flow Stalled Entries Dashboard Widget",
+            "description": "Adds a Dashboard widget that counts the entries waiting on each Gravity Flow step for longer than a number of days you choose.",
+            "type": "php",
+            "file": "Gravity Flow Stalled Entries Dashboard Widget.php",
+            "hash": "sha256:a8767a0eb2ef2c0a6cf61d1540f612c42395320e8765689741836c02972ead0c",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Flow",
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php",
+                    "gravityflow/gravityflow.php"
+                ]
+            }
+        },
+        {
+            "id": "scroll-to-the-gravity-forms-confirmation-message",
+            "name": "Scroll to the Gravity Forms Confirmation Message",
+            "description": "After a submission, scrolls the page to the confirmation message instead of leaving the visitor at the top of the page.",
+            "type": "php",
+            "file": "Scroll to the Gravity Forms Confirmation Message.php",
+            "hash": "sha256:d05a266aebecc9cd611080f0a8d7d385e74f82552a427c505164c0da0f772d9b",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "disable-the-gravity-forms-form-view-counter",
+            "name": "Disable the Gravity Forms Form View Counter",
+            "description": "Stops Gravity Forms writing to the database every time a form is viewed.",
+            "type": "php",
+            "file": "Disable the Gravity Forms Form View Counter.php",
+            "hash": "sha256:213f945363436df256b5db2a2b4705120ba02e1ed098066131400503fb3c0824",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
+        },
+        {
+            "id": "enable-the-gravity-forms-field-label-visibility-setting",
+            "name": "Enable the Gravity Forms Field Label Visibility Setting",
+            "description": "Turns on the Field Label Visibility option in the form editor, so you can hide the label of an individual field.",
+            "type": "php",
+            "file": "Enable the Gravity Forms Field Label Visibility Setting.php",
+            "hash": "sha256:41626ce7276cca83dad4214a1c8106f7b777d5e40bdcbe13511be738f9c05b8e",
+            "version": "1.0.0",
+            "tags": [
+                "Gravity Forms"
+            ],
+            "scope": {
+                "context": "everywhere",
+                "hook": "plugins_loaded",
+                "priority": 10
+            },
+            "requires": {
+                "php": "8.0",
+                "wordpress": "6.0",
+                "plugins": [
+                    "gravityforms/gravityforms.php"
+                ]
+            }
         }
     ]
 }
