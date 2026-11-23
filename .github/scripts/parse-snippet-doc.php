@@ -38,7 +38,7 @@ const ECOSYSTEM_FLAGS = [
 /**
  * Installation methods, matching field 7's configured choice values verbatim.
  */
-const INSTALL_METHODS = [ 'Code Snippets', 'Code Chest', 'Custom JS' ];
+const INSTALL_METHODS = [ 'GravityOps Code Snippet Manager', 'Code Chest', 'Custom JS' ];
 
 /**
  * Recognised section headers, in the order they must appear.
@@ -546,7 +546,7 @@ function build_metadata( string $path, string $extension, array $lines ): array 
 	}
 
 	if ( null === $install ) {
-		$install = 'js' === $extension ? 'Code Chest' : 'Code Snippets';
+		$install = 'js' === $extension ? 'Code Chest' : 'GravityOps Code Snippet Manager';
 	}
 
 	$sections = collect_sections( $lines, $errors );

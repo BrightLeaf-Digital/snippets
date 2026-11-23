@@ -14,8 +14,8 @@ snippet; this repository is where the code lives.
    what you have to configure, and how to drive it once installed. Most snippets need at least
    one form ID, field ID, or step ID changed.
 2. Install it where the docblock's `@install` line says, or — when there is no such line —
-   according to the extension: `.php` files go in a PHP snippet manager such as **Code
-   Snippets**, `.js` files in **Code Chest** or your site's custom JavaScript.
+   according to the extension: `.php` files go in a PHP snippet manager such as
+   **GravityOps Code Snippet Manager**, `.js` files in **Code Chest** or your site's custom JavaScript.
 3. Test on staging first.
 
 `.php` files are snippets, not plugins: they have no plugin header and are meant to be pasted
@@ -58,7 +58,7 @@ from, so it follows a fixed format enforced in CI:
  * Human-readable title
  *
  * @gravityflow
- * @install Code Snippets
+ * @install GravityOps Code Snippet Manager
  *
  * GOAL:
  * What it does, and when it is useful.
@@ -80,7 +80,7 @@ from, so it follows a fixed format enforced in CI:
 - **Ecosystem flags** — at least one of `@gravityforms`, `@gravityflow`, `@gravityview`,
   `@gravityperks`, `@gravitykit`, `@gravityops`, `@wordpress`. Tag only what the snippet
   directly targets.
-- **`@install`** — optional; one of `Code Snippets`, `Code Chest`, `Custom JS`.
+- **`@install`** — optional; one of `GravityOps Code Snippet Manager`, `Code Chest`, `Custom JS`.
 - **Sections** — `GOAL:` is required; `REQUIREMENTS:`, `CONFIGURATION:`, `USAGE:`, `FEATURES:`,
   `FILTERS:` and `NOTES:` are optional, and must appear in that order. Within a section, `- `
   makes a list, a 4-space indent makes a code block, and `` `code` ``, `**bold**` and
