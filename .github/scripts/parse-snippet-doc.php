@@ -41,6 +41,15 @@ const ECOSYSTEM_FLAGS = [
 const INSTALL_METHODS = [ 'GravityOps Code Snippet Manager', 'Code Chest', 'Custom JS' ];
 
 /**
+ * GravityOps Code Snippet Manager cleanup declarations (`@cleanup-<kind> name, name`).
+ *
+ * GOCSM reads these from the header docblock and removes the named resources when the snippet
+ * is deleted (or deactivated, per `@cleanup-on`). The directory stores nothing from them; they
+ * are validated with GOCSM's own rules so a bad declaration fails here rather than on install.
+ */
+const CLEANUP_KINDS = [ 'cron', 'option', 'transient', 'on' ];
+
+/**
  * Recognised section headers, in the order they must appear.
  *
  * GOAL is required; the rest are optional. Fixing the set is what stops the format drifting
@@ -508,12 +517,18 @@ function build_metadata( string $path, string $extension, array $lines ): array 
 			continue;
 		}
 
+		if ( 1 === preg_match( '/^@cleanup-([a-z]+)\b(.*)$/i', $line, $matches ) ) {
+			$errors = array_merge( $errors, cleanup_errors( strtolower( $matches[1] ), $matches[2] ) );
+			continue;
+		}
+
 		$flag = strtolower( ltrim( strtok( $line, " \t" ) ?: '', '@' ) );
 		if ( ! isset( ECOSYSTEM_FLAGS[ $flag ] ) ) {
 			$errors[] = sprintf(
-				'Unknown tag "@%s". Allowed: %s, @install, @nopublish.',
+				'Unknown tag "@%s". Allowed: %s, @install, @nopublish, %s.',
 				$flag,
-				implode( ', ', array_map( static fn( $f ) => '@' . $f, array_keys( ECOSYSTEM_FLAGS ) ) )
+				implode( ', ', array_map( static fn( $f ) => '@' . $f, array_keys( ECOSYSTEM_FLAGS ) ) ),
+				implode( ', ', array_map( static fn( $k ) => '@cleanup-' . $k, CLEANUP_KINDS ) )
 			);
 			continue;
 		}
@@ -581,6 +596,45 @@ function build_metadata( string $path, string $extension, array $lines ): array 
 		],
 		'errors' => [],
 	];
+}
+
+/**
+ * Validates one `@cleanup-<kind>` declaration with GravityOps Code Snippet Manager's rules:
+ * a comma-separated list of exact names (no wildcards), or `deactivate`/`delete` for `on`.
+ *
+ * @param string $kind  Lowercased kind after `@cleanup-`.
+ * @param string $value Rest of the line.
+ *
+ * @return array<int, string> Errors; empty when the declaration is valid.
+ */
+function cleanup_errors( string $kind, string $value ): array {
+	if ( ! in_array( $kind, CLEANUP_KINDS, true ) ) {
+		return [
+			sprintf(
+				'Unknown tag "@cleanup-%s". Allowed: %s.',
+				$kind,
+				implode( ', ', array_map( static fn( $k ) => '@cleanup-' . $k, CLEANUP_KINDS ) )
+			),
+		];
+	}
+
+	$names = array_values( array_filter( array_map( 'trim', explode( ',', $value ) ), 'strlen' ) );
+	if ( [] === $names ) {
+		return [ sprintf( '@cleanup-%s needs at least one name.', $kind ) ];
+	}
+
+	$errors = [];
+	foreach ( $names as $name ) {
+		if ( 'on' === $kind ) {
+			if ( ! in_array( $name, [ 'deactivate', 'delete' ], true ) ) {
+				$errors[] = sprintf( '@cleanup-on takes deactivate and/or delete; found "%s".', $name );
+			}
+		} elseif ( 1 !== preg_match( '/^[a-zA-Z0-9_.:\-]{1,191}$/D', $name ) ) {
+			$errors[] = sprintf( '@cleanup-%s needs exact names (letters, digits, _ . : -); found "%s".', $kind, $name );
+		}
+	}
+
+	return $errors;
 }
 
 /**

@@ -81,6 +81,10 @@ from, so it follows a fixed format enforced in CI:
   `@gravityperks`, `@gravitykit`, `@gravityops`, `@wordpress`. Tag only what the snippet
   directly targets.
 - **`@install`** — optional; one of `GravityOps Code Snippet Manager`, `Code Chest`, `Custom JS`.
+- **`@cleanup-option`, `@cleanup-transient`, `@cleanup-cron`, `@cleanup-on`** — optional; exact
+  names (comma-separated, no wildcards) of the data the snippet stores, which GravityOps Code
+  Snippet Manager removes when the snippet is deleted. `@cleanup-on` takes `deactivate` and/or
+  `delete`.
 - **Sections** — `GOAL:` is required; `REQUIREMENTS:`, `CONFIGURATION:`, `USAGE:`, `FEATURES:`,
   `FILTERS:` and `NOTES:` are optional, and must appear in that order. Within a section, `- `
   makes a list, a 4-space indent makes a code block, and `` `code` ``, `**bold**` and
